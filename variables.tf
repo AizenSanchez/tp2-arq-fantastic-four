@@ -45,3 +45,7 @@ variable "os_version" {
 variable "machine_sku" {
   default = "Standard_B1s"
 }
+
+variable "redis_sku" {
+  default = "Balanced_B0"
+}
