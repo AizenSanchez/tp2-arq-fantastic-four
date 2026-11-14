@@ -1,11 +1,11 @@
-$ curl -i -X POST localhost:3000/exchange -d '{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"30007919"}'
+$ curl -s -i -X POST localhost:3000/exchange -H 'Content-Type: application/json' -d '{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"30453330"}'
 HTTP/1.1 200 OK
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
 Content-Length: 395
-ETag: W/"18b-Y7qhMHCWBOd6Gq4Nat14EkLNXo8"
-Date: Sat, 14 Nov 2026 17:59:38 GMT
+ETag: W/"18b-CrVbXIu9ZsnK+d2DCXMqUaFSY2s"
+Date: Sat, 14 Nov 2026 20:54:56 GMT
 Connection: keep-alive
 Keep-Alive: timeout=5
 
-{"id":"PHNVp7Mf0EMDEN6i4KuVZ","ts":"2026-11-14T17:59:38.120Z","ok":true,"actor":null,"arca":{"ok":true,"codigoAutorizacion":"4426d625-b693-4798-a9b1-2119771b7689","intentos":1},"request":{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"30007919"},"exchangeRate":0.0006609385327164573,"counterAmount":0.6609385327164573,"obs":null}
+{"id":"M2-vgmgYryos7lnEkZLB4","ts":"2026-11-14T20:54:56.003Z","ok":true,"actor":null,"arca":{"ok":true,"codigoAutorizacion":"35c6dfdf-c2d4-4fd7-8aab-f71d1aaf8086","intentos":1},"request":{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"30453330"},"exchangeRate":0.0006609385327164573,"counterAmount":0.6609385327164573,"obs":null}

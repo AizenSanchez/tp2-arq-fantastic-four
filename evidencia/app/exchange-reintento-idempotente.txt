@@ -1,24 +1,26 @@
-# Mismo Idempotency-Key y mismo body, dos veces. Entradas en el log de Redis antes/despues del reintento: 6 / 6
+# Mismo Idempotency-Key y mismo body, dos veces.
+# Entradas en el log (curl -s localhost:3000/log | jq length): antes del primero 6, despues del reintento 7 (el primero suma 1, el reintento no suma)
 ## Primer request
-HTTP/1.1 200 OK
+$ curl -s -i -X POST localhost:3000/exchange -H 'Content-Type: application/json' -H 'Idempotency-Key: demo-reintento-34912313' -d '{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"34912313"}'
+HTTP/1.1 403 Forbidden
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
-Content-Length: 395
-ETag: W/"18b-d8ViUbxO0dmZnAuaHm1tPNkOk7g"
-Date: Sat, 14 Nov 2026 18:00:10 GMT
+Content-Length: 364
+ETag: W/"16c-nXAYlO6oc4NRWpUaL+XKo+LRPHg"
+Date: Sat, 14 Nov 2026 20:55:09 GMT
 Connection: keep-alive
 Keep-Alive: timeout=5
 
-{"id":"iM-cjqF2oTMLzyt08nPEw","ts":"2026-11-14T18:00:09.834Z","ok":true,"actor":null,"arca":{"ok":true,"codigoAutorizacion":"a4c4543c-22ee-42ed-978d-72cd4c823a97","intentos":1},"request":{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"50209458"},"exchangeRate":0.0006609385327164573,"counterAmount":0.6609385327164573,"obs":null}
-
+{"id":"DKptJWFMfxoa1l-4n5joZ","ts":"2026-11-14T20:55:09.705Z","ok":false,"actor":null,"arca":{"ok":false,"codigoAutorizacion":null,"intentos":1},"request":{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"34912313"},"exchangeRate":null,"counterAmount":0,"obs":"DNI con restricciones fiscales (ARCA)"}
 ## Reintento
-HTTP/1.1 200 OK
+$ curl -s -i -X POST localhost:3000/exchange -H 'Content-Type: application/json' -H 'Idempotency-Key: demo-reintento-34912313' -d '{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"34912313"}'
+HTTP/1.1 403 Forbidden
 X-Powered-By: Express
 Content-Type: application/json; charset=utf-8
-Content-Length: 395
-ETag: W/"18b-d8ViUbxO0dmZnAuaHm1tPNkOk7g"
-Date: Sat, 14 Nov 2026 18:00:10 GMT
+Content-Length: 364
+ETag: W/"16c-nXAYlO6oc4NRWpUaL+XKo+LRPHg"
+Date: Sat, 14 Nov 2026 20:55:09 GMT
 Connection: keep-alive
 Keep-Alive: timeout=5
 
-{"id":"iM-cjqF2oTMLzyt08nPEw","ts":"2026-11-14T18:00:09.834Z","ok":true,"actor":null,"arca":{"ok":true,"codigoAutorizacion":"a4c4543c-22ee-42ed-978d-72cd4c823a97","intentos":1},"request":{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"50209458"},"exchangeRate":0.0006609385327164573,"counterAmount":0.6609385327164573,"obs":null}
+{"id":"DKptJWFMfxoa1l-4n5joZ","ts":"2026-11-14T20:55:09.705Z","ok":false,"actor":null,"arca":{"ok":false,"codigoAutorizacion":null,"intentos":1},"request":{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"34912313"},"exchangeRate":null,"counterAmount":0,"obs":"DNI con restricciones fiscales (ARCA)"}

@@ -1,12 +1,14 @@
-$ docker compose stop arca; curl -i -X POST localhost:3000/exchange -H 'Idempotency-Key: demo-503'
+$ docker compose -f docker-compose.local.yml stop arca 2>/dev/null
+
+$ curl -s -i -X POST localhost:3000/exchange -H 'Content-Type: application/json' -H 'Idempotency-Key: demo-503' -d '{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"40101235"}'
 HTTP/1.1 503 Service Unavailable
 X-Powered-By: Express
 Retry-After: 1
 Content-Type: application/json; charset=utf-8
-Content-Length: 49
-ETag: W/"31-U0zRKehjkUSapJPGvkk+DZUgodk"
-Date: Sat, 14 Nov 2026 17:59:52 GMT
+Content-Length: 50
+ETag: W/"32-ffKCUUMTMbvVrDf138wk5THPIXk"
+Date: Sat, 14 Nov 2026 20:55:04 GMT
 Connection: keep-alive
 Keep-Alive: timeout=5
 
-{"error":"ARCA no disponible","motivo":"timeout"}
+{"error":"ARCA no disponible","motivo":"conexion"}
