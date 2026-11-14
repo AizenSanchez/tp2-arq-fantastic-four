@@ -18,10 +18,9 @@ resource "azurerm_managed_redis" "redis" {
     # por defecto es false y entonces Azure no exporta primary_access_key
     access_keys_authentication_enabled = true
 
-    # cliente comun en vez de cluster-aware; MULTI y Lua con varias claves necesitan el hash tag {av}: (node/keys.js)
-    clustering_policy = "EnterpriseCluster"
+    # sin shards: MULTI y Lua pueden tocar varias claves sin que tengan que caer en el mismo slot
+    clustering_policy = "NoCluster"
 
-    # como en el TP1 (docker-compose: --maxmemory-policy volatile-ttl)
     eviction_policy = "VolatileTTL"
   }
 }
