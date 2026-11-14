@@ -35,6 +35,4 @@ resource "azurerm_container_group" "tp2_container" {
     username = var.dockerhub_username
     password = var.dockerhub_token
   }
-
-  # La URI de ARCA la escribe infra_file.tf en node/infra.json (antes era un sed sobre node/config.js)
 }

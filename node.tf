@@ -3,7 +3,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "tp2_vmss" {
   resource_group_name = azurerm_resource_group.tp2_resource_group.name
   location            = azurerm_resource_group.tp2_resource_group.location
   sku                 = var.machine_sku
-  instances           = var.node_instances
+  instances           = 1
   admin_username      = "azureuser"
   depends_on          = [azurerm_lb_rule.lb_rule]
   upgrade_mode        = "Automatic"
@@ -96,4 +96,13 @@ resource "azurerm_lb_rule" "lb_rule" {
 resource "azurerm_lb_backend_address_pool" "lb_backend_address_pool" {
   loadbalancer_id = azurerm_lb.tp2_lb.id
   name            = "lb_backend_address_pool"
+}
+
+resource "local_sensitive_file" "infra_json" {
+  filename        = "${path.module}/node/infra.json"
+  file_permission = "0600"
+  content = jsonencode({
+    arcaUri  = "http://${azurerm_container_group.tp2_container.ip_address}:8080"
+    redisUrl = "rediss://:${urlencode(azurerm_managed_redis.redis.default_database[0].primary_access_key)}@${azurerm_managed_redis.redis.hostname}:${azurerm_managed_redis.redis.default_database[0].port}"
+  })
 }

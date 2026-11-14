@@ -46,17 +46,6 @@ variable "machine_sku" {
   default = "Standard_B1s"
 }
 
-variable "node_instances" {
-  description = "Cantidad de nodos del VMSS (1 para el caso base, 2 para el escalado). Despues: ansible/setup.sh y ansible/deploy.sh"
-  default     = 1
-}
-
 variable "redis_sku" {
-  description = "SKU de Azure Managed Redis. Balanced_B0 es la mas chica; subirla si Redis aparece como cuello de botella"
-  default     = "Balanced_B0"
-}
-
-variable "redis_high_availability" {
-  description = "Replica de Redis para alta disponibilidad (duplica el costo). Cambiarlo recrea la instancia"
-  default     = false
+  default = "Balanced_B0"
 }
