@@ -1,0 +1,11 @@
+$ curl -i -X POST localhost:3000/exchange   (sin dni)
+HTTP/1.1 400 Bad Request
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 71
+ETag: W/"47-WBoCIOXg6cXf3NJ5qlNb7MvvQBE"
+Date: Sat, 14 Nov 2026 17:59:39 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"error":"dni must be a string with a number from 1000000 to 99999999"}

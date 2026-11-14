@@ -1,0 +1,11 @@
+$ curl -i -X POST localhost:3000/exchange -d '{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"30015838"}'
+HTTP/1.1 403 Forbidden
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 364
+ETag: W/"16c-4FN6pg1Tuy8iQXGyErl9K2CMmUY"
+Date: Sat, 14 Nov 2026 17:59:39 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"id":"cp_GWIdi-gPPdfItcUcIL","ts":"2026-11-14T17:59:39.191Z","ok":false,"actor":null,"arca":{"ok":false,"codigoAutorizacion":null,"intentos":2},"request":{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"30015838"},"exchangeRate":null,"counterAmount":0,"obs":"DNI con restricciones fiscales (ARCA)"}
