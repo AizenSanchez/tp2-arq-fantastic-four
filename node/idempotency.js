@@ -1,8 +1,6 @@
 //a retry with the same Idempotency-Key gets the saved response instead of running again
 import { createClient } from "redis";
 
-import { k } from "./keys.js";
-
 export function createIdempotencyMiddleware({ store, ttlMs = 10 * 60 * 1000, leaseMs = 30 * 1000 }) {
   return async (req, res, next) => {
     const key = req.get("Idempotency-Key");
@@ -94,7 +92,7 @@ export async function createRedisStore(url) {
   return {
     async reserve(key, entry, leaseMs) {
       const saved = await client.eval(RESERVE_SCRIPT, {
-        keys: [k(`idem:${key}`)],
+        keys: [`idem:${key}`],
         arguments: [JSON.stringify(entry), String(leaseMs)],
       });
 
@@ -102,11 +100,11 @@ export async function createRedisStore(url) {
     },
 
     async complete(key, entry, ttlMs) {
-      await client.set(k(`idem:${key}`), JSON.stringify(entry), { PX: ttlMs });
+      await client.set(`idem:${key}`, JSON.stringify(entry), { PX: ttlMs });
     },
 
     async release(key) {
-      await client.del(k(`idem:${key}`));
+      await client.del(`idem:${key}`);
     },
 
     async close() {

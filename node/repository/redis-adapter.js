@@ -5,7 +5,6 @@ import path from "path";
 import fs from "fs";
 
 import { assertReciprocal } from "../rates.js";
-import { k } from "../keys.js";
 
 const APPEND_SCRIPT = `
 local prev = redis.call("GET", KEYS[2]) or ""
@@ -14,7 +13,7 @@ redis.call("XADD", KEYS[1], "*", "data", ARGV[1], "prev", prev, "hash", hash)
 redis.call("SET", KEYS[2], hash)
 `;
 
-const append = (stream, entry) => ({ keys: [k(stream), k(`${stream}:last`)], arguments: [JSON.stringify(entry)] });
+const append = (stream, entry) => ({ keys: [stream, `${stream}:last`], arguments: [JSON.stringify(entry)] });
 
 const RESERVE_SCRIPT = `
 local balance = tonumber(redis.call("HGET", KEYS[1], ARGV[1]))
@@ -36,8 +35,8 @@ export async function createRedisAdapter(url) {
 
   async function getAccounts() {
     const [balances, currencies] = await Promise.all([
-      client.hGetAll(k("balances")),
-      client.hGetAll(k("currencies")),
+      client.hGetAll("balances"),
+      client.hGetAll("currencies"),
     ]);
 
     return Object.keys(currencies).map((id) => ({
@@ -58,13 +57,13 @@ export async function createRedisAdapter(url) {
     async setAccountBalance(accountId, balance, audit) {
       await client
         .multi()
-        .hSet(k("balances"), String(accountId), String(balance))
+        .hSet("balances", String(accountId), String(balance))
         .eval(APPEND_SCRIPT, append("audit", audit))
         .exec();
     },
 
     async getRates() {
-      const pairs = await client.hGetAll(k("rates"));
+      const pairs = await client.hGetAll("rates");
       const rates = {};
 
       for (const [pair, rate] of Object.entries(pairs)) {
@@ -79,7 +78,7 @@ export async function createRedisAdapter(url) {
     async setRate({ baseCurrency, counterCurrency, rate }, audit) {
       await client
         .multi()
-        .hSet(k("rates"), {
+        .hSet("rates", {
           [`${baseCurrency}:${counterCurrency}`]: String(rate),
           [`${counterCurrency}:${baseCurrency}`]: String(1 / rate),
         })
@@ -101,7 +100,7 @@ export async function createRedisAdapter(url) {
 
     async reserveBalance(accountId, amount) {
       const reserved = await client.eval(RESERVE_SCRIPT, {
-        keys: [k("balances")],
+        keys: ["balances"],
         arguments: [String(accountId), String(amount)],
       });
 
@@ -109,7 +108,7 @@ export async function createRedisAdapter(url) {
     },
 
     async creditBalance(accountId, amount) {
-      await client.hIncrByFloat(k("balances"), String(accountId), amount);
+      await client.hIncrByFloat("balances", String(accountId), amount);
     },
 
     async ping() {
@@ -125,8 +124,8 @@ export async function createRedisAdapter(url) {
 async function readStream(client, stream, last) {
   //last: only the newest N entries (XREVRANGE), still returned oldest first
   const entries = last
-    ? (await client.xRevRange(k(stream), "+", "-", { COUNT: last })).reverse()
-    : await client.xRange(k(stream), "-", "+");
+    ? (await client.xRevRange(stream, "+", "-", { COUNT: last })).reverse()
+    : await client.xRange(stream, "-", "+");
   return entries.map(({ message }) => ({ ...JSON.parse(message.data), prev: message.prev, hash: message.hash }));
 }
 
@@ -136,20 +135,20 @@ async function seed(client) {
   const rates = readState("rates.json");
   assertReciprocal(rates, "rates.json");
 
-  if (!(await client.set(k("seeded"), "1", { NX: true }))) {
+  if (!(await client.set("seeded", "1", { NX: true }))) {
     return;
   }
 
   const multi = client.multi();
 
   for (const account of accounts) {
-    multi.hSet(k("balances"), String(account.id), String(account.balance));
-    multi.hSet(k("currencies"), String(account.id), account.currency);
+    multi.hSet("balances", String(account.id), String(account.balance));
+    multi.hSet("currencies", String(account.id), account.currency);
   }
 
   for (const base in rates) {
     for (const counter in rates[base]) {
-      multi.hSet(k("rates"), `${base}:${counter}`, String(rates[base][counter]));
+      multi.hSet("rates", `${base}:${counter}`, String(rates[base][counter]));
     }
   }
 

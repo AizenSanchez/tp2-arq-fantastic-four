@@ -1,7 +1,6 @@
 # Entorno local para desarrollar y probar la app sin Azure: Redis + ARCA (imagen de la catedra) + la app.
 # Uso: docker compose -f docker-compose.local.yml up -d --build
 # Los tests (cd node && npm test) tambien pueden usar este Redis: REDIS_URL=redis://localhost:6379
-# Nunca apuntar los tests a Redis de Azure: hacen FLUSHDB.
 services:
   redis:
     image: redis:7.4.11
