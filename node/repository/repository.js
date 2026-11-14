@@ -8,7 +8,7 @@
  * @property {() => Promise<Record<string, Record<string, number>>>} getRates
  * @property {(rate: { baseCurrency: string, counterCurrency: string, rate: number }, audit: object) => Promise<void>} setRate
  * @property {() => Promise<object[]>} getAudit
- * @property {(options?: { last?: number }) => Promise<object[]>} getLog
+ * @property {() => Promise<object[]>} getLog
  * @property {(entry: object) => Promise<void>} appendLog
  * @property {(accountId: number, amount: number) => Promise<boolean>} reserveBalance
  * @property {(accountId: number, amount: number) => Promise<void>} creditBalance

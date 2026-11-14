@@ -86,8 +86,8 @@ export async function createRedisAdapter(url) {
         .exec();
     },
 
-    async getLog({ last } = {}) {
-      return readStream(client, "log", last);
+    async getLog() {
+      return readStream(client, "log");
     },
 
     async getAudit() {
@@ -121,11 +121,8 @@ export async function createRedisAdapter(url) {
   };
 }
 
-async function readStream(client, stream, last) {
-  //last: only the newest N entries (XREVRANGE), still returned oldest first
-  const entries = last
-    ? (await client.xRevRange(stream, "+", "-", { COUNT: last })).reverse()
-    : await client.xRange(stream, "-", "+");
+async function readStream(client, stream) {
+  const entries = await client.xRange(stream, "-", "+");
   return entries.map(({ message }) => ({ ...JSON.parse(message.data), prev: message.prev, hash: message.hash }));
 }
 

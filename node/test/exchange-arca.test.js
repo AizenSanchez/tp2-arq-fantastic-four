@@ -87,11 +87,6 @@ test("approved: 200, with the ARCA code in the answer", async () => {
   assert.deepEqual(json.arca, { ok: true, codigoAutorizacion: "cod-123", intentos: 1 });
 });
 
-test("the DNI as a number is accepted (converted to text)", async () => {
-  reset("approve");
-  assert.equal((await exchange(body({ dni: 40101235 }))).status, 200);
-});
-
 test("ARCA rejects: 403, logged with ok:false, nothing reserved", async () => {
   reset("reject");
   const before = await (await fetch(`${baseUrl}/accounts`)).json();
@@ -100,7 +95,7 @@ test("ARCA rejects: 403, logged with ok:false, nothing reserved", async () => {
   assert.equal(json.ok, false);
   assert.equal(json.obs, "DNI con restricciones fiscales (ARCA)");
   assert.deepEqual(await (await fetch(`${baseUrl}/accounts`)).json(), before);
-  const [last] = await (await fetch(`${baseUrl}/log?last=1`)).json();
+  const last = (await (await fetch(`${baseUrl}/log`)).json()).at(-1);
   assert.equal(last.id, json.id);
 });
 
@@ -119,7 +114,7 @@ test("ARCA 5xx twice: 503 with Retry-After, logged, and the key is free for a re
   assert.deepEqual(first.json, { error: "ARCA no disponible", motivo: "http_5xx" });
   assert.equal(arcaCalls, 2);
 
-  const [last] = await (await fetch(`${baseUrl}/log?last=1`)).json();
+  const last = (await (await fetch(`${baseUrl}/log`)).json()).at(-1);
   assert.equal(last.ok, false);
   assert.equal(last.arca.motivo, "http_5xx");
 
@@ -137,21 +132,11 @@ test("ARCA answers 4xx: 502", async () => {
 
 test("invalid or missing DNI: 400 and ARCA is not called", async () => {
   reset("approve");
-  for (const dni of [undefined, "", "abc", "999999", "100000000", "0123456", 1.5, null]) {
+  for (const dni of [undefined, "", "abc", "999999", "100000000", "0123456", 40101235, 1.5, null]) {
     const { status } = await exchange(body({ dni }));
     assert.equal(status, 400, `dni ${JSON.stringify(dni)}`);
   }
   assert.equal(arcaCalls, 0);
-});
-
-test("GET /log?last=N: newest N entries; invalid N is 400", async () => {
-  reset("approve");
-  await exchange(body());
-  await exchange(body());
-  const two = await (await fetch(`${baseUrl}/log?last=2`)).json();
-  assert.equal(two.length, 2);
-  assert.equal((await fetch(`${baseUrl}/log?last=0`)).status, 400);
-  assert.equal((await fetch(`${baseUrl}/log?last=abc`)).status, 400);
 });
 
 test("a 500 after ARCA approved is saved: the retry does not move the funds again", async () => {

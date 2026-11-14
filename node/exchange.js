@@ -61,8 +61,8 @@ export async function getRates() {
 }
 
 //returns the whole transaction log
-export async function getLog(options) {
-  return repository.getLog(options);
+export async function getLog() {
+  return repository.getLog();
 }
 
 //returns who changed balances and rates, and when

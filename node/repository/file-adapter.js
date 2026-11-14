@@ -77,9 +77,8 @@ export async function createFileAdapter({ dir, persist = true }) {
       rates[counterCurrency][baseCurrency] = 1 / rate;
     },
 
-    async getLog({ last } = {}) {
-      const log = await loadLog(logFile);
-      return last ? log.slice(-last) : log;
+    async getLog() {
+      return loadLog(logFile);
     },
 
     async appendLog(entry) {

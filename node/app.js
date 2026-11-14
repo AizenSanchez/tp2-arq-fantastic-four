@@ -105,7 +105,7 @@ app.get("/health", asyncHandler(async (req, res) => {
 
 const isPositiveNumber = (v) => typeof v === "number" && Number.isFinite(v) && v > 0;
 const isCurrencyCode = (v) => typeof v === "string" && /^[A-Z]{3}$/.test(v);
-//DNI as text, 7 or 8 digits: from 1000000 to 99999999 (a number is converted to text before this check)
+//DNI as text, from 1000000 to 99999999
 const isDni = (v) => typeof v === "string" && /^[1-9][0-9]{6,7}$/.test(v);
 const isAccountId = (v) => (typeof v === "string" && v.length > 0) || Number.isInteger(v);
 
@@ -177,15 +177,8 @@ app.put("/rates", asyncHandler(async (req, res) => {
 
 // LOG endpoint
 
-//GET /log?last=N answers only the newest N entries: with thousands of entries the full log is too big
 app.get("/log", asyncHandler(async (req, res) => {
-  if (req.query.last === undefined) {
-    return res.json(await getLog());
-  }
-  if (!/^[1-9][0-9]{0,5}$/.test(String(req.query.last))) {
-    return res.status(400).json({ error: "last must be a positive integer" });
-  }
-  res.json(await getLog({ last: Number(req.query.last) }));
+  res.json(await getLog());
 }));
 
 app.get("/audit", asyncHandler(async (req, res) => {
@@ -194,15 +187,11 @@ app.get("/audit", asyncHandler(async (req, res) => {
 
 // EXCHANGE endpoint
 
-// order (plan, section 3.1): idempotency -> validation -> ARCA -> exchange.
 // ARCA goes before the funds are reserved, so a refusal leaves nothing to undo
 
 async function validateBody(req, res, next) {
   //until ARCA answers nothing is decided, so a failure up to there lets the client retry with the same key
   res.locals.retryable = true;
-  if (typeof req.body?.dni === "number" && Number.isSafeInteger(req.body.dni)) {
-    req.body.dni = String(req.body.dni);
-  }
   const error = await validateExchange(req.body);
   if (error) {
     return res.status(400).json({ error });
