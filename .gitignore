@@ -25,3 +25,9 @@ pubkey
 *.pem
 *.bak
 .vscode
+
+# TP2
+node/infra.json
+tfplan
+*.tfplan
+perf/results/**/*.tmp
