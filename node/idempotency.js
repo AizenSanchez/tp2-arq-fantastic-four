@@ -32,12 +32,10 @@ export function createIdempotencyMiddleware({ store, ttlMs = 10 * 60 * 1000, lea
 
     const json = res.json.bind(res);
     res.json = (responseBody) => {
-      //a 5xx is not an answer to keep: free the key so the client's retry runs again
-      //(otherwise it would get a 409 during the lease, or the saved failure for ttlMs)
-      const save =
-        res.statusCode >= 500
-          ? store.release(key)
-          : store.complete(key, { body, response: { status: res.statusCode, body: responseBody } }, ttlMs);
+      //the handler marks the request retryable while no funds can have moved: a 5xx then frees the key
+      const save = res.locals.retryable && res.statusCode >= 500
+        ? store.release(key)
+        : store.complete(key, { body, response: { status: res.statusCode, body: responseBody } }, ttlMs);
       save
         .catch((err) => console.error(`could not save Idempotency-Key ${key}:`, err))
         .finally(() => json(responseBody));

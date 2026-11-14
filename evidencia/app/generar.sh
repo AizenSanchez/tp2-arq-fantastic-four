@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Regenera la evidencia de respuestas de la app (plan, punto 5.11) contra el compose local.
+# Regenera la evidencia de respuestas de la app contra el compose local.
 # Cada archivo empieza con el comando exacto que produjo la respuesta ("$ ...").
 # ARCA aprueba, rechaza o falla al azar: para 200 y 403 se prueban DNIs hasta obtener ese caso,
 # y se guarda el comando del intento que lo obtuvo.
@@ -55,7 +55,7 @@ run "$(exchange_cmd "$(body ',"dni":"123"')")" > $OUT/exchange-400-dni-invalido.
 $COMPOSE start arca >/dev/null 2>&1
 sleep 2
 
-# idempotencia: el primer request tiene que terminar en 200 o 403 (un 5xx libera la clave a proposito)
+# idempotencia: el primer request tiene que terminar en 200 o 403 (si ARCA falla la clave se libera a proposito)
 for i in $(seq 1 30); do
   dni=$(random_dni)
   cmd=$(exchange_cmd "$(body ",\"dni\":\"$dni\"")" "-H 'Idempotency-Key: demo-reintento-$dni' ")

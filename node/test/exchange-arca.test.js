@@ -2,7 +2,7 @@
 import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import http from "node:http";
-import { mkdtemp, cp, rm } from "node:fs/promises";
+import { mkdtemp, cp, rm, chmod, appendFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -152,4 +152,24 @@ test("GET /log?last=N: newest N entries; invalid N is 400", async () => {
   assert.equal(two.length, 2);
   assert.equal((await fetch(`${baseUrl}/log?last=0`)).status, 400);
   assert.equal((await fetch(`${baseUrl}/log?last=abc`)).status, 400);
+});
+
+test("a 500 after ARCA approved is saved: the retry does not move the funds again", async () => {
+  reset("approve");
+  const logFile = path.join(stateDir, "log.jsonl");
+  await appendFile(logFile, "");
+  await chmod(logFile, 0o444);
+  let first;
+  try {
+    first = await exchange(body(), { "idempotency-key": "log-down" });
+  } finally {
+    await chmod(logFile, 0o644);
+  }
+  assert.equal(first.status, 500);
+  const accounts = await (await fetch(`${baseUrl}/accounts`)).json();
+
+  const retry = await exchange(body(), { "idempotency-key": "log-down" });
+  assert.equal(retry.status, 500);
+  assert.equal(arcaCalls, 1);
+  assert.deepEqual(await (await fetch(`${baseUrl}/accounts`)).json(), accounts);
 });

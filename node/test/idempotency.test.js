@@ -115,15 +115,17 @@ test("with redis a key reserved by one replica is seen by another", { skip: !pro
   await replica2.close();
 });
 
-//--- TP2: a 5xx is not saved, so the retry of the client runs again
-
-test("a 5xx is not saved: the same key runs again", async (t) => {
+function startRetryableApp(t, retryable, status = 503) {
   const app = express();
   let calls = 0;
   app.use(express.json());
   app.post("/exchange", createIdempotencyMiddleware({ store: createMemoryStore() }), (req, res) => {
     calls++;
-    res.status(calls === 1 ? 503 : 200).json({ calls });
+    if (calls === 1) {
+      res.locals.retryable = retryable;
+      return res.status(status).json({ calls });
+    }
+    res.json({ calls });
   });
   const server = app.listen(0);
   t.after(() => server.close());
@@ -135,11 +137,30 @@ test("a 5xx is not saved: the same key runs again", async (t) => {
       body: JSON.stringify({ a: 1 }),
     });
 
-  assert.equal((await post()).status, 503);
-  const retry = await post();
-  assert.equal(retry.status, 200);
-  assert.equal(calls, 2);
-  //and the success is saved
-  assert.equal((await post()).status, 200);
-  assert.equal(calls, 2);
+  return { post, calls: () => calls };
+}
+
+test("a 5xx is saved like any other answer: the retry does not run again", async (t) => {
+  const app = startRetryableApp(t, false);
+
+  assert.equal((await app.post()).status, 503);
+  assert.equal((await app.post()).status, 503);
+  assert.equal(app.calls(), 1);
+});
+
+test("a retryable answer frees the key: the retry runs again and its success is saved", async (t) => {
+  const app = startRetryableApp(t, true);
+
+  assert.equal((await app.post()).status, 503);
+  assert.equal((await app.post()).status, 200);
+  assert.equal((await app.post()).status, 200);
+  assert.equal(app.calls(), 2);
+});
+
+test("a retryable answer below 500 is saved: only a failure frees the key", async (t) => {
+  const app = startRetryableApp(t, true, 400);
+
+  assert.equal((await app.post()).status, 400);
+  assert.equal((await app.post()).status, 400);
+  assert.equal(app.calls(), 1);
 });

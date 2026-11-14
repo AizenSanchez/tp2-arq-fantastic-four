@@ -198,6 +198,8 @@ app.get("/audit", asyncHandler(async (req, res) => {
 // ARCA goes before the funds are reserved, so a refusal leaves nothing to undo
 
 async function validateBody(req, res, next) {
+  //until ARCA answers nothing is decided, so a failure up to there lets the client retry with the same key
+  res.locals.retryable = true;
   if (typeof req.body?.dni === "number" && Number.isSafeInteger(req.body.dni)) {
     req.body.dni = String(req.body.dni);
   }
@@ -244,6 +246,7 @@ async function checkArca(req, res, next) {
     return res.status(503).set("Retry-After", "1").json({ error: "ARCA no disponible", motivo: err.motivo });
   }
 
+  res.locals.retryable = false;
   const resultado = validation.ok ? "aprobado" : "rechazado";
   guardedMetrics.arcaFinished({ resultado, intentos: validation.intentos, ms: validation.ms });
   logArcaValidation({ dni, resultado, codigoAutorizacion: validation.codigoAutorizacion, intentos: validation.intentos, ms: validation.ms });
