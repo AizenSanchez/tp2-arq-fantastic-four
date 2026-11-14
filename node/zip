@@ -2,6 +2,11 @@ OLD_DIR="$(pwd)"
 DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd $DIR
 
-zip src.zip *.js *.json -1
+# infra.json lo escribe terraform (arcaUri y redisUrl): sin el, la app no arranca en los nodos
+[ -f infra.json ] || { echo "Falta node/infra.json: correr terraform apply"; exit 1; }
+
+# -r: el codigo esta en carpetas (repository, metrics, state, tools) y tienen que llegar a los nodos
+rm -f src.zip
+zip -r -1 src.zip . -x 'node_modules/*' 'test/*' '*.md' 'src.zip' 'lb_dns' '*.bak' 'Dockerfile' '.*' 'state/*.jsonl'
 
 cd $OLD_DIR
