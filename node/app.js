@@ -1,6 +1,6 @@
 import express from "express";
 import connectDatadog from "connect-datadog";
-import dogstatsd from "node-dogstatsd";
+import StatsD from "hot-shots";
 
 import {
   init as exchangeInit,
@@ -73,9 +73,18 @@ app.use((req, res, next) => {
 
 //standard HTTP metrics of the Datadog integration (the teacher asked for it), next to our own http.* ones
 if (config.metricsAdapter == "statsd") {
+  //without errorHandler hot-shots writes every failed send to stderr: one line is enough
+  let warned = false;
   app.use(
     connectDatadog({
-      dogstatsd: new dogstatsd.StatsD(config.statsdHost, config.statsdPort),
+      dogstatsd: new StatsD({
+        host: config.statsdHost,
+        port: config.statsdPort,
+        errorHandler: (err) => {
+          if (!warned) console.error(`express metrics: statsd send failed (${err.code ?? err.message})`);
+          warned = true;
+        },
+      }),
       stat: `${config.metricsPrefix}.express`,
       method: true,
       response_code: true,

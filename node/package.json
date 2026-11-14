@@ -1,7 +1,7 @@
 {
   "name": "exchange-service",
   "version": "1.0.0",
-  "description": "arVault exchange service (TP1 integrated version) with ARCA validation, for Azure",
+  "description": "arVault exchange service with ARCA validation, for Azure",
   "license": "ISC",
   "author": "",
   "type": "module",
@@ -15,7 +15,6 @@
     "express": "^4.21.2",
     "hot-shots": "17.1.1",
     "nanoid": "^5.1.2",
-    "node-dogstatsd": "^0.0.7",
     "redis": "6.2.1"
   }
 }
