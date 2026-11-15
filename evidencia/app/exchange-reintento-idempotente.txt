@@ -1,0 +1,26 @@
+# Mismo Idempotency-Key y mismo body, dos veces.
+# Entradas en el log (curl -s localhost:3000/log | jq length): antes del primero 6, despues del reintento 7 (el primero suma 1, el reintento no suma)
+## Primer request
+$ curl -s -i -X POST localhost:3000/exchange -H 'Content-Type: application/json' -H 'Idempotency-Key: demo-reintento-34912313' -d '{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"34912313"}'
+HTTP/1.1 403 Forbidden
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 364
+ETag: W/"16c-nXAYlO6oc4NRWpUaL+XKo+LRPHg"
+Date: Sat, 14 Nov 2026 20:55:09 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"id":"DKptJWFMfxoa1l-4n5joZ","ts":"2026-11-14T20:55:09.705Z","ok":false,"actor":null,"arca":{"ok":false,"codigoAutorizacion":null,"intentos":1},"request":{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"34912313"},"exchangeRate":null,"counterAmount":0,"obs":"DNI con restricciones fiscales (ARCA)"}
+## Reintento
+$ curl -s -i -X POST localhost:3000/exchange -H 'Content-Type: application/json' -H 'Idempotency-Key: demo-reintento-34912313' -d '{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"34912313"}'
+HTTP/1.1 403 Forbidden
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 364
+ETag: W/"16c-nXAYlO6oc4NRWpUaL+XKo+LRPHg"
+Date: Sat, 14 Nov 2026 20:55:09 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"id":"DKptJWFMfxoa1l-4n5joZ","ts":"2026-11-14T20:55:09.705Z","ok":false,"actor":null,"arca":{"ok":false,"codigoAutorizacion":null,"intentos":1},"request":{"baseCurrency":"ARS","counterCurrency":"USD","baseAmount":1000,"baseAccountId":101,"counterAccountId":102,"dni":"34912313"},"exchangeRate":null,"counterAmount":0,"obs":"DNI con restricciones fiscales (ARCA)"}

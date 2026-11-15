@@ -1,11 +1,11 @@
-# Deja el estado de arVault como nuevo (borra las claves {av}:* de Redis y vuelve a sembrar).
+# Deja el estado de arVault como nuevo (borra todas las claves de Redis y vuelve a sembrar).
 # Va sin become: pm2 y la app pertenecen a azureuser. No hace falta reiniciar pm2.
 # run_once: el estado esta en Redis, que es uno solo para todos los nodos.
 - name: Reset del estado de arVault
   hosts: all
   gather_facts: no
   tasks:
-    - name: Borrar las claves {av}:* y volver a sembrar
+    - name: Borrar todas las claves y volver a sembrar
       command: node tools/reset-state.js
       args:
         chdir: /home/azureuser

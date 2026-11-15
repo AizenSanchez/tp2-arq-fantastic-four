@@ -1,0 +1,11 @@
+$ curl -s -i localhost:3000/
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: text/html; charset=utf-8
+Content-Length: 13
+ETag: W/"d-aGTv12Omx4QelmA2daCP+sXihWo"
+Date: Sat, 14 Nov 2026 20:54:55 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+Server is up.

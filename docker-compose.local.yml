@@ -1,0 +1,32 @@
+# Entorno local para desarrollar y probar la app sin Azure: Redis + ARCA (imagen de la catedra) + la app.
+# Uso: docker compose -f docker-compose.local.yml up -d --build
+# Los tests (cd node && npm test) tambien pueden usar este Redis: REDIS_URL=redis://localhost:6379
+services:
+  redis:
+    image: redis:7.4.11
+    ports:
+      - "127.0.0.1:6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  arca:
+    image: arqsoft/arca:1.0.0
+    ports:
+      - "127.0.0.1:8081:8080"   # 8081 en el host por si el 8080 esta ocupado; la app usa arca:8080 por la red de docker
+
+  app:
+    build: ./node
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      REDIS_URL: redis://redis:6379
+      ARCA_URI: http://arca:8080
+      METRICS_ADAPTER: "null"
+    depends_on:
+      redis:
+        condition: service_healthy
+      arca:
+        condition: service_started
