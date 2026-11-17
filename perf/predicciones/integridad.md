@@ -94,7 +94,7 @@ Igual que en las demás predicciones: es el viaje de ida y vuelta por internet d
 | Usuarios cuyo primer pedido terminó en 200 / 403 / 503 | ≈ 117 / 72 / 11 (±14 / ±12 / ±6) | esperado |
 | Usuarios con **dos aprobaciones distintas** (duplicado) | **0** | **exacto** |
 | Entradas del log con `ok: true` | = cantidad de usuarios con alguna aprobación ≈ **124** (±14) | esperado; la igualdad con el conteo del cliente es **exacta** |
-| Entradas totales nuevas en el log | ≈ **211** (±4): una por usuario, más una por cada usuario cuyo primer pedido fue 503 | esperado |
+| Entradas totales nuevas en el log | ≈ **211** (±7): una por usuario, más una por cada usuario cuyo primer pedido fue 503 | esperado |
 | Variación del saldo de USD | = −(suma de `counterAmount` de las entradas `ok: true`) | **exacto** (tolerancia 10⁻⁶) |
 | Variación del saldo de ARS | = +1.000 × cantidad de aprobaciones | **exacto** |
 | Latencia del reintento (cuando es repetición guardada) | mediana ≈ **RTT + 5 ms**, sin ARCA ni transferencias | esperado |
@@ -111,7 +111,7 @@ Igual que en las demás predicciones: es el viaje de ida y vuelta por internet d
 
 | Qué | 1 nodo | 2 nodos |
 |---|---|---|
-| Reintentos que caen en otro nodo | 0 % | **≈ 50 %** (±7 puntos, o sea 93 a 107 de 200) |
+| Reintentos que caen en otro nodo | 0 % | **≈ 50 %** (±7 puntos, o sea 86 a 114 de 200) |
 | Latencia del reintento repetido | RTT + 5 ms | RTT + 5 ms (no depende del nodo: la respuesta guardada está en Redis) |
 | Entradas del log | ≈ 211 | ≈ 211 |
 
@@ -129,3 +129,7 @@ Igual que en las demás predicciones: es el viaje de ida y vuelta por internet d
 - [ ] Medir el RTT base (`GET /`) y anotarlo.
 - [ ] Confirmar con un smoke de ARCA en Azure las proporciones 5/36/59 %. Si difieren, anotarlo; las invariantes marcadas **exacto** no cambian.
 - [ ] Reiniciar el estado (`ansible/reset.sh`) antes de cada escenario y **correr solo uno a la vez**: los escenarios cambian la tasa y el saldo de USD, que son compartidos con los demás bloques.
+
+## Nota al pie (17/11, antes de correr cualquier prueba)
+
+Se corrigieron dos tolerancias que estaban mal calculadas: las entradas totales del log de reintentos pasaron de ±4 a ±7 (con ±4 solo se cubría el 79 % de los casos por puro azar de ARCA) y el cruce entre nodos se expresó como 86 a 114 de 200 (±7 puntos), que es lo que decía el texto. Los valores centrales no cambian.
