@@ -3,8 +3,11 @@
   "corrida": "exchange-capacidad",
   "entorno": "local",
   "rtt": {
-    "p50_ms": 1.5,
-    "p95_ms": 2.6
+    "reutilizada": {
+      "p50_ms": 1.5,
+      "p95_ms": 2.6
+    },
+    "nueva": null
   },
   "recorte_s": {
     "inicio": 5,
@@ -1058,6 +1061,18 @@
     ]
   },
   "artillery": {
+    "response_time_2xx": {
+      "n": 28930,
+      "p50": 1064.4,
+      "p95": 6569.8,
+      "p99": 9607.1
+    },
+    "response_time_4xx": {
+      "n": 15271,
+      "p50": 441.5,
+      "p95": 6569.8,
+      "p99": 9607.1
+    },
     "codigos": {
       "http.codes.403": 15271,
       "http.codes.503": 2964,

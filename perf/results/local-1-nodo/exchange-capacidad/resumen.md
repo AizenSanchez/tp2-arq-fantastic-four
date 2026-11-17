@@ -17,7 +17,9 @@ node: v24.22.3   maquina: DESKTOP-BV02RG7 (8 CPU, 8 GiB)   conexion: local
 codigo de salida de artillery: 0
 ```
 
-RTT de base (20 × `GET /`): p50 1.5 ms, p95 2.6 ms.
+RTT de base (`GET /`): conexión reutilizada p50 1.5 ms, p95 2.6 ms · conexión nueva — (no se midió en esta corrida).
+
+Las latencias de este resumen salen de `pedidos.jsonl`: desde antes de abrir la conexión hasta el fin de la respuesta (incluyen el handshake TCP, porque Artillery abre una conexión por pedido). El `http.response_time` de Artillery y Datadog es más corto: solo desde que terminó de salir el pedido hasta el primer byte.
 
 ## Por fase (por hora de salida, sin los primeros 5 s ni los últimos 2 s de cada fase)
 
@@ -98,5 +100,7 @@ Bajada a 20 pedidos/s. Umbral: p95 de los 200 ≤ 1402.8 ms y sin errores propio
 ## Control contra Artillery
 
 Códigos: `{"http.codes.403":15271,"http.codes.503":2964,"http.codes.200":28930}` · errores: `{"errors.ERR_SOCKET_TIMEOUT":80557,"errors.ECONNRESET":1278}`
+
+`http.response_time` de Artillery (toda la corrida, ms): 2xx `{"n":28930,"p50":1064.4,"p95":6569.8,"p99":9607.1}` · 4xx `{"n":15271,"p50":441.5,"p95":6569.8,"p99":9607.1}`
 
 Escenarios creados: 129000, fallidos: 81835, líneas en pedidos.jsonl: 129000.

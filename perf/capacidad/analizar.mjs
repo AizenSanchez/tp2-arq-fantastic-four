@@ -140,7 +140,10 @@ for (const f of porFase) {
   f.cumple = Object.values(f.condiciones).every(Boolean);
 }
 
-const resumen = { caso, corrida: nombre, entorno: ENTORNO, rtt: rtt && { p50_ms: rtt.p50_ms, p95_ms: rtt.p95_ms }, recorte_s: { inicio: RECORTE_S, fin: RECORTE_FIN_S }, fases: porFase };
+// rtt.json viejo: una sola serie con fetch (conexion reutilizada salvo la primera muestra)
+const rttReutilizada = rtt ? { p50_ms: rtt.reutilizada?.p50_ms ?? rtt.p50_ms, p95_ms: rtt.reutilizada?.p95_ms ?? rtt.p95_ms } : null;
+const rttNueva = rtt?.nueva ? { p50_ms: rtt.nueva.p50_ms, p95_ms: rtt.nueva.p95_ms, connect_p50_ms: rtt.nueva.connect_p50_ms } : null;
+const resumen = { caso, corrida: nombre, entorno: ENTORNO, rtt: rtt && { reutilizada: rttReutilizada, nueva: rttNueva }, recorte_s: { inicio: RECORTE_S, fin: RECORTE_FIN_S }, fases: porFase };
 
 // ------------------------------------------------------------------ capacidad: B y recuperacion
 
@@ -229,7 +232,12 @@ if (corrida === "endurance") {
 }
 
 const contadores = artillery?.aggregate?.counters ?? {};
+// http.response_time de Artillery (y de Datadog) es la fase firstByte de got: sin connect ni envio del pedido
+const resumenes = artillery?.aggregate?.summaries ?? {};
+const tiempo = (k) => (resumenes[k] ? { n: resumenes[k].count, p50: resumenes[k].p50 ?? resumenes[k].median, p95: resumenes[k].p95, p99: resumenes[k].p99 } : null);
 resumen.artillery = {
+  response_time_2xx: tiempo("http.response_time.2xx"),
+  response_time_4xx: tiempo("http.response_time.4xx"),
   codigos: Object.fromEntries(Object.entries(contadores).filter(([k]) => k.startsWith("http.codes."))),
   errores: Object.fromEntries(Object.entries(contadores).filter(([k]) => k.startsWith("errors."))),
   escenarios_creados: contadores["vusers.created"] ?? null,
@@ -255,7 +263,9 @@ const md = [
   meta.trim(),
   "```",
   "",
-  `RTT de base (20 × \`GET /\`): p50 ${v(rtt?.p50_ms)} ms, p95 ${v(rtt?.p95_ms)} ms.`,
+  `RTT de base (\`GET /\`): conexión reutilizada p50 ${v(rttReutilizada?.p50_ms)} ms, p95 ${v(rttReutilizada?.p95_ms)} ms · conexión nueva ${rttNueva ? `p50 ${rttNueva.p50_ms} ms, p95 ${rttNueva.p95_ms} ms (connect p50 ${v(rttNueva.connect_p50_ms)} ms)` : "— (no se midió en esta corrida)"}.`,
+  "",
+  "Las latencias de este resumen salen de `pedidos.jsonl`: desde antes de abrir la conexión hasta el fin de la respuesta (incluyen el handshake TCP, porque Artillery abre una conexión por pedido). El `http.response_time` de Artillery y Datadog es más corto: solo desde que terminó de salir el pedido hasta el primer byte.",
   "",
   `## Por fase (por hora de salida, sin los primeros ${RECORTE_S} s ni los últimos ${RECORTE_FIN_S} s de cada fase)`,
   "",
@@ -354,6 +364,8 @@ md.push(
   "## Control contra Artillery",
   "",
   `Códigos: \`${JSON.stringify(resumen.artillery.codigos)}\` · errores: \`${JSON.stringify(resumen.artillery.errores)}\``,
+  "",
+  `\`http.response_time\` de Artillery (toda la corrida, ms): 2xx \`${JSON.stringify(resumen.artillery.response_time_2xx)}\` · 4xx \`${JSON.stringify(resumen.artillery.response_time_4xx)}\``,
   "",
   `Escenarios creados: ${v(resumen.artillery.escenarios_creados)}, fallidos: ${v(resumen.artillery.escenarios_fallidos)}, líneas en pedidos.jsonl: ${pedidos.length}.`,
   ""

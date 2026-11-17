@@ -4,6 +4,7 @@
 import { spawn, execFile, execFileSync, execSync } from "node:child_process";
 import { promisify } from "node:util";
 import fs from "node:fs";
+import http from "node:http";
 import os from "node:os";
 import path from "node:path";
 
@@ -101,18 +102,51 @@ await esperarSalud();
 
 // ------------------------------------------------------------------ 2: RTT de base
 
-// GET / no toca ARCA ni Redis: es la ida y vuelta de red mas el costo minimo de express
-console.log("[2/5] RTT de base: 20 x GET / secuenciales");
-const rtts = [];
-for (let n = 0; n < 20; n++) {
-  const t = performance.now();
-  const r = await fetch(`${BASE}/`, { signal: AbortSignal.timeout(5000) });
-  await r.text();
-  rtts.push(Math.round((performance.now() - t) * 10) / 10);
+// GET / no toca ARCA ni Redis: es la ida y vuelta de red mas el costo minimo de express. Se mide de dos formas:
+// - reutilizada: conexion keep-alive ya abierta (1 RTT). Es lo que agrega la red al http.response_time de
+//   Artillery/Datadog, que es la fase firstByte de got: desde que termino de salir el pedido hasta el primer byte.
+// - nueva: una conexion TCP por pedido, como hace Artillery (cada usuario virtual tiene su agente y hace un solo
+//   pedido). Es lo que agrega la red a la latencia de pedidos.jsonl (handshake + pedido, ~2 RTT).
+const r1 = (x) => Math.round(x * 10) / 10;
+function getRaiz(agent) {
+  return new Promise((resolve, reject) => {
+    const t = performance.now();
+    let tConnect = null;
+    const req = http.get(`${BASE}/`, { agent, timeout: 5000 }, (res) => {
+      res.resume();
+      res.on("end", () => resolve({ ms: r1(performance.now() - t), connect_ms: tConnect === null ? null : r1(tConnect - t) }));
+    });
+    req.on("socket", (s) => s.connecting && s.once("connect", () => (tConnect = performance.now())));
+    req.on("timeout", () => req.destroy(new Error("timeout de GET /")));
+    req.on("error", reject);
+  });
 }
-const rtt = { target: BASE, n: rtts.length, p50_ms: percentil(rtts, 50), p95_ms: percentil(rtts, 95), muestras_ms: rtts };
+const N_RTT = 20;
+const serie = (muestras) => ({ n: muestras.length, p50_ms: percentil(muestras, 50), p95_ms: percentil(muestras, 95), muestras_ms: muestras });
+console.log(`[2/5] RTT de base: ${N_RTT} x GET / con la conexion reutilizada y ${N_RTT} con conexion nueva`);
+const agenteKeepAlive = new http.Agent({ keepAlive: true, maxSockets: 1 });
+await getRaiz(agenteKeepAlive); // abre la conexion, no cuenta
+const reutilizada = [];
+for (let n = 0; n < N_RTT; n++) reutilizada.push((await getRaiz(agenteKeepAlive)).ms);
+agenteKeepAlive.destroy();
+const nueva = [];
+const connect = [];
+for (let n = 0; n < N_RTT; n++) {
+  const m = await getRaiz(false); // agent: false = conexion nueva y Connection: close
+  nueva.push(m.ms);
+  if (m.connect_ms !== null) connect.push(m.connect_ms);
+}
+const rtt = {
+  target: BASE,
+  // p50_ms y p95_ms de arriba son los de la conexion reutilizada (1 RTT)
+  p50_ms: percentil(reutilizada, 50),
+  p95_ms: percentil(reutilizada, 95),
+  reutilizada: serie(reutilizada),
+  nueva: { ...serie(nueva), connect_p50_ms: percentil(connect, 50) },
+};
 fs.writeFileSync(archivo("rtt.json"), JSON.stringify(rtt, null, 2) + "\n");
-console.log(`      p50 ${rtt.p50_ms} ms, p95 ${rtt.p95_ms} ms`);
+console.log(`      reutilizada: p50 ${rtt.reutilizada.p50_ms} ms, p95 ${rtt.reutilizada.p95_ms} ms`);
+console.log(`      nueva:       p50 ${rtt.nueva.p50_ms} ms, p95 ${rtt.nueva.p95_ms} ms (connect p50 ${rtt.nueva.connect_p50_ms} ms)`);
 
 // ------------------------------------------------------------------ 3: monitor de recursos (solo local)
 
@@ -204,7 +238,7 @@ fs.writeFileSync(
     `fin UTC: ${fin.toISOString()}`,
     `zona horaria: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
     `fases: ${JSON.stringify(FASES)}`,
-    `RTT de base (GET /): p50 ${rtt.p50_ms} ms, p95 ${rtt.p95_ms} ms`,
+    `RTT de base (GET /): conexion reutilizada p50 ${rtt.reutilizada.p50_ms} ms, p95 ${rtt.reutilizada.p95_ms} ms; conexion nueva p50 ${rtt.nueva.p50_ms} ms, p95 ${rtt.nueva.p95_ms} ms`,
     `commit: ${sh("git rev-parse HEAD")}`,
     `git status --porcelain (sin perf/results):\n${sh("git status --porcelain -- . ':!perf/results'") || "(vacio)"}`,
     `artillery: ${sh("perf/node_modules/.bin/artillery --version | grep -i artillery")}`,

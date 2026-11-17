@@ -63,7 +63,20 @@ Variables: `TARGET` (por defecto `localhost:3000` o `node/lb_dns`), `RESET_CMD` 
 contenedor, o `ansible/reset.sh` en Azure), `CONEXION`, `DATADOG_API_KEY` (solo Azure, solo por entorno),
 `DATADOG_API_HOST` (`us5.datadoghq.com`), y las de las fases de arriba.
 
-Antes de Artillery, `correr.mjs` reinicia el estado de Redis y mide el RTT de base (20 × `GET /` secuenciales).
+Antes de Artillery, `correr.mjs` reinicia el estado de Redis y mide el RTT de base con `GET /` (no toca ARCA ni
+Redis), de dos formas: 20 pedidos por una conexión keep-alive ya abierta (1 RTT) y 20 con una conexión nueva cada uno
+(handshake TCP + pedido, ~2 RTT).
+
+## Dos latencias distintas
+
+| Latencia | Dónde está | Desde | Hasta | RTT que incluye |
+|---|---|---|---|---|
+| la de `pedidos.jsonl` (y de `resumen.md`) | `ms` = `t1 − t0` | `beforeRequest`, antes de abrir la conexión | `afterResponse`, con el cuerpo ya recibido | conexión nueva (~2 RTT): Artillery abre una conexión por pedido, porque cada usuario virtual tiene su propio agente y hace un solo pedido |
+| `http.response_time` de Artillery y `artillery.http.response_time.*` en Datadog | reporte JSON de Artillery | fin del envío del pedido | primer byte de la respuesta | conexión reutilizada (1 RTT) |
+
+La segunda es la fase `firstByte` de got (`timings.response − timings.upload`, en
+`perf/node_modules/got/dist/source/core/utils/timer.js`), que Artillery publica como `http.response_time`
+(`artillery/dist/lib/core/engine_http.js`). No incluye la espera del socket, el DNS, el connect TCP ni el envío.
 
 ## Qué queda en `perf/results/<caso>/exchange-<corrida>/`
 
@@ -72,7 +85,7 @@ Antes de Artillery, `correr.mjs` reinicia el estado de Redis y mide el RTT de ba
   `ECONNREFUSED`...), `ms`, `escenario` (par de monedas) y, en los 503, si vino de ARCA y el motivo.
 - `recursos.jsonl` (solo local): CPU (% de un núcleo) y memoria de app, redis y arca cada 1 s, de `docker stats`.
   En Azure no se muestrea: lo cubre Datadog, recortado con las horas UTC de `meta.txt`.
-- `rtt.json`: las 20 muestras de `GET /` con su p50 y p95.
+- `rtt.json`: las muestras de `GET /` con conexión reutilizada y con conexión nueva, con su p50, p95 y el connect.
 - `meta.txt`: inicio y fin UTC, fases, commit, `git status`, versiones, máquina y conexión; en Azure, además,
   `terraform output` de `vmss_instances`, `vmss_sku` y `redis_sku`, y la región.
 - `resumen.md` y `resumen.json`: los genera `analizar.mjs` solo a partir de los archivos anteriores.
