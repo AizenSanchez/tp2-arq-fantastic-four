@@ -20,6 +20,11 @@ config:
             apiKey: "{{ $processEnvironment.DATADOG_API_KEY }}"
             apiHost: "{{ $processEnvironment.DATADOG_API_HOST }}"
             prefix: "artillery."
+            # El evento de inicio y fin lo manda dogapi, que NO recibe el sitio de Datadog y siempre llama al de EE.UU.
+            # (app.datadoghq.com). Con una cuenta de otro sitio (us5, eu...) falla y Artillery se cae antes de medir.
+            # Las metricas no dependen de esto: van por datadog-metrics, que si usa apiHost
+            event:
+              send: false
             tags:
               - "test:exchange-integridad-saldo"
               - "caso:{{ $processEnvironment.CASO }}"

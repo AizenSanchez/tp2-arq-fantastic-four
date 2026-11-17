@@ -123,6 +123,8 @@ Consecuencias para el grupo:
 - Una clave inválida, o una falla de Datadog al arrancar, **tira abajo toda la corrida** antes de medir nada. Antes de la corrida oficial hay que hacer una prueba corta con la clave real y mirar que llegue al dashboard.
 - Sin verificar: `apiHost` figura como deprecado en `datadog-metrics` (pide `site`). Funciona en esta versión, pero conviene comprobar con una clave real que `app.datadoghq.com` (lo que dice el plan) sea aceptado.
 
+**Mitigación verificada (misma fecha).** `dogapi`, que crea el evento de inicio y de fin de Artillery, se inicializa sin el sitio de Datadog (`datadog.js` líneas 91 a 94 solo le pasan `api_key` y `app_key`), así que siempre llama al sitio por defecto de EE.UU. El grupo usa `us5.datadoghq.com` (`ansible/vmss_setup.yml`): con una clave de otro sitio esa llamada falla igual que con la clave falsa. Las métricas no dependen de eso: van por `datadog-metrics`, que sí respeta el sitio (y le saca el `app.` inicial). Se agregó `event: send: false` al entorno `azure` de los tres YAML y se repitió la prueba en seco: la corrida **termina con INVARIANTES OK** (`local-datadog-sin-evento/salida.txt`), con los avisos esperables de un host inexistente. Costo: no aparecen en Datadog las marcas de inicio y fin de cada prueba (el rango temporal se sigue viendo con el selector del dashboard). Los YAML de los otros bloques y `perf/root.yaml` tienen el mismo problema si la cuenta no es de EE.UU.
+
 ## C. Saldo bajo carga (3.100 pedidos, 100 por segundo sostenidos)
 
 | | 1 nodo | 2 nodos | Predicción |

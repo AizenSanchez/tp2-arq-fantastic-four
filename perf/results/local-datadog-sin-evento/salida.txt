@@ -1,0 +1,546 @@
+[1/4] reinicio del estado: docker compose -f docker-compose.local.yml exec -T app node tools/reset-state.js
+reset: 4 keys deleted, state seeded again
+[2/4] estado inicial: USD 60000, ARS 120000000, 0 entradas en el log
+[3/4] Artillery (exchange-integridad-reintentos.yaml, entorno azure) contra http://localhost:3000
+Test run id: tjkcq_xd4wx3pgnpf7kb8qn9dzjgy8dp6dc_hjat
+2026-11-17T04:08:22.433Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T04:08:22.435Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794888502432',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: false
+  },
+  tags: [
+    'test:exchange-integridad-reintentos',
+    'caso:local-datadog-sin-evento'
+  ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T04:08:22.435Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+2026-11-17T04:08:26.097Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T04:08:26.101Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794888506097',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: false
+  },
+  tags: [
+    'test:exchange-integridad-reintentos',
+    'caso:local-datadog-sin-evento'
+  ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T04:08:26.102Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+2026-11-17T04:08:28.638Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T04:08:28.643Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794888508638',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: false
+  },
+  tags: [
+    'test:exchange-integridad-reintentos',
+    'caso:local-datadog-sin-evento'
+  ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T04:08:28.643Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+2026-11-17T04:08:30.683Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T04:08:30.686Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794888510682',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: false
+  },
+  tags: [
+    'test:exchange-integridad-reintentos',
+    'caso:local-datadog-sin-evento'
+  ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T04:08:30.686Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+2026-11-17T04:08:32.874Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T04:08:32.876Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794888512873',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: false
+  },
+  tags: [
+    'test:exchange-integridad-reintentos',
+    'caso:local-datadog-sin-evento'
+  ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T04:08:32.877Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+2026-11-17T04:08:35.220Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T04:08:35.225Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794888515219',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: false
+  },
+  tags: [
+    'test:exchange-integridad-reintentos',
+    'caso:local-datadog-sin-evento'
+  ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T04:08:35.225Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+2026-11-17T04:08:37.584Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T04:08:37.587Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794888517584',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: false
+  },
+  tags: [
+    'test:exchange-integridad-reintentos',
+    'caso:local-datadog-sin-evento'
+  ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T04:08:37.587Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+2026-11-17T04:08:40.163Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T04:08:40.166Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794888520162',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: false
+  },
+  tags: [
+    'test:exchange-integridad-reintentos',
+    'caso:local-datadog-sin-evento'
+  ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T04:08:40.166Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+Phase started: 200 usuarios, 10 por segundo (index: 0, duration: 20s) 01:08:40(-0300)
+
+--------------------------------------
+Metrics for period to: 01:08:50(-0300) (width: 9.119s)
+--------------------------------------
+
+http.codes.200: ................................................................ 106
+http.codes.403: ................................................................ 60
+http.codes.503: ................................................................ 2
+http.downloaded_bytes: ......................................................... 63798
+http.request_rate: ............................................................. 20/sec
+http.requests: ................................................................. 177
+http.response_time:
+  min: ......................................................................... 1
+  max: ......................................................................... 1199
+  mean: ........................................................................ 376
+  median: ...................................................................... 147
+  p95: ......................................................................... 1064.4
+  p99: ......................................................................... 1130.2
+http.response_time.2xx:
+  min: ......................................................................... 1
+  max: ......................................................................... 1199
+  mean: ........................................................................ 482.6
+  median: ...................................................................... 10.1
+  p95: ......................................................................... 1085.9
+  p99: ......................................................................... 1130.2
+http.response_time.4xx:
+  min: ......................................................................... 1
+  max: ......................................................................... 550
+  mean: ........................................................................ 195.9
+  median: ...................................................................... 257.3
+  p95: ......................................................................... 468.8
+  p99: ......................................................................... 550.1
+http.response_time.5xx:
+  min: ......................................................................... 109
+  max: ......................................................................... 148
+  mean: ........................................................................ 128.5
+  median: ...................................................................... 108.9
+  p95: ......................................................................... 108.9
+  p99: ......................................................................... 108.9
+http.responses: ................................................................ 168
+vusers.completed: .............................................................. 84
+vusers.created: ................................................................ 93
+vusers.created_by_name.Cambio ARS -> USD de 1.000 ARS, pedido dos veces: ....... 93
+vusers.failed: ................................................................. 0
+vusers.session_length:
+  min: ......................................................................... 266.5
+  max: ......................................................................... 1216.3
+  mean: ........................................................................ 767.4
+  median: ...................................................................... 889.1
+  p95: ......................................................................... 1130.2
+  p99: ......................................................................... 1200.1
+
+
+An error occurred during the HTTP request: FetchError: request to https://api.datadog.invalid/api/v1/series failed, reason: getaddrinfo ENOTFOUND api.datadog.invalid
+    at ClientRequest.<anonymous> (/home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/node_modules/node-fetch/lib/index.js:1501:11)
+    at ClientRequest.emit (node:events:519:28)
+    at emitErrorEvent (node:_http_client:107:11)
+    at TLSSocket.socketErrorListener (node:_http_client:574:5)
+    at TLSSocket.emit (node:events:519:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  type: 'system',
+  errno: 'ENOTFOUND',
+  code: 'ENOTFOUND'
+}
+An error occurred during the HTTP request: FetchError: request to https://api.datadog.invalid/api/v1/series failed, reason: getaddrinfo ENOTFOUND api.datadog.invalid
+    at ClientRequest.<anonymous> (/home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/node_modules/node-fetch/lib/index.js:1501:11)
+    at ClientRequest.emit (node:events:519:28)
+    at emitErrorEvent (node:_http_client:107:11)
+    at TLSSocket.socketErrorListener (node:_http_client:574:5)
+    at TLSSocket.emit (node:events:519:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  type: 'system',
+  errno: 'ENOTFOUND',
+  code: 'ENOTFOUND'
+}
+Phase completed: 200 usuarios, 10 por segundo (index: 0, duration: 20s) 01:09:00(-0300)
+
+An error occurred during the HTTP request: FetchError: request to https://api.datadog.invalid/api/v1/series failed, reason: getaddrinfo ENOTFOUND api.datadog.invalid
+    at ClientRequest.<anonymous> (/home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/node_modules/node-fetch/lib/index.js:1501:11)
+    at ClientRequest.emit (node:events:519:28)
+    at emitErrorEvent (node:_http_client:107:11)
+    at TLSSocket.socketErrorListener (node:_http_client:574:5)
+    at TLSSocket.emit (node:events:519:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  type: 'system',
+  errno: 'ENOTFOUND',
+  code: 'ENOTFOUND'
+}
+metrics: ERROR: failed to send metrics (err=FetchError: request to https://api.datadog.invalid/api/v1/series failed, reason: getaddrinfo ENOTFOUND api.datadog.invalid
+    at ClientRequest.<anonymous> (/home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/node_modules/node-fetch/lib/index.js:1501:11)
+    at ClientRequest.emit (node:events:519:28)
+    at emitErrorEvent (node:_http_client:107:11)
+    at TLSSocket.socketErrorListener (node:_http_client:574:5)
+    at TLSSocket.emit (node:events:519:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  type: 'system',
+  errno: 'ENOTFOUND',
+  code: 'ENOTFOUND'
+})
+--------------------------------------
+Metrics for period to: 01:09:00(-0300) (width: 9.966s)
+--------------------------------------
+
+http.codes.200: ................................................................ 130
+http.codes.403: ................................................................ 65
+http.codes.503: ................................................................ 7
+http.downloaded_bytes: ......................................................... 75346
+http.request_rate: ............................................................. 20/sec
+http.requests: ................................................................. 201
+http.response_time:
+  min: ......................................................................... 1
+  max: ......................................................................... 1338
+  mean: ........................................................................ 392.2
+  median: ...................................................................... 113.3
+  p95: ......................................................................... 1107.9
+  p99: ......................................................................... 1200.1
+http.response_time.2xx:
+  min: ......................................................................... 1
+  max: ......................................................................... 1338
+  mean: ........................................................................ 510.2
+  median: ...................................................................... 757.6
+  p95: ......................................................................... 1130.2
+  p99: ......................................................................... 1224.4
+http.response_time.4xx:
+  min: ......................................................................... 1
+  max: ......................................................................... 530
+  mean: ........................................................................ 186.9
+  median: ...................................................................... 214.9
+  p95: ......................................................................... 487.9
+  p99: ......................................................................... 518.1
+http.response_time.5xx:
+  min: ......................................................................... 103
+  max: ......................................................................... 113
+  mean: ........................................................................ 107.9
+  median: ...................................................................... 108.9
+  p95: ......................................................................... 108.9
+  p99: ......................................................................... 108.9
+http.responses: ................................................................ 202
+vusers.completed: .............................................................. 101
+vusers.created: ................................................................ 100
+vusers.created_by_name.Cambio ARS -> USD de 1.000 ARS, pedido dos veces: ....... 100
+vusers.failed: ................................................................. 0
+vusers.session_length:
+  min: ......................................................................... 224.8
+  max: ......................................................................... 1349.3
+  mean: ........................................................................ 792.7
+  median: ...................................................................... 907
+  p95: ......................................................................... 1224.4
+  p99: ......................................................................... 1326.4
+
+
+--------------------------------------
+Metrics for period to: 01:09:10(-0300) (width: 1.606s)
+--------------------------------------
+
+http.codes.200: ................................................................ 22
+http.codes.403: ................................................................ 8
+http.downloaded_bytes: ......................................................... 11600
+http.request_rate: ............................................................. 22/sec
+http.requests: ................................................................. 22
+http.response_time:
+  min: ......................................................................... 1
+  max: ......................................................................... 1328
+  mean: ........................................................................ 392.5
+  median: ...................................................................... 4
+  p95: ......................................................................... 1022.7
+  p99: ......................................................................... 1043.3
+http.response_time.2xx:
+  min: ......................................................................... 1
+  max: ......................................................................... 1328
+  mean: ........................................................................ 466.7
+  median: ...................................................................... 4
+  p95: ......................................................................... 1022.7
+  p99: ......................................................................... 1043.3
+http.response_time.4xx:
+  min: ......................................................................... 2
+  max: ......................................................................... 501
+  mean: ........................................................................ 188.5
+  median: ...................................................................... 3
+  p95: ......................................................................... 354.3
+  p99: ......................................................................... 354.3
+http.responses: ................................................................ 30
+vusers.completed: .............................................................. 15
+vusers.created: ................................................................ 7
+vusers.created_by_name.Cambio ARS -> USD de 1.000 ARS, pedido dos veces: ....... 7
+vusers.failed: ................................................................. 0
+vusers.session_length:
+  min: ......................................................................... 316.7
+  max: ......................................................................... 1338.5
+  mean: ........................................................................ 794.2
+  median: ...................................................................... 871.5
+  p95: ......................................................................... 1064.4
+  p99: ......................................................................... 1064.4
+
+
+All VUs finished. Total time: 23 seconds
+
+--------------------------------
+Summary report @ 01:09:04(-0300)
+--------------------------------
+
+http.codes.200: ................................................................ 258
+http.codes.403: ................................................................ 133
+http.codes.503: ................................................................ 9
+http.downloaded_bytes: ......................................................... 150744
+http.request_rate: ............................................................. 20/sec
+http.requests: ................................................................. 400
+http.response_time:
+  min: ......................................................................... 1
+  max: ......................................................................... 1338
+  mean: ........................................................................ 385.4
+  median: ...................................................................... 147
+  p95: ......................................................................... 1107.9
+  p99: ......................................................................... 1200.1
+http.response_time.2xx:
+  min: ......................................................................... 1
+  max: ......................................................................... 1338
+  mean: ........................................................................ 495.2
+  median: ...................................................................... 713.5
+  p95: ......................................................................... 1130.2
+  p99: ......................................................................... 1224.4
+http.response_time.4xx:
+  min: ......................................................................... 1
+  max: ......................................................................... 550
+  mean: ........................................................................ 191.1
+  median: ...................................................................... 237.5
+  p95: ......................................................................... 497.8
+  p99: ......................................................................... 528.6
+http.response_time.5xx:
+  min: ......................................................................... 103
+  max: ......................................................................... 148
+  mean: ........................................................................ 112.4
+  median: ...................................................................... 108.9
+  p95: ......................................................................... 113.3
+  p99: ......................................................................... 113.3
+http.responses: ................................................................ 400
+vusers.completed: .............................................................. 200
+vusers.created: ................................................................ 200
+vusers.created_by_name.Cambio ARS -> USD de 1.000 ARS, pedido dos veces: ....... 200
+vusers.failed: ................................................................. 0
+vusers.session_length:
+  min: ......................................................................... 224.8
+  max: ......................................................................... 1349.3
+  mean: ........................................................................ 782.2
+  median: ...................................................................... 889.1
+  p95: ......................................................................... 1153.1
+  p99: ......................................................................... 1326.4
+Log file: /home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/results/local-datadog-sin-evento/exchange-integridad-reintentos.json
+2026-11-17T04:09:04.550Z plugin:publish-metrics:datadog-statsd flushing metrics
+metrics: The `onSuccess` and `onError` callback arguments for BufferedMetricsLogger.flush() are deprecated and will be removed in a future release. Please use the promise object that `flush()` returns instead.
+An error occurred during the HTTP request: FetchError: request to https://api.datadog.invalid/api/v1/series failed, reason: getaddrinfo ENOTFOUND api.datadog.invalid
+    at ClientRequest.<anonymous> (/home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/node_modules/node-fetch/lib/index.js:1501:11)
+    at ClientRequest.emit (node:events:519:28)
+    at emitErrorEvent (node:_http_client:107:11)
+    at TLSSocket.socketErrorListener (node:_http_client:574:5)
+    at TLSSocket.emit (node:events:519:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  type: 'system',
+  errno: 'ENOTFOUND',
+  code: 'ENOTFOUND'
+}
+2026-11-17T04:09:04.550Z plugin:publish-metrics:datadog-statsd flushing metrics
+metrics: The `onSuccess` and `onError` callback arguments for BufferedMetricsLogger.flush() are deprecated and will be removed in a future release. Please use the promise object that `flush()` returns instead.
+2026-11-17T04:09:04.550Z plugin:publish-metrics:datadog-statsd flushing metrics
+metrics: The `onSuccess` and `onError` callback arguments for BufferedMetricsLogger.flush() are deprecated and will be removed in a future release. Please use the promise object that `flush()` returns instead.
+2026-11-17T04:09:04.550Z plugin:publish-metrics:datadog-statsd flushing metrics
+metrics: The `onSuccess` and `onError` callback arguments for BufferedMetricsLogger.flush() are deprecated and will be removed in a future release. Please use the promise object that `flush()` returns instead.
+2026-11-17T04:09:04.550Z plugin:publish-metrics:datadog-statsd flushing metrics
+metrics: The `onSuccess` and `onError` callback arguments for BufferedMetricsLogger.flush() are deprecated and will be removed in a future release. Please use the promise object that `flush()` returns instead.
+2026-11-17T04:09:04.550Z plugin:publish-metrics:datadog-statsd flushing metrics
+metrics: The `onSuccess` and `onError` callback arguments for BufferedMetricsLogger.flush() are deprecated and will be removed in a future release. Please use the promise object that `flush()` returns instead.
+2026-11-17T04:09:04.550Z plugin:publish-metrics:datadog-statsd flushing metrics
+metrics: The `onSuccess` and `onError` callback arguments for BufferedMetricsLogger.flush() are deprecated and will be removed in a future release. Please use the promise object that `flush()` returns instead.
+2026-11-17T04:09:04.550Z plugin:publish-metrics:datadog-statsd flushing metrics
+metrics: The `onSuccess` and `onError` callback arguments for BufferedMetricsLogger.flush() are deprecated and will be removed in a future release. Please use the promise object that `flush()` returns instead.
+An error occurred during the HTTP request: FetchError: request to https://api.datadog.invalid/api/v1/series failed, reason: getaddrinfo ENOTFOUND api.datadog.invalid
+    at ClientRequest.<anonymous> (/home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/node_modules/node-fetch/lib/index.js:1501:11)
+    at ClientRequest.emit (node:events:519:28)
+    at emitErrorEvent (node:_http_client:107:11)
+    at TLSSocket.socketErrorListener (node:_http_client:574:5)
+    at TLSSocket.emit (node:events:519:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  type: 'system',
+  errno: 'ENOTFOUND',
+  code: 'ENOTFOUND'
+}
+An error occurred during the HTTP request: FetchError: request to https://api.datadog.invalid/api/v1/series failed, reason: getaddrinfo ENOTFOUND api.datadog.invalid
+    at ClientRequest.<anonymous> (/home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/node_modules/node-fetch/lib/index.js:1501:11)
+    at ClientRequest.emit (node:events:519:28)
+    at emitErrorEvent (node:_http_client:107:11)
+    at TLSSocket.socketErrorListener (node:_http_client:574:5)
+    at TLSSocket.emit (node:events:519:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  type: 'system',
+  errno: 'ENOTFOUND',
+  code: 'ENOTFOUND'
+}
+metrics: ERROR: failed to send metrics (err=FetchError: request to https://api.datadog.invalid/api/v1/series failed, reason: getaddrinfo ENOTFOUND api.datadog.invalid
+    at ClientRequest.<anonymous> (/home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/node_modules/node-fetch/lib/index.js:1501:11)
+    at ClientRequest.emit (node:events:519:28)
+    at emitErrorEvent (node:_http_client:107:11)
+    at TLSSocket.socketErrorListener (node:_http_client:574:5)
+    at TLSSocket.emit (node:events:519:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  type: 'system',
+  errno: 'ENOTFOUND',
+  code: 'ENOTFOUND'
+})
+
+[4/4] exchange-integridad-reintentos (local-datadog-sin-evento)
+respuestas: {"200":258,"403":133,"503":9}   por nodo: {"b0956cfcb02a":400}
+  ok    [exacta] todos los pedidos tienen respuesta registrada: 400 de 400
+  ok    [exacta] sin errores propios (otros estados, timeouts, conexiones caidas): otros estados: 0, errores de Artillery: 0, estados: {"200":258,"403":133,"503":9}
+  ok    [exacta] el saldo de USD nunca fue negativo: minimo visto: 59912.756113681426 en 51 lecturas
+  ok    [exacta] hay 200 usuarios con sus dos respuestas: 200
+  ok    [exacta] reintentos de un 200 o 403 devuelven la misma respuesta y el mismo id (100 %): 191 de 191
+  ok    [exacta] ningun usuario con dos aprobaciones distintas: 0
+  ok    [exacta] sin respuestas 409: 0
+  ok    [exacta] entradas del log con ok:true = aprobaciones distintas: 132 contra 132
+  ok    [exacta] entradas nuevas del log = respuestas distintas + 503: 209 contra 209
+  ok    [exacta] saldo de USD varia en -(suma de lo aprobado): 87.24388631857437 contra 87.24388631857236
+  ok    [exacta] saldo de ARS varia en +(suma de lo aprobado): 132000 contra 132000
+  ok    [esperada] primer pedido 200: 126 (rango 103 a 131)
+  ok    [esperada] primer pedido 403: 65 (rango 60 a 84)
+  ok    [esperada] primer pedido 503: 9 (rango 5 a 17)
+  ok    [esperada] usuarios con alguna aprobacion: 132 (rango 110 a 138)
+  ok    [esperada] entradas nuevas del log: 209 (rango 204 a 218)
+  ok    [exacta] con un solo nodo ningun reintento cruza de nodo: 0
+  ok    [esperada] mediana del reintento repetido (RTT + 5 ms): 7 (rango 0 a 60)
+
+=> INVARIANTES OK. Invariantes exactas rotas: 0. Valores esperados fuera de rango: 0.
+Evidencia en perf/results/local-datadog-sin-evento/ (crudo de Artillery: exchange-integridad-reintentos.json)
