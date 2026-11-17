@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Corre un escenario de integridad de punta a punta y verifica sus invariantes.
 //
-//   node perf/integridad/correr.mjs <saldo|reintentos> <caso> [--env local|azure]
+//   node perf/integridad/correr.mjs <saldo|saldo-carga|reintentos|duplicados> <caso> [--env local|azure]
 //
 // Que hace, en orden:
 //   1. reinicia el estado de Redis (los escenarios cambian tasa y saldos, que son compartidos)
@@ -15,6 +15,7 @@
 // Variables de entorno: TARGET o TARGETS (nodos, separados por coma), RESET_CMD (como reiniciar el estado),
 // RTT_MS (latencia de red base, para comparar latencias), CONEXION (cable o wifi), DATADOG_API_KEY (solo azure).
 import { spawn, execSync } from "node:child_process";
+import crypto from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -37,16 +38,23 @@ const [escenario, caso] = args;
 
 const ESCENARIOS = {
   saldo: { yaml: "exchange-integridad-saldo.yaml", pedidos: 400 },
+  // lo mismo con 100 pedidos por segundo: la integridad tiene que valer tambien con el nodo ocupado
+  "saldo-carga": { yaml: "exchange-integridad-saldo-carga.yaml", pedidos: 3100 },
   reintentos: { yaml: "exchange-integridad-reintentos.yaml", pedidos: 400 },
+  // dos pedidos iguales A LA VEZ con la misma clave. Artillery ejecuta los pasos de un usuario en secuencia
+  // y no puede mandarlos a la vez, asi que este escenario usa un lanzador propio (motor "propio"):
+  // 100 pares + un tercer pedido por par = 300 pedidos
+  duplicados: { motor: "propio", pedidos: 300, pares: 100, paresPorSegundo: 10 },
 };
 
 if (!ESCENARIOS[escenario] || !caso || !["local", "azure"].includes(ENTORNO)) {
-  console.error("uso: node perf/integridad/correr.mjs <saldo|reintentos> <caso> [--env local|azure]");
+  console.error("uso: node perf/integridad/correr.mjs <saldo|saldo-carga|reintentos|duplicados> <caso> [--env local|azure]");
   console.error("ejemplos de caso: local-1-nodo, local-2-nodos, 1-nodo, escalado");
   process.exit(2);
 }
 
 const nombreCompleto = `exchange-integridad-${escenario}`;
+const esSaldo = escenario === "saldo" || escenario === "saldo-carga";
 const salida = path.join(RAIZ, "perf/results", caso);
 const extras = path.join(salida, nombreCompleto);
 const rawArtillery = path.join(salida, `${nombreCompleto}.json`);
@@ -128,7 +136,7 @@ await esperarSalud();
 // saldo: tasa 0,001 (5.000 ARS = 5 USD exactos) y 100 USD de saldo = saldo para 20 cambios
 const MONTO_ARS = 5000;
 const MONTO_USD = 5;
-if (escenario === "saldo") {
+if (esSaldo) {
   const inicial = await leerEstado();
   const r1 = await http("PUT", `${BASE}/rates`, { baseCurrency: "ARS", counterCurrency: "USD", rate: 0.001 });
   const r2 = await http("PUT", `${BASE}/accounts/${inicial.usdId}/balance`, { balance: 100 });
@@ -161,31 +169,77 @@ const vigilante = (async () => {
 })();
 
 const inicio = new Date();
-console.log(`[3/4] Artillery (${ESCENARIOS[escenario].yaml}, entorno ${ENTORNO}) contra ${NODOS.join(", ")}`);
-const codigo = await new Promise((resolve) => {
-  const p = spawn(
-    path.join(RAIZ, "perf/node_modules/.bin/artillery"),
-    ["run", ESCENARIOS[escenario].yaml, "-e", ENTORNO, "--output", rawArtillery],
-    {
-      cwd: AQUI,
-      stdio: "inherit",
-      env: {
-        ...process.env,
-        TARGET: NODOS[0],
-        TARGETS: NODOS.join(","),
-        CASO: caso,
-        DATADOG_API_HOST: process.env.DATADOG_API_HOST ?? "app.datadoghq.com",
-        PEDIDOS_JSONL: path.join(extras, "pedidos.jsonl"),
-      },
+let codigo = 0;
+let erroresDelLanzador = 0;
+
+// motor propio: dos pedidos iguales a la vez con la misma Idempotency-Key, y despues un tercero
+async function lanzarDuplicados() {
+  const { pares, paresPorSegundo } = ESCENARIOS[escenario];
+  const archivo = path.join(extras, "pedidos.jsonl");
+  const dniAlAzar = () => String(1000000 + Math.floor(Math.random() * (99999999 - 1000000 + 1)));
+  const nodoAlAzar = () => NODOS[Math.floor(Math.random() * NODOS.length)];
+  const pedir = async (key, dni, intento) => {
+    const t0 = Date.now();
+    try {
+      const r = await fetch(`${nodoAlAzar()}/exchange`, {
+        method: "POST",
+        headers: { "content-type": "application/json", "Idempotency-Key": key },
+        body: JSON.stringify({ baseCurrency: "ARS", counterCurrency: "USD", baseAmount: 1000, baseAccountId: 101, counterAccountId: 102, dni }),
+        signal: AbortSignal.timeout(10000),
+      });
+      const cuerpo = await r.json().catch(() => ({}));
+      fs.appendFileSync(archivo, JSON.stringify({ t: Date.now(), key, intento, status: r.status, id: cuerpo.id ?? null, node: r.headers.get("x-node"), retryAfter: r.headers.get("retry-after"), ms: Date.now() - t0 }) + "\n");
+    } catch {
+      erroresDelLanzador++;
     }
+  };
+  await Promise.all(
+    Array.from({ length: pares }, async (_, i) => {
+      await dormir((i * 1000) / paresPorSegundo);
+      const key = crypto.randomUUID();
+      const dni = dniAlAzar();
+      await Promise.all([pedir(key, dni, 1), pedir(key, dni, 2)]); // a la vez
+      await pedir(key, dni, 3); // despues, uno solo
+    })
   );
-  p.on("exit", resolve);
-});
+  fs.writeFileSync(rawArtillery, JSON.stringify({ motor: "propio", pares, paresPorSegundo, erroresDelLanzador }, null, 2) + "\n");
+}
+
+if (ESCENARIOS[escenario].motor === "propio") {
+  console.log(`[3/4] lanzador propio (${ESCENARIOS[escenario].pares} pares de pedidos simultaneos) contra ${NODOS.join(", ")}`);
+  await lanzarDuplicados();
+} else {
+  console.log(`[3/4] Artillery (${ESCENARIOS[escenario].yaml}, entorno ${ENTORNO}) contra ${NODOS.join(", ")}`);
+  codigo = await new Promise((resolve) => {
+    const p = spawn(
+      path.join(RAIZ, "perf/node_modules/.bin/artillery"),
+      ["run", ESCENARIOS[escenario].yaml, "-e", ENTORNO, "--output", rawArtillery],
+      {
+        cwd: AQUI,
+        stdio: "inherit",
+        env: {
+          ...process.env,
+          TARGET: NODOS[0],
+          TARGETS: NODOS.join(","),
+          CASO: caso,
+          DATADOG_API_HOST: process.env.DATADOG_API_HOST ?? "app.datadoghq.com",
+          PEDIDOS_JSONL: path.join(extras, "pedidos.jsonl"),
+        },
+      }
+    );
+    p.on("exit", resolve);
+  });
+}
 const fin = new Date();
 await dormir(1500);
 vigilando = false;
 await vigilante;
 if (codigo !== 0) console.error(`AVISO: Artillery termino con codigo ${codigo}`);
+if (!fs.existsSync(rawArtillery)) {
+  console.error(`\nERROR: Artillery no genero el reporte (${path.relative(RAIZ, rawArtillery)}), no hay nada que verificar.`);
+  console.error("Causas conocidas: el plugin de Datadog cae con una clave invalida o si Datadog no responde (TypeError en datadog.js), o el target no responde.");
+  process.exit(3);
+}
 
 // ---------------------------------------------------------------- 4: foto final y verificacion
 
@@ -193,13 +247,18 @@ const despues = await leerEstado();
 const logCompleto = (await http("GET", `${BASE}/log`)).json;
 const nuevas = logCompleto.slice(logAntes);
 fs.writeFileSync(path.join(extras, "saldos.jsonl"), saldos.map((s) => JSON.stringify(s)).join("\n") + "\n");
-guardar("despues.json", { cuentas: despues.cuentas, entradasNuevasDeLog: nuevas });
+// con miles de entradas (saldo-carga) se guardan solo las aprobadas, para no subir megas de log al repo
+const recortado = nuevas.length > 500;
+guardar("despues.json", { cuentas: despues.cuentas, cantidadDeEntradasNuevas: nuevas.length, recortado, entradasNuevasDeLog: recortado ? nuevas.filter((e) => e.ok) : nuevas });
 
 const pedidos = leerJsonl(path.join(extras, "pedidos.jsonl"));
 const artillery = JSON.parse(fs.readFileSync(rawArtillery, "utf8"));
-const erroresDeCliente = Object.entries(artillery.aggregate?.counters ?? {})
-  .filter(([k]) => k.startsWith("errors."))
-  .reduce((suma, [, v]) => suma + v, 0);
+const erroresDeCliente =
+  artillery.motor === "propio"
+    ? artillery.erroresDelLanzador
+    : Object.entries(artillery.aggregate?.counters ?? {})
+        .filter(([k]) => k.startsWith("errors."))
+        .reduce((suma, [, v]) => suma + v, 0);
 
 const comprobaciones = [];
 // exacta: si falla, la corrida falla. esperada: solo se informa si cae fuera del rango predicho
@@ -219,7 +278,7 @@ const porNodo = {};
 for (const p of pedidos) porNodo[p.node ?? "?"] = (porNodo[p.node ?? "?"] ?? 0) + 1;
 
 const okLog = nuevas.filter((e) => e.ok);
-const estadosEsperados = [200, 403, 422, 503];
+const estadosEsperados = escenario === "duplicados" ? [200, 403, 409, 503] : [200, 403, 422, 503];
 const respondidos = n(200, 403, 422, 502, 503);
 
 // invariantes que valen en los dos escenarios
@@ -230,27 +289,42 @@ exacta("el saldo de USD nunca fue negativo", saldos.length > 0 && saldos.every((
 
 let extra = {};
 
-if (escenario === "saldo") {
+if (esSaldo) {
   const capacidad = Math.floor(antes.usd / MONTO_USD);
   exacta(`aprobados (200) = ${capacidad}`, n(200) === capacidad, `${n(200)}`);
   exacta("saldo final de USD = saldo inicial - 5 x aprobados", cerca(despues.usd, antes.usd - MONTO_USD * n(200)), `${despues.usd}`);
   exacta("saldo final de ARS = saldo inicial + 5.000 x aprobados", cerca(despues.ars, antes.ars + MONTO_ARS * n(200)), `${despues.ars}`);
-  exacta("entradas nuevas del log = pedidos respondidos", nuevas.length === respondidos, `${nuevas.length} contra ${respondidos}`);
-  exacta("entradas del log con ok:true = aprobados", okLog.length === n(200), `${okLog.length} contra ${n(200)} respuestas 200`);
+  // si el cliente perdio respuestas (timeouts por saturacion), el servidor pudo procesar pedidos que el cliente no vio:
+  // entonces el log puede tener MAS entradas que respuestas, y las igualdades pasan a ser desigualdades
+  const conPerdidas = erroresDeCliente > 0;
+  exacta("entradas nuevas del log = pedidos respondidos", conPerdidas ? nuevas.length >= respondidos : nuevas.length === respondidos, `${nuevas.length} contra ${respondidos}`);
+  exacta("entradas del log con ok:true = aprobados", conPerdidas ? okLog.length >= n(200) : okLog.length === n(200), `${okLog.length} contra ${n(200)} respuestas 200`);
 
-  esperada("pedidos que llegan a la reserva (200 + 422)", n(200, 422), 215, 255);
-  esperada("422 (sin fondos)", n(422), 195, 235);
-  esperada("403 (ARCA rechaza)", n(403), 126, 162);
-  esperada("503 (ARCA no disponible)", n(503), 12, 30);
+  // invariantes SOLO con el servidor (log y saldos): no dependen de lo que el cliente alcanzo a ver
+  exacta(`[servidor] entradas ok:true en el log = ${capacidad}`, okLog.length === capacidad, `${okLog.length}`);
+  exacta("[servidor] saldo final de USD = inicial - 5 x entradas ok:true", cerca(despues.usd, antes.usd - MONTO_USD * okLog.length), `${despues.usd}`);
+  exacta("[servidor] saldo final de ARS = inicial + 5.000 x entradas ok:true", cerca(despues.ars, antes.ars + MONTO_ARS * okLog.length), `${despues.ars}`);
 
-  // rafaga = los 100 primeros pedidos que salieron
-  const orden = [...pedidos].sort((a, b) => a.t - a.ms - (b.t - b.ms));
-  const rafaga = orden.slice(0, 100);
-  const enRafaga = (e) => rafaga.filter((p) => p.status === e).length;
-  esperada("en la rafaga: aprobados", enRafaga(200), capacidad, capacidad);
-  esperada("en la rafaga: 422", enRafaga(422), 29, 49);
-  esperada("en la rafaga: 403", enRafaga(403), 26, 46);
-  esperada("en la rafaga: 503", enRafaga(503), 0, 10);
+  if (escenario === "saldo") {
+    esperada("pedidos que llegan a la reserva (200 + 422)", n(200, 422), 215, 255);
+    esperada("422 (sin fondos)", n(422), 195, 235);
+    esperada("403 (ARCA rechaza)", n(403), 126, 162);
+    esperada("503 (ARCA no disponible)", n(503), 12, 30);
+
+    // rafaga = los 100 primeros pedidos que salieron
+    const orden = [...pedidos].sort((a, b) => a.t - a.ms - (b.t - b.ms));
+    const rafaga = orden.slice(0, 100);
+    const enRafaga = (e) => rafaga.filter((p) => p.status === e).length;
+    esperada("en la rafaga: aprobados", enRafaga(200), capacidad, capacidad);
+    esperada("en la rafaga: 422", enRafaga(422), 29, 49);
+    esperada("en la rafaga: 403", enRafaga(403), 26, 46);
+    esperada("en la rafaga: 503", enRafaga(503), 0, 10);
+  } else {
+    // saldo-carga: 3.100 pedidos, con las proporciones de ARCA ya medidas (ver la ampliacion de las predicciones)
+    esperada("422 (sin fondos)", n(422), 1850, 2070);
+    esperada("403 (ARCA rechaza)", n(403), 830, 1030);
+    esperada("503 (ARCA no disponible)", n(503), 141, 231);
+  }
 
   const aprobadosPorNodo = {};
   for (const p of pedidos.filter((q) => q.status === 200)) aprobadosPorNodo[p.node ?? "?"] = (aprobadosPorNodo[p.node ?? "?"] ?? 0) + 1;
@@ -312,6 +386,57 @@ if (escenario === "reintentos") {
     reintentosQueCruzanDeNodo: cruzan,
     latenciaRepeticion: lat(repeticiones),
   };
+}
+
+if (escenario === "duplicados") {
+  const porClave = new Map();
+  for (const p of pedidos) {
+    if (!porClave.has(p.key)) porClave.set(p.key, {});
+    porClave.get(p.key)[p.intento] = p;
+  }
+  const grupos = [...porClave.values()].filter((g) => g[1] && g[2] && g[3]);
+  const salio = (p) => p.t - p.ms; // cuando salio el pedido
+  const noCuatrocientosNueve = (g) => [g[1], g[2]].filter((p) => p.status !== 409).sort((a, b) => salio(a) - salio(b));
+  const unSolo409 = grupos.filter((g) => [g[1], g[2]].filter((p) => p.status === 409).length === 1);
+  const ganadores = grupos.map((g) => noCuatrocientosNueve(g)[0]).filter(Boolean);
+  const todos409 = pedidos.filter((p) => p.status === 409);
+  // si el ganador fue 200 o 403 y el otro NO recibio 409 (ya habia terminado), tiene que haber recibido lo mismo
+  const sinLio = grupos.filter((g) => {
+    const [primero, segundo] = noCuatrocientosNueve(g);
+    return !segundo || ![200, 403].includes(primero.status) || (segundo.status === primero.status && segundo.id === primero.id);
+  });
+  const idsAprobados = new Set(pedidos.filter((p) => p.status === 200).map((p) => p.id));
+  const idsRespuestas = new Set(pedidos.filter((p) => [200, 403].includes(p.status)).map((p) => p.id));
+  const terceros = grupos.filter((g) => {
+    const w = noCuatrocientosNueve(g)[0];
+    return w && [200, 403].includes(w.status);
+  });
+  const tercerosIguales = terceros.filter((g) => g[3].status === noCuatrocientosNueve(g)[0].status && g[3].id === noCuatrocientosNueve(g)[0].id);
+  const paresDeNodos = grupos.filter((g) => g[1].node && g[2].node);
+  const cruzan = paresDeNodos.filter((g) => g[1].node !== g[2].node).length;
+  const pares = ESCENARIOS[escenario].pares;
+
+  exacta(`hay ${pares} pares con sus tres respuestas`, grupos.length === pares, `${grupos.length}`);
+  if (ENTORNO === "local") exacta("cada par tiene exactamente un 409", unSolo409.length === pares, `${unSolo409.length} de ${pares}`);
+  else esperada("pares con exactamente un 409 (en la nube puede haber diferencia de llegada)", unSolo409.length, 95, pares);
+  exacta("ningun par con dos 409", grupos.filter((g) => g[1].status === 409 && g[2].status === 409).length === 0, "0 esperado");
+  exacta("todo 409 lleva Retry-After: 1", todos409.length > 0 && todos409.every((p) => p.retryAfter === "1"), `${todos409.length} respuestas 409`);
+  exacta("si el ganador fue 200 o 403, el otro pedido (si no fue 409) devolvio lo mismo", sinLio.length === grupos.length, `${sinLio.length} de ${grupos.length}`);
+  exacta("el tercer pedido repite la respuesta del ganador (200 o 403), mismo id", terceros.length > 0 && tercerosIguales.length === terceros.length, `${tercerosIguales.length} de ${terceros.length}`);
+  exacta("entradas del log con ok:true = aprobaciones distintas", okLog.length === idsAprobados.size, `${okLog.length} contra ${idsAprobados.size}`);
+  exacta("entradas nuevas del log = respuestas distintas + 503 (el que pierde con 409 no genera entrada)", nuevas.length === idsRespuestas.size + n(502, 503), `${nuevas.length} contra ${idsRespuestas.size + n(502, 503)}`);
+  const sumaUsd = okLog.reduce((acc, e) => acc + e.counterAmount, 0);
+  const sumaArs = okLog.reduce((acc, e) => acc + e.request.baseAmount, 0);
+  exacta("saldo de USD varia en -(suma de lo aprobado)", cerca(antes.usd - despues.usd, sumaUsd), `${antes.usd - despues.usd} contra ${sumaUsd}`);
+  exacta("saldo de ARS varia en +(suma de lo aprobado)", cerca(despues.ars - antes.ars, sumaArs), `${despues.ars - antes.ars} contra ${sumaArs}`);
+
+  const g = (e) => ganadores.filter((p) => p.status === e).length;
+  esperada("ganador 200", g(200), 52, 76);
+  esperada("ganador 403", g(403), 18, 42);
+  esperada("ganador 503", g(503), 1, 12);
+  esperada("mediana de un 409 (RTT + 5 ms)", todos409.length ? percentil(todos409.map((p) => p.ms), 50) : null, RTT_MS, RTT_MS + 60);
+  if (new Set(pedidos.map((p) => p.node).filter(Boolean)).size > 1) esperada("pares cuyos dos pedidos caen en nodos distintos", cruzan, 40, 60);
+  extra = { pares: grupos.length, paresConUn409: unSolo409.length, ganadores: { 200: g(200), 403: g(403), 503: g(503) }, paresEnNodosDistintos: cruzan, latencia409: lat(todos409) };
 }
 
 // ---------------------------------------------------------------- informe
