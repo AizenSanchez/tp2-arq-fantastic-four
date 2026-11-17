@@ -31,3 +31,4 @@ node/infra.json
 tfplan
 *.tfplan
 perf/results/**/*.tmp
+perf/results/prueba-*/

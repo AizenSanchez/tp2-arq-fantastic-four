@@ -1,0 +1,118 @@
+{
+  "title": "arVault TP2 — disponibilidad",
+  "description": "Bloque 3: carga constante con fallas del proceso inyectadas. Lo crea perf/datadog/crear-dashboard.mjs; no editar en la web (se pisa). Las marcas verticales son las fallas que publica perf/disponibilidad/correr.mjs.",
+  "layout_type": "ordered",
+  "template_variables": [
+    { "name": "caso", "prefix": "caso", "available_values": [], "default": "*" },
+    { "name": "host", "prefix": "host", "available_values": [], "default": "*" }
+  ],
+  "widgets": [
+    {
+      "definition": {
+        "type": "timeseries",
+        "title": "Artillery: respuestas por código (por segundo)",
+        "show_legend": true,
+        "requests": [
+          { "q": "sum:artillery.http.codes.200{test:exchange-disponibilidad,$caso}.as_rate()", "display_type": "bars", "style": { "palette": "green" } },
+          { "q": "sum:artillery.http.codes.400{test:exchange-disponibilidad,$caso}.as_rate()", "display_type": "bars", "style": { "palette": "cool" } },
+          { "q": "sum:artillery.http.codes.403{test:exchange-disponibilidad,$caso}.as_rate()", "display_type": "bars", "style": { "palette": "purple" } },
+          { "q": "sum:artillery.http.codes.422{test:exchange-disponibilidad,$caso}.as_rate()", "display_type": "bars", "style": { "palette": "grey" } },
+          { "q": "sum:artillery.http.codes.502{test:exchange-disponibilidad,$caso}.as_rate()", "display_type": "bars", "style": { "palette": "orange" } },
+          { "q": "sum:artillery.http.codes.503{test:exchange-disponibilidad,$caso}.as_rate()", "display_type": "bars", "style": { "palette": "warm" } }
+        ],
+        "events": [{ "q": "tags:test:exchange-disponibilidad $caso" }]
+      }
+    },
+    {
+      "definition": {
+        "type": "timeseries",
+        "title": "Artillery: errores del cliente (sin respuesta)",
+        "show_legend": true,
+        "requests": [
+          { "q": "sum:artillery.errors.ECONNREFUSED{test:exchange-disponibilidad,$caso}.as_count()", "display_type": "bars", "style": { "palette": "red" } },
+          { "q": "sum:artillery.errors.ECONNRESET{test:exchange-disponibilidad,$caso}.as_count()", "display_type": "bars", "style": { "palette": "orange" } },
+          { "q": "sum:artillery.errors.ERR_SOCKET_TIMEOUT{test:exchange-disponibilidad,$caso}.as_count()", "display_type": "bars", "style": { "palette": "warm" } },
+          { "q": "sum:artillery.errors.ETIMEDOUT{test:exchange-disponibilidad,$caso}.as_count()", "display_type": "bars", "style": { "palette": "warm" } }
+        ],
+        "events": [{ "q": "tags:test:exchange-disponibilidad $caso" }]
+      }
+    },
+    {
+      "definition": {
+        "type": "timeseries",
+        "title": "Artillery: tiempo de respuesta (ms)",
+        "show_legend": true,
+        "requests": [
+          { "q": "avg:artillery.http.response_time.median{test:exchange-disponibilidad,$caso}", "display_type": "line" },
+          { "q": "avg:artillery.http.response_time.p95{test:exchange-disponibilidad,$caso}", "display_type": "line" },
+          { "q": "max:artillery.http.response_time.max{test:exchange-disponibilidad,$caso}", "display_type": "line" }
+        ],
+        "events": [{ "q": "tags:test:exchange-disponibilidad $caso" }]
+      }
+    },
+    {
+      "definition": {
+        "type": "timeseries",
+        "title": "Servidor: respuestas por código y por host",
+        "show_legend": true,
+        "requests": [
+          { "q": "sum:arvault.exchange.http.respuestas.200{$host} by {host}.as_count()", "display_type": "bars" },
+          { "q": "sum:arvault.exchange.http.respuestas.400{$host} by {host}.as_count()", "display_type": "bars" },
+          { "q": "sum:arvault.exchange.http.respuestas.403{$host} by {host}.as_count()", "display_type": "bars" },
+          { "q": "sum:arvault.exchange.http.respuestas.500{$host} by {host}.as_count()", "display_type": "bars" },
+          { "q": "sum:arvault.exchange.http.respuestas.503{$host} by {host}.as_count()", "display_type": "bars" }
+        ],
+        "events": [{ "q": "tags:test:exchange-disponibilidad $caso" }]
+      }
+    },
+    {
+      "definition": {
+        "type": "timeseries",
+        "title": "Servidor: POST /exchange mediana y p95 por host (ms)",
+        "show_legend": true,
+        "requests": [
+          { "q": "avg:arvault.exchange.http.POST.exchange.median{$host} by {host}", "display_type": "line" },
+          { "q": "avg:arvault.exchange.http.POST.exchange.95percentile{$host} by {host}", "display_type": "line" }
+        ],
+        "events": [{ "q": "tags:test:exchange-disponibilidad $caso" }]
+      }
+    },
+    {
+      "definition": {
+        "type": "timeseries",
+        "title": "ARCA: validaciones y errores",
+        "show_legend": true,
+        "requests": [
+          { "q": "sum:arvault.exchange.arca.aprobadas{$host}.as_count()", "display_type": "bars" },
+          { "q": "sum:arvault.exchange.arca.rechazadas{$host}.as_count()", "display_type": "bars" },
+          { "q": "sum:arvault.exchange.arca.errores.http_5xx{$host}.as_count()", "display_type": "bars" },
+          { "q": "sum:arvault.exchange.arca.errores.timeout{$host}.as_count()", "display_type": "bars" },
+          { "q": "sum:arvault.exchange.arca.errores.conexion{$host}.as_count()", "display_type": "bars" },
+          { "q": "sum:arvault.exchange.arca.reintentos{$host}.as_count()", "display_type": "line" }
+        ],
+        "events": [{ "q": "tags:test:exchange-disponibilidad $caso" }]
+      }
+    },
+    {
+      "definition": {
+        "type": "timeseries",
+        "title": "Nodos: CPU (user) y carga",
+        "show_legend": true,
+        "requests": [
+          { "q": "avg:system.cpu.user{$host} by {host}", "display_type": "line" },
+          { "q": "avg:system.load.1{$host} by {host}", "display_type": "line" }
+        ],
+        "events": [{ "q": "tags:test:exchange-disponibilidad $caso" }]
+      }
+    },
+    {
+      "definition": {
+        "type": "timeseries",
+        "title": "Nodos: memoria usada (bytes)",
+        "show_legend": true,
+        "requests": [{ "q": "avg:system.mem.used{$host} by {host}", "display_type": "line" }],
+        "events": [{ "q": "tags:test:exchange-disponibilidad $caso" }]
+      }
+    }
+  ]
+}
