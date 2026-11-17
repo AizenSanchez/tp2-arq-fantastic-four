@@ -1,0 +1,17 @@
+escenario: exchange-integridad-saldo
+caso: local-control-negativo
+entorno: local
+inicio UTC: 2026-11-17T03:55:55.888Z
+fin UTC: 2026-11-17T03:56:33.959Z
+nodos: http://localhost:3002
+commit: 7278141d1b610da9b38971b733fa44bb0c9b69a2
+git status --porcelain (sin perf/results):
+ M perf/integridad/exchange-integridad-reintentos.yaml
+ M perf/integridad/exchange-integridad-saldo.yaml
+?? perf/integridad/control-negativo.mjs
+artillery: Artillery: 2.0.34
+node: v22.22.0
+maquina: 192.168.1.51
+conexion: no informada
+RTT base (ms): 0
+zona horaria: America/Buenos_Aires
