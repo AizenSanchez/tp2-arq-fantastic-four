@@ -26,8 +26,8 @@ RATE=5 DURACION=270 node perf/disponibilidad/correr.mjs prueba-local-disponibili
 # Azure (con la predicción del caso ya pusheada)
 read -s DATADOG_API_KEY; export DATADOG_API_KEY                   # nunca en un archivo
 export CONEXION=cable                                              # o wifi, queda en meta.txt
-node perf/disponibilidad/correr.mjs 1-nodo --env azure
-node perf/disponibilidad/correr.mjs escalado --env azure           # con 2 nodos; rompe solo vmss[0] (NODO=...)
+DURACION=200 node perf/disponibilidad/correr.mjs 1-nodo --env azure   # E9, E3 y E4 (sin E18: ver predicciones)
+node perf/disponibilidad/correr.mjs escalado --env azure              # 2 nodos, línea completa; rompe solo vmss[0] (NODO=...)
 ```
 
 Variables: `RATE` (pedidos/s, 20), `DURACION` (s, 300), `NODO` (patrón de Ansible, `vmss[0]`), `SIN_FALLAS=1`,
