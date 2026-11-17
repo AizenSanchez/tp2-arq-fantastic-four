@@ -8,9 +8,9 @@ config:
   http:
     timeout: 10
   environments:
-    # contra docker-compose.local.yml (con --profile dos-nodos, correr.mjs reparte entre los dos nodos)
+    # contra docker-compose.local.yml. TARGET lo define correr.mjs (por defecto http://localhost:3000)
     local:
-      target: "http://localhost:3000"
+      target: "{{ $processEnvironment.TARGET }}"
     # contra el balanceador de Azure: TARGET sale de node/lb_dns (lo hace correr.mjs)
     azure:
       target: "{{ $processEnvironment.TARGET }}"

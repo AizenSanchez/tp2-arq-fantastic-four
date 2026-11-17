@@ -10,7 +10,7 @@ config:
     timeout: 10
   environments:
     local:
-      target: "http://localhost:3000"
+      target: "{{ $processEnvironment.TARGET }}"
     azure:
       target: "{{ $processEnvironment.TARGET }}"
       plugins:
