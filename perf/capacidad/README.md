@@ -59,6 +59,14 @@ RATE_ENDURANCE=<0,5·B> RATE_TRAMO=<B> node perf/capacidad/correr.mjs endurance 
 node perf/capacidad/analizar.mjs <caso> <capacidad|endurance>
 ```
 
+Después de cada corrida en Azure, las series y los gráficos de Datadog (métricas `artillery.*` de la corrida y CPU y
+memoria del nodo `tp2vmss000000`) se bajan a `datadog/` con:
+
+```bash
+read -s DD_APP_KEY; export DD_APP_KEY                             # además de DATADOG_API_KEY; nunca en un archivo
+node perf/capacidad/capturar-datadog.mjs azure-1-nodo capacidad   # o endurance
+```
+
 Variables: `TARGET` (por defecto `localhost:3000` o `node/lb_dns`), `RESET_CMD` (por defecto `reset-state.js` en el
 contenedor, o `ansible/reset.sh` en Azure), `CONEXION`, `DATADOG_API_KEY` (solo Azure, solo por entorno),
 `DATADOG_API_HOST` (`us5.datadoghq.com`), `AZURE_GRUPO` (`tp2_resource_group`), `AZURE_MONITOR_ESPERA_S` (180) y
