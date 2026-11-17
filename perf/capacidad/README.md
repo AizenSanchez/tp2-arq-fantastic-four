@@ -52,7 +52,7 @@ ESCALONES=5,10 DURACION_ESCALON=15 DURACION_BAJADA=15 node perf/capacidad/correr
 # Azure (con las predicciones ya pusheadas)
 read -s DATADOG_API_KEY; export DATADOG_API_KEY                   # nunca en un archivo
 export CONEXION=cable                                              # o wifi, queda en meta.txt
-node perf/capacidad/correr.mjs capacidad azure-1-nodo --env azure
+ESCALONES=10,20,40,80,120,160,200,240,320 node perf/capacidad/correr.mjs capacidad azure-1-nodo --env azure
 RATE_ENDURANCE=<0,5·B> RATE_TRAMO=<B> node perf/capacidad/correr.mjs endurance azure-1-nodo --env azure
 
 # volver a analizar sin correr
@@ -61,7 +61,11 @@ node perf/capacidad/analizar.mjs <caso> <capacidad|endurance>
 
 Variables: `TARGET` (por defecto `localhost:3000` o `node/lb_dns`), `RESET_CMD` (por defecto `reset-state.js` en el
 contenedor, o `ansible/reset.sh` en Azure), `CONEXION`, `DATADOG_API_KEY` (solo Azure, solo por entorno),
-`DATADOG_API_HOST` (`us5.datadoghq.com`), y las de las fases de arriba.
+`DATADOG_API_HOST` (`us5.datadoghq.com`), `AZURE_GRUPO` (`tp2_resource_group`), `AZURE_MONITOR_ESPERA_S` (180) y
+las de las fases de arriba.
+
+En Azure los escalones son `10,20,40,80,120,160,200,240,320` (ver `../predicciones/capacidad.md`): se agrega 200 para
+afinar B entre 160 y 240, y se cortan 480 y 640 para no sostener miles de conexiones a la vez a través del router.
 
 Antes de Artillery, `correr.mjs` reinicia el estado de Redis y mide el RTT de base con `GET /` (no toca ARCA ni
 Redis), de dos formas: 20 pedidos por una conexión keep-alive ya abierta (1 RTT) y 20 con una conexión nueva cada uno
@@ -84,8 +88,17 @@ La segunda es la fase `firstByte` de got (`timings.response − timings.upload`,
 - `pedidos.jsonl`: una línea por pedido: `t0` (salida), `t1` (llegada), `status` (código HTTP, o `ERR_SOCKET_TIMEOUT`,
   `ECONNREFUSED`...), `ms`, `escenario` (par de monedas) y, en los 503, si vino de ARCA y el motivo.
 - `recursos.jsonl` (solo local): CPU (% de un núcleo) y memoria de app, redis y arca cada 1 s, de `docker stats`.
-  En Azure no se muestrea: lo cubre Datadog, recortado con las horas UTC de `meta.txt`.
+  En Azure no se muestrea: el nodo lo cubre Datadog y Redis y ARCA, `azure-monitor/`, con las horas UTC de `meta.txt`.
 - `rtt.json`: las muestras de `GET /` con conexión reutilizada y con conexión nueva, con su p50, p95 y el connect.
 - `meta.txt`: inicio y fin UTC, fases, commit, `git status`, versiones, máquina y conexión; en Azure, además,
   `terraform output` de `vmss_instances`, `vmss_sku` y `redis_sku`, y la región.
-- `resumen.md` y `resumen.json`: los genera `analizar.mjs` solo a partir de los archivos anteriores.
+- `azure-monitor/` (solo Azure): Redis y ARCA no tienen agente de Datadog, así que `correr.mjs` exporta sus métricas
+  de Azure Monitor con `az monitor metrics list`, en el rango de la corrida más 2 min antes y después, con grano de
+  1 min. Espera `AZURE_MONITOR_ESPERA_S` antes, porque Azure Monitor publica con 1 a 3 min de demora:
+  - `redis.json`: `usedmemory` (bytes), `operationsPerSecond` y `percentProcessorTime` (%), con máximo y promedio;
+  - `arca.json`: `CpuUsage` (milicores: 0,5 vCPU = 500) y `MemoryUsage` (bytes), con promedio y máximo;
+  - `LEEME.txt`: el rango y cómo volver a exportar; un `<recurso>.error.txt` si alguna exportación falló.
+
+  Los nombres se verificaron con `az monitor metrics list-definitions`. Los campos `id` se borran y cualquier
+  `subscriptions/<id>` se reemplaza, para no publicar el id de la suscripción.
+- `resumen.md` y `resumen.json`: los genera `analizar.mjs` solo a partir de los archivos anteriores (sin `azure-monitor/`).

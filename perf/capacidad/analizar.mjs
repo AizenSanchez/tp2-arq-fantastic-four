@@ -314,7 +314,7 @@ if (recursos.length) {
     ""
   );
 } else {
-  md.push("## Recursos", "", "Sin muestreo local (en Azure, ver Datadog con las horas UTC de meta.txt).", "");
+  md.push("## Recursos", "", "Sin muestreo local. En Azure: el nodo en Datadog (horas UTC de meta.txt) y Redis y ARCA en `azure-monitor/`.", "");
 }
 
 if (resumen.throughput_sostenido) {
