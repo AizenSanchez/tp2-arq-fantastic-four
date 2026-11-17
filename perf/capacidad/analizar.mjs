@@ -371,5 +371,9 @@ md.push(
   ""
 );
 
+// observaciones escritas a mano (lo que los crudos no explican solos): se copian tal cual al final
+const observaciones = leer("observaciones.md");
+if (observaciones) md.push("## Observaciones (de `observaciones.md`, escritas a mano)", "", observaciones.trim(), "");
+
 fs.writeFileSync(path.join(dir, "resumen.md"), md.filter((l, k, a) => !(l === "" && a[k - 1] === "")).join("\n"));
 console.log(md.join("\n"));
