@@ -1,0 +1,124 @@
+# E8 del TP1 a 0,1 B (B = 120 req/s, el de 1 nodo en Azure), con su mezcla de pares. una sola conexion por
+# usuario virtual: Artillery la deja abierta 4 s entre pedidos y el think es de 3 s como mucho.
+config:
+  target: "{{ $processEnvironment.TARGET }}"
+  http:
+    timeout: 10
+  phases:
+    - name: "Llegada constante 12 escenarios/s"
+      duration: 600
+      arrivalRate: 12
+  plugins:
+    publish-metrics:
+      - type: datadog
+        apiKey: "{{ $processEnvironment.DATADOG_API_KEY }}"
+        apiHost: "us5.datadoghq.com"
+        prefix: "artillery."
+        event:
+          send: false
+        tags:
+          - "test:exchange-representativa"
+
+scenarios:
+  - name: "Cliente: ARS -> USD"
+    weight: 35
+    flow:
+      - get:
+          url: "/rates"
+      - think: "{{ $randomNumber(1, 3) }}"
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "ARS"
+            counterCurrency: "USD"
+            baseAmount: 1000
+            baseAccountId: 101
+            counterAccountId: 102
+            dni: "{{ $randomNumber(1000000, 99999999) }}"
+      - get:
+          url: "/accounts"
+  - name: "Cliente: USD -> ARS"
+    weight: 35
+    flow:
+      - get:
+          url: "/rates"
+      - think: "{{ $randomNumber(1, 3) }}"
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "USD"
+            counterCurrency: "ARS"
+            baseAmount: 1
+            baseAccountId: 102
+            counterAccountId: 101
+            dni: "{{ $randomNumber(1000000, 99999999) }}"
+      - get:
+          url: "/accounts"
+  - name: "Cliente: ARS -> EUR"
+    weight: 10
+    flow:
+      - get:
+          url: "/rates"
+      - think: "{{ $randomNumber(1, 3) }}"
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "ARS"
+            counterCurrency: "EUR"
+            baseAmount: 1000
+            baseAccountId: 101
+            counterAccountId: 103
+            dni: "{{ $randomNumber(1000000, 99999999) }}"
+      - get:
+          url: "/accounts"
+  - name: "Cliente: EUR -> ARS"
+    weight: 10
+    flow:
+      - get:
+          url: "/rates"
+      - think: "{{ $randomNumber(1, 3) }}"
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "EUR"
+            counterCurrency: "ARS"
+            baseAmount: 1
+            baseAccountId: 103
+            counterAccountId: 101
+            dni: "{{ $randomNumber(1000000, 99999999) }}"
+      - get:
+          url: "/accounts"
+  - name: "Cliente: ARS -> BRL"
+    weight: 5
+    flow:
+      - get:
+          url: "/rates"
+      - think: "{{ $randomNumber(1, 3) }}"
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "ARS"
+            counterCurrency: "BRL"
+            baseAmount: 1000
+            baseAccountId: 101
+            counterAccountId: 104
+            dni: "{{ $randomNumber(1000000, 99999999) }}"
+      - get:
+          url: "/accounts"
+  - name: "Cliente: BRL -> ARS"
+    weight: 5
+    flow:
+      - get:
+          url: "/rates"
+      - think: "{{ $randomNumber(1, 3) }}"
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "BRL"
+            counterCurrency: "ARS"
+            baseAmount: 1
+            baseAccountId: 104
+            counterAccountId: 101
+            dni: "{{ $randomNumber(1000000, 99999999) }}"
+      - get:
+          url: "/accounts"
