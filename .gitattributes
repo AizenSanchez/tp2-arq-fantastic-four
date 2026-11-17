@@ -2,3 +2,4 @@
 node/zip text eol=lf
 *.yml text eol=lf
 *.tf text eol=lf
+perf/results/**/*.json linguist-generated=true
