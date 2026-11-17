@@ -6,7 +6,11 @@ Las predicciones están en [`../predicciones/integridad.md`](../predicciones/int
 | Escenario | Qué prueba | Archivo |
 |---|---|---|
 | `saldo` | Con saldo para 20 cambios y 400 pedidos, se aprueban exactamente 20 y el saldo nunca es negativo | `exchange-integridad-saldo.yaml` |
+| `saldo-carga` | Lo mismo con 3.100 pedidos (100 por segundo durante 30 s): la integridad vale con el nodo ocupado | `exchange-integridad-saldo-carga.yaml` |
 | `reintentos` | Repetir un pedido con la misma `Idempotency-Key` devuelve la misma respuesta y no opera dos veces, aunque caiga en otro nodo | `exchange-integridad-reintentos.yaml` |
+| `duplicados` | Dos pedidos iguales **a la vez** con la misma clave: uno opera, el otro recibe 409, y un tercero repite la respuesta (lanzador propio, no Artillery) | dentro de `correr.mjs` |
+
+Otros scripts: `control-negativo.mjs` (comprueba que `saldo` **detecta** una reserva que no es atómica) y `medir-arca.mjs` (caracteriza las fallas y rechazos de ARCA).
 
 `correr.mjs` hace todo: reinicia el estado, prepara el escenario, lanza Artillery, vigila el saldo cada segundo y al final
 verifica las invariantes contra `/accounts` y `/log`. Solo usa HTTP. Termina con código 1 si se rompe una invariante **exacta**
@@ -19,7 +23,10 @@ cd perf && npm ci && cd ..                                    # una vez
 docker compose -f docker-compose.local.yml --profile dos-nodos up -d --build
 
 node perf/integridad/correr.mjs saldo local-1-nodo
+node perf/integridad/correr.mjs saldo-carga local-1-nodo
 node perf/integridad/correr.mjs reintentos local-1-nodo
+node perf/integridad/correr.mjs duplicados local-1-nodo
+node perf/integridad/control-negativo.mjs                     # tiene que terminar con "OK": detecta el defecto
 # dos nodos: no hay balanceador en local, el script elige el nodo al azar en cada conexion
 TARGETS=http://localhost:3000,http://localhost:3001 node perf/integridad/correr.mjs saldo local-2-nodos
 TARGETS=http://localhost:3000,http://localhost:3001 node perf/integridad/correr.mjs reintentos local-2-nodos
@@ -39,7 +46,10 @@ node perf/integridad/correr.mjs reintentos 1-nodo --env azure
 # subir node_instances a 2, ansible/setup.sh, ansible/deploy.sh, y repetir con el caso "escalado"
 node perf/integridad/correr.mjs saldo escalado --env azure
 node perf/integridad/correr.mjs reintentos escalado --env azure
+# opcionales: saldo-carga y duplicados, con ambos casos
 ```
+
+**Antes de la corrida oficial, con la clave real, una prueba corta** (por ejemplo `reintentos` con un caso de prueba como `prueba-seca`) y mirar que las métricas lleguen al dashboard: una clave inválida o una falla de Datadog al arrancar hace caer Artillery **antes de medir** (ver `perf/results/resultados-integridad-local.md`, sección B). Y **no dejar `DEBUG=plugin:publish-metrics:datadog-statsd` prendido** (lo exporta `perf/run.sh`): imprime la clave en claro.
 
 ## Qué queda en `perf/results/<caso>/`
 
