@@ -68,7 +68,7 @@ Antes de Artillery, `correr.mjs` reinicia el estado de Redis y mide el RTT de ba
 ## Qué queda en `perf/results/<caso>/exchange-<corrida>/`
 
 - `exchange-<corrida>.json`: el reporte crudo de Artillery (`--output`).
-- `pedidos.jsonl`: una línea por pedido: `t0` (salida), `t1` (llegada), `status` (código HTTP, o `ETIMEDOUT`,
+- `pedidos.jsonl`: una línea por pedido: `t0` (salida), `t1` (llegada), `status` (código HTTP, o `ERR_SOCKET_TIMEOUT`,
   `ECONNREFUSED`...), `ms`, `escenario` (par de monedas) y, en los 503, si vino de ARCA y el motivo.
 - `recursos.jsonl` (solo local): CPU (% de un núcleo) y memoria de app, redis y arca cada 1 s, de `docker stats`.
   En Azure no se muestrea: lo cubre Datadog, recortado con las horas UTC de `meta.txt`.

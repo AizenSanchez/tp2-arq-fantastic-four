@@ -63,7 +63,8 @@ const media = (v) => (v.length ? v.reduce((a, b) => a + b, 0) / v.length : null)
 const r1 = (x) => (x === null || x === undefined ? null : Math.round(x * 10) / 10);
 const pct = (a, b) => (b ? r1((100 * a) / b) : null);
 
-const TIMEOUTS = new Set(["ETIMEDOUT", "ESOCKETTIMEDOUT", "TimeoutError"]);
+// ERR_SOCKET_TIMEOUT es el que da got (el cliente HTTP de Artillery) al cumplirse http.timeout
+const TIMEOUTS = new Set(["ETIMEDOUT", "ESOCKETTIMEDOUT", "ERR_SOCKET_TIMEOUT", "TimeoutError"]);
 function clase(p) {
   if (typeof p.status !== "number") return TIMEOUTS.has(p.status) ? "timeout" : "conexion";
   if (p.status === 200) return "200";
