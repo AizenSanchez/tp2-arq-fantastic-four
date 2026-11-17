@@ -345,7 +345,7 @@ fs.writeFileSync(
     `fin UTC: ${fin.toISOString()}`,
     `nodos: ${NODOS.join(", ")}`,
     `commit: ${execSync("git rev-parse HEAD", { cwd: RAIZ }).toString().trim()}`,
-    `git status --porcelain:\n${execSync("git status --porcelain", { cwd: RAIZ }).toString().trimEnd() || "(vacio)"}`,
+    `git status --porcelain (sin perf/results):\n${execSync("git status --porcelain -- . ':!perf/results'", { cwd: RAIZ }).toString().trimEnd() || "(vacio)"}`,
     `artillery: ${execSync(`${path.join(RAIZ, "perf/node_modules/.bin/artillery")} --version`).toString().split("\n").find((l) => /Artillery/.test(l)) ?? "?"}`,
     `node: ${process.version}`,
     `maquina: ${os.hostname()}`,
