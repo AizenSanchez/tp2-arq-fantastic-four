@@ -45,15 +45,6 @@ Si la corrida se corta con Ctrl+C, el script manda `kill -CONT` y `pm2 start` pa
 - `.../meta.txt`: inicio y fin UTC, commit, `git status`, versiones, máquina y conexión.
 - `.../resumen.md` y `resumen.json`: los genera `analizar.mjs` solo a partir de los archivos anteriores.
 
-## Dashboard de Datadog
+## Datadog
 
-`perf/datadog/dashboard-disponibilidad.json` se crea o actualiza por API, sin tocar la web:
-
-```bash
-read -s DD_API_KEY; export DD_API_KEY
-read -s DD_APP_KEY; export DD_APP_KEY      # Organization Settings -> Application Keys
-node perf/datadog/crear-dashboard.mjs perf/datadog/dashboard-disponibilidad.json
-node perf/datadog/crear-dashboard.mjs --metricas artillery.   # después de una corrida: confirma los nombres
-```
-
-Cada falla aparece como una marca vertical en los gráficos: `correr.mjs` publica un evento con la API key de Artillery.
+Cada falla se publica como evento en Datadog, con la misma API key de Artillery.
