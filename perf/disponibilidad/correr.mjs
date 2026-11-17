@@ -16,7 +16,8 @@
 //
 // Variables: RATE (pedidos/s, 20), DURACION (s, 300), NODO (patron de Ansible del nodo a romper, vmss[0]),
 // SIN_FALLAS=1 (solo carga y monitor), CONEXION (cable|wifi), DATADOG_API_KEY y DATADOG_API_HOST (azure).
-import { spawn, execFileSync, execSync } from "node:child_process";
+import { spawn, execFile, execFileSync, execSync } from "node:child_process";
+import { promisify } from "node:util";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -58,26 +59,30 @@ if (ENTORNO === "azure" && !process.env.DATADOG_API_KEY) {
 // ---------------------------------------------------------------- comandos en el nodo
 
 // Ansible se corre desde ansible/: el ProxyCommand del inventario usa ../key.pem
-function enNodo(comando) {
-  const out = execFileSync(
-    "ansible",
-    ["-i", "vmss_hosts", NODO, "-u", "azureuser", "--private-key", "../key.pem", "-m", "shell", "-a", comando],
-    { cwd: path.join(RAIZ, "ansible"), encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }
-  );
-  return out.split("\n").slice(1).join("\n").trim(); // la primera linea es "host | CHANGED | rc=0 >>"
-}
+const ANSIBLE = (comando) => ["-i", "vmss_hosts", NODO, "-u", "azureuser", "--private-key", "../key.pem", "-m", "shell", "-a", comando];
+const OPCIONES_ANSIBLE = { cwd: path.join(RAIZ, "ansible"), encoding: "utf8" };
+const sinCabecera = (out) => out.split("\n").slice(1).join("\n").trim(); // la primera linea es "host | CHANGED | rc=0 >>"
+
+// bloqueante: solo para las fotos de antes y despues y la limpieza, cuando el monitor no esta corriendo
+const enNodo = (comando) => sinCabecera(execFileSync("ansible", ANSIBLE(comando), { ...OPCIONES_ANSIBLE, stdio: ["ignore", "pipe", "pipe"] }));
+
+// asincronico: para las fallas. Ansible tarda de 6 a 13 s (el SSH pasa por el jumpbox); con la version bloqueante
+// el monitor de /health, que corre en este mismo proceso, se quedaba sin consultar justo durante cada falla
+const execFileAsync = promisify(execFile);
+const enNodoSinBloquear = async (comando) => sinCabecera((await execFileAsync("ansible", ANSIBLE(comando), OPCIONES_ANSIBLE)).stdout);
 
 const compose = (...a) => execFileSync("docker", ["compose", "-f", "docker-compose.local.yml", ...a], { cwd: RAIZ, encoding: "utf8", stdio: "pipe" });
+const composeSinBloquear = (...a) => execFileAsync("docker", ["compose", "-f", "docker-compose.local.yml", ...a], { cwd: RAIZ, encoding: "utf8" });
 
 // Cada falla imprime primero la hora del nodo (ms), para fecharla con su reloj y no con el de la laptop.
 // En local son aproximaciones con docker (no hay pm2): sirven para ensayar los scripts, no como evidencia.
 const PID = "$(pm2 pid app)";
 const FALLAS = {
-  "kill-9": { azure: `date +%s%3N; kill -9 ${PID}`, local: () => (compose("kill", "app"), compose("start", "app")) },
-  "pm2-stop": { azure: "date +%s%3N; pm2 stop app >/dev/null", local: () => compose("stop", "app") },
-  "pm2-start": { azure: "date +%s%3N; pm2 start app >/dev/null", local: () => compose("start", "app") },
-  "kill-STOP": { azure: `date +%s%3N; kill -STOP ${PID}`, local: () => compose("pause", "app") },
-  "kill-CONT": { azure: `date +%s%3N; kill -CONT ${PID}`, local: () => compose("unpause", "app") },
+  "kill-9": { azure: `date +%s%3N; kill -9 ${PID}`, local: async () => (await composeSinBloquear("kill", "app"), await composeSinBloquear("start", "app")) },
+  "pm2-stop": { azure: "date +%s%3N; pm2 stop app >/dev/null", local: () => composeSinBloquear("stop", "app") },
+  "pm2-start": { azure: "date +%s%3N; pm2 start app >/dev/null", local: () => composeSinBloquear("start", "app") },
+  "kill-STOP": { azure: `date +%s%3N; kill -STOP ${PID}`, local: () => composeSinBloquear("pause", "app") },
+  "kill-CONT": { azure: `date +%s%3N; kill -CONT ${PID}`, local: () => composeSinBloquear("unpause", "app") },
 };
 const LINEA_DE_TIEMPO = [
   { s: 60, falla: "kill-9" },
@@ -94,10 +99,10 @@ async function inyectar(falla, planificado) {
   let error = null;
   try {
     if (ENTORNO === "azure") {
-      salidaCmd = enNodo(FALLAS[falla].azure);
+      salidaCmd = await enNodoSinBloquear(FALLAS[falla].azure);
       tNodo = Number(salidaCmd.match(/\d{13}/)?.[0]) || null;
     } else {
-      FALLAS[falla].local();
+      await FALLAS[falla].local();
     }
   } catch (err) {
     error = String(err.stderr || err.message).trim().slice(0, 500);
@@ -191,7 +196,9 @@ const monitor = (async () => {
 const INICIO_MS = Date.now();
 const inicio = new Date(INICIO_MS);
 console.log(`[3/5] ${RATE} pedidos/s durante ${DURACION} s contra ${BASE}${SIN_FALLAS ? " (sin fallas)" : ""}`);
-const temporizadores = SIN_FALLAS ? [] : LINEA_DE_TIEMPO.map(({ s, falla }) => setTimeout(() => inyectar(falla, s), s * 1000));
+// cada falla queda en curso como promesa: al final se espera a que terminen antes de limpiar y de analizar
+const enCurso = [];
+const temporizadores = SIN_FALLAS ? [] : LINEA_DE_TIEMPO.map(({ s, falla }) => setTimeout(() => enCurso.push(inyectar(falla, s)), s * 1000));
 
 const artillery = spawn(
   path.join(RAIZ, "perf/node_modules/.bin/artillery"),
@@ -213,6 +220,7 @@ for (const senal of ["SIGINT", "SIGTERM"]) {
 const codigo = await new Promise((r) => artillery.on("exit", r));
 const fin = new Date();
 temporizadores.forEach(clearTimeout);
+await Promise.all(enCurso);
 monitoreando = false;
 await monitor;
 dejarElNodoAndando();
