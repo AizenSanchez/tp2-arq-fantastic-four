@@ -133,3 +133,77 @@ Igual que en las demás predicciones: es el viaje de ida y vuelta por internet d
 ## Nota al pie (17/11, antes de correr cualquier prueba)
 
 Se corrigieron dos tolerancias que estaban mal calculadas: las entradas totales del log de reintentos pasaron de ±4 a ±7 (con ±4 solo se cubría el 79 % de los casos por puro azar de ARCA) y el cruce entre nodos se expresó como 86 a 114 de 200 (±7 puntos), que es lo que decía el texto. Los valores centrales no cambian.
+
+---
+
+# Ampliación del 17/11 (antes de implementar y de correr nada de esto)
+
+Las predicciones de arriba quedan como están. Esta ampliación agrega cuatro cosas. Las proporciones de ARCA que se usan acá son las **medidas después** de las primeras predicciones (`perf/results/local-arca/medicion.txt`: 24,4 % ± 1,5 de HTTP 500, que con 1 reintento dejan ≈ 6 % de 503, y ≈ 30 % de rechazos entre los que responden, fijos por DNI). Para cualquier pedido: **503 ≈ 6 %, 403 ≈ 30 %, llega a la reserva ≈ 64 %**. Siguen siendo medidas en Docker local: en Azure pueden diferir.
+
+## A. Control negativo: ¿el escenario `saldo` detecta una reserva que no es atómica?
+
+**Para qué.** Hoy todo da OK, y un test que nunca falla no prueba nada. Se corre `saldo` contra una copia temporal de la app donde `reserveBalance` es la del TP 1: **chequea el saldo y lo descuenta recién ~600 ms después**, en lugar de hacerlo de una vez en Redis. Los 600 ms imitan la ventana que había en el TP 1 entre el chequeo y el descuento (las dos transferencias simuladas, 2 × U(200, 400) ms). Es una **simulación del defecto del TP 1**, no el código del TP 1.
+
+| Qué | Predicción |
+|---|---|
+| Resultado de `correr.mjs` | **INVARIANTE ROTA** (código de salida 1). Es lo que tiene que pasar |
+| Comprobación "aprobados = 20" | **falla** |
+| Comprobación "el saldo de USD nunca fue negativo" | **falla** |
+| Aprobados (200) | ≈ **45** (rango 30 a 65). Más del doble de lo que permite el saldo |
+| Saldo final de USD | ≈ **−125** (rango −225 a −50) |
+| Comprobación "saldo final = inicial − 5 × aprobados" | **pasa**: cada aprobado descuenta una vez, el problema es que hay de más |
+| Con el código real (`origin/main`) | 20 aprobados y USD 0, como ya se midió |
+
+**Razonamiento.** Llegan a la reserva ≈ 49 pedidos por segundo durante la ráfaga (≈ 64 de cada 100, repartidos en ≈ 1,3 s). Todos los chequeos hechos antes de que aterrice el primer descuento (≈ 0,8 s) ven 100 USD y pasan. El saldo recién llega a 0 cuando aterriza el 20.º descuento, ≈ 1,2 s. Hasta ahí, todo chequeo pasa: ≈ 45 a 50. Es la misma forma que dio el TP 1 con la carrera corta (40 aprobados, saldo −100).
+
+**Límite.** Si diera 20 aprobados, el test **no tiene poder** con esta carga, y habría que subir la concurrencia.
+
+## B. Prueba en seco del plugin de Datadog (sin cuenta)
+
+El entorno `azure` de los YAML nunca se ejecutó. Se corre el escenario `reintentos` con `--env azure`, con una clave falsa y `DATADOG_API_HOST` apuntando a un nombre que no existe (para que nada salga de la máquina), y `DEBUG=plugin:publish-metrics:datadog-statsd`.
+
+| Qué | Predicción |
+|---|---|
+| Artillery acepta el entorno `azure` y arranca | **sí** |
+| Los `tags` salen con el valor real: `test:exchange-integridad-reintentos` y `caso:<el caso>` | **sí** (el template `{{ $processEnvironment.CASO }}` funciona dentro de `tags`). Es la duda que dejó anotada el plan |
+| El debug muestra `Initializing datadog via HTTPS` y la clave tapada | **sí** |
+| La corrida termina igual aunque Datadog no se pueda alcanzar | **sí**, con avisos de error al enviar métricas, sin abortar |
+| Que las métricas **lleguen** a Datadog | **no se puede comprobar sin cuenta**: queda para Azure |
+
+## C. `saldo` bajo carga (`exchange-integridad-saldo-carga`)
+
+**Para qué.** La integridad también tiene que valer cuando el sistema está ocupado, no solo con 10 pedidos por segundo. Mismo montaje de saldo (20 cambios), con una ráfaga de 100 y después **100 pedidos por segundo durante 30 s**: **3.100 pedidos** en total.
+
+| Qué | Predicción para 1 nodo y para 2 nodos (local) | Tipo |
+|---|---|---|
+| Aprobados | **20** | exacta |
+| Saldo final de USD / de ARS | **0** / **120.100.000** | exacta |
+| Saldo mínimo visto | ≥ 0 | exacta |
+| Entradas del log con `ok: true` | **20** | exacta |
+| Entradas nuevas del log = pedidos respondidos | **3.100** | exacta |
+| Errores propios (timeouts, ECONN, 5xx que no son 503 de ARCA) | **0** | exacta |
+| 422 | ≈ 1.960 (±110) | esperada |
+| 403 | ≈ 930 (±100) | esperada |
+| 503 | ≈ 186 (±45) | esperada |
+| Latencia de un 200 | mediana ≈ RTT + 985 ms (sin cambio respecto de 10 req/s) | esperada |
+| CPU del nodo | < 15 % (≈ 100 req/s × ≈ 1,2 ms) | esperada |
+
+**En la nube** se espera lo mismo mientras el nodo no se sature: 100 req/s es ≈ 60 % del escalón de 160 req/s que las otras predicciones esperan sin saturar (CPU ≈ 20 %). Si en Azure el nodo se satura y aparecen timeouts del cliente, se esperan **tres cosas a la vez**: (1) fallan las comprobaciones del cliente (respuestas, errores propios), (2) **siguen valiendo las del servidor**: 20 entradas `ok: true` en el log, saldo final de USD 0 y nunca negativo, y (3) el log puede tener **más** entradas que respuestas recibidas (pedidos que el servidor procesó y cuya respuesta el cliente no vio). Por eso `correr.mjs` va a comprobar también las invariantes **solo con el log y los saldos**.
+
+## D. Duplicados concurrentes (`exchange-integridad-duplicados`)
+
+**Para qué.** El escenario de reintentos manda el segundo pedido *después* de recibir la respuesta del primero, así que nunca ejercita el caso "mismo pedido mientras el primero sigue en curso" (la reserva `lease`, que responde 409). Acá cada usuario manda **los dos pedidos a la vez** (con conexiones separadas, y con 2 nodos pueden caer en nodos distintos). **100 pares** a razón de 10 pares por segundo (200 pedidos), y después un tercer pedido secuencial con la misma clave.
+
+| Qué | Predicción | Tipo |
+|---|---|---|
+| Pares con **exactamente un 409** | **100 de 100** en local | exacta en local; ≥ 95 de 100 en la nube (si la diferencia de llegada supera los ≈ 100 ms que dura la operación, el segundo ya encuentra la respuesta guardada) |
+| Pares con dos respuestas que no son 409 y no son iguales | **0** | exacta |
+| Entradas nuevas del log = cantidad de pares | **100** (el que pierde con 409 no genera entrada) | exacta |
+| Entradas con `ok: true` = pares cuyo ganador fue 200 | igualdad | exacta |
+| Pares con dos aprobaciones distintas | **0** | exacta |
+| Tercer pedido (cuando el ganador fue 200 o 403) | **misma respuesta y mismo `id`**, 100 % | exacta |
+| Ganador: 200 / 403 / 503 | ≈ 64 / 30 / 6 (±12 / ±12 / ±6) de 100 | esperada |
+| Latencia del 409 | mediana ≈ **RTT + 5 ms** | esperada |
+| Pares cuyos dos pedidos caen en nodos distintos (con 2 nodos) | ≈ 50 (±10) | esperada |
+
+**Razonamiento.** La clave se reserva con un `SET NX` en Redis (`createRedisStore`): de dos pedidos simultáneos, solo uno lo consigue, aunque estén en nodos distintos. El otro encuentra la clave sin respuesta guardada y devuelve 409 con `Retry-After: 1` (`node/idempotency.js`). Mientras el ganador consulta a ARCA pasan ≥ 100 ms (≥ 200 ms si ARCA aprueba), mucho más que la diferencia de llegada en local (unos pocos ms).
