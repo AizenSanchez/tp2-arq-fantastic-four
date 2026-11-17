@@ -1,14 +1,5 @@
 #!/usr/bin/env node
-// Crea o actualiza (por titulo) un dashboard de Datadog a partir de un JSON del repo, y opcionalmente lista
-// que metricas llegaron, para confirmar los nombres que usa el dashboard.
-//
-//   node perf/datadog/crear-dashboard.mjs perf/datadog/dashboard-disponibilidad.json
-//   node perf/datadog/crear-dashboard.mjs --metricas artillery.     # metricas con ese prefijo en la ultima hora
-//
-// Necesita, exportadas en la terminal con read -s (nunca en un archivo):
-//   DD_API_KEY  la API key de la organizacion oficial
-//   DD_APP_KEY  una Application key (Organization Settings -> Application Keys)
-//   DD_SITE     el sitio de la organizacion (por defecto us5.datadoghq.com, el de ansible/vmss_setup.yml)
+// Uso: perf/disponibilidad/README.md
 import fs from "node:fs";
 
 const SITE = (process.env.DD_SITE ?? "us5.datadoghq.com").replace(/^app\./, "");

@@ -1,21 +1,5 @@
 #!/usr/bin/env node
-// Corrida de disponibilidad (bloque 3): carga constante y fallas del proceso inyectadas a tiempos fijos.
-//
-//   node perf/disponibilidad/correr.mjs <caso> [--env local|azure]
-//
-// En orden:
-//   1. reinicia el estado y espera /health = 200
-//   2. (azure) foto de pm2 en el nodo: pid, reinicios, kill_timeout
-//   3. lanza Artillery y, en paralelo, un monitor de GET /health cada 1 s (E14) y las fallas de la linea de tiempo
-//   4. (azure) foto de pm2 despues y las lineas de arranque y apagado del log de la app
-//   5. meta.txt y analisis (analizar.mjs -> resumen.md)
-//
-// Linea de tiempo (segundos desde el inicio de la carga; ver README.md):
-//   30-40 pedidos invalidos (E9, lo hace procesadores.cjs) · 60 kill -9 (E3) · 120 pm2 stop (E4) · 150 pm2 start
-//   210 kill -STOP, proceso congelado (E18) · 240 kill -CONT
-//
-// Variables: RATE (pedidos/s, 20), DURACION (s, 300), NODO (patron de Ansible del nodo a romper, vmss[0]),
-// SIN_FALLAS=1 (solo carga y monitor), CONEXION (cable|wifi), DATADOG_API_KEY y DATADOG_API_HOST (azure).
+// Uso y linea de tiempo: perf/disponibilidad/README.md
 import { spawn, execFile, execFileSync, execSync } from "node:child_process";
 import { promisify } from "node:util";
 import fs from "node:fs";
@@ -56,26 +40,21 @@ if (ENTORNO === "azure" && !process.env.DATADOG_API_KEY) {
   process.exit(2);
 }
 
-// ---------------------------------------------------------------- comandos en el nodo
-
-// Ansible se corre desde ansible/: el ProxyCommand del inventario usa ../key.pem
+// desde ansible/ porque el ProxyCommand del inventario usa ../key.pem
 const ANSIBLE = (comando) => ["-i", "vmss_hosts", NODO, "-u", "azureuser", "--private-key", "../key.pem", "-m", "shell", "-a", comando];
 const OPCIONES_ANSIBLE = { cwd: path.join(RAIZ, "ansible"), encoding: "utf8" };
-const sinCabecera = (out) => out.split("\n").slice(1).join("\n").trim(); // la primera linea es "host | CHANGED | rc=0 >>"
+const sinCabecera = (out) => out.split("\n").slice(1).join("\n").trim();
 
-// bloqueante: solo para las fotos de antes y despues y la limpieza, cuando el monitor no esta corriendo
 const enNodo = (comando) => sinCabecera(execFileSync("ansible", ANSIBLE(comando), { ...OPCIONES_ANSIBLE, stdio: ["ignore", "pipe", "pipe"] }));
 
-// asincronico: para las fallas. Ansible tarda de 6 a 13 s (el SSH pasa por el jumpbox); con la version bloqueante
-// el monitor de /health, que corre en este mismo proceso, se quedaba sin consultar justo durante cada falla
+// Ansible tarda de 6 a 13 s: si bloquea, el monitor de /health deja de consultar justo durante la falla
 const execFileAsync = promisify(execFile);
 const enNodoSinBloquear = async (comando) => sinCabecera((await execFileAsync("ansible", ANSIBLE(comando), OPCIONES_ANSIBLE)).stdout);
 
 const compose = (...a) => execFileSync("docker", ["compose", "-f", "docker-compose.local.yml", ...a], { cwd: RAIZ, encoding: "utf8", stdio: "pipe" });
 const composeSinBloquear = (...a) => execFileAsync("docker", ["compose", "-f", "docker-compose.local.yml", ...a], { cwd: RAIZ, encoding: "utf8" });
 
-// Cada falla imprime primero la hora del nodo (ms), para fecharla con su reloj y no con el de la laptop.
-// En local son aproximaciones con docker (no hay pm2): sirven para ensayar los scripts, no como evidencia.
+// la hora del nodo fecha la falla mejor que la de la laptop, por la demora de Ansible
 const PID = "$(pm2 pid app)";
 const FALLAS = {
   "kill-9": { azure: `date +%s%3N; kill -9 ${PID}`, local: async () => (await composeSinBloquear("kill", "app"), await composeSinBloquear("start", "app")) },
@@ -113,7 +92,6 @@ async function inyectar(falla, planificado) {
   if (ENTORNO === "azure") await marcarEnDatadog(falla, tNodo ?? antes, error);
 }
 
-// una marca vertical en los graficos del dashboard (el evento solo necesita la API key, la misma de Artillery)
 async function marcarEnDatadog(falla, t, error) {
   const api = `https://api.${DATADOG_API_HOST.replace(/^app\./, "")}`;
   try {
@@ -135,7 +113,7 @@ async function marcarEnDatadog(falla, t, error) {
   }
 }
 
-// si la corrida se corta a mitad, el proceso no puede quedar congelado ni detenido en el nodo
+// si la corrida se corta, el proceso no puede quedar congelado ni detenido
 let limpiando = false;
 function dejarElNodoAndando() {
   if (limpiando || SIN_FALLAS) return;
@@ -151,8 +129,6 @@ function dejarElNodoAndando() {
     console.error(`no pude dejar el nodo andando, revisalo a mano: ${err.message}`);
   }
 }
-
-// ---------------------------------------------------------------- 1 y 2: reinicio y foto de pm2
 
 async function esperarSalud() {
   for (let n = 0; n < 60; n++) {
@@ -177,8 +153,6 @@ if (ENTORNO === "azure") {
   fs.writeFileSync(archivo("pm2-antes.json"), enNodo(FOTO_PM2) + "\n");
 }
 
-// ---------------------------------------------------------------- 3: carga, monitor y fallas
-
 let monitoreando = true;
 const monitor = (async () => {
   while (monitoreando) {
@@ -196,7 +170,6 @@ const monitor = (async () => {
 const INICIO_MS = Date.now();
 const inicio = new Date(INICIO_MS);
 console.log(`[3/5] ${RATE} pedidos/s durante ${DURACION} s contra ${BASE}${SIN_FALLAS ? " (sin fallas)" : ""}`);
-// cada falla queda en curso como promesa: al final se espera a que terminen antes de limpiar y de analizar
 const enCurso = [];
 const temporizadores = SIN_FALLAS ? [] : LINEA_DE_TIEMPO.map(({ s, falla }) => setTimeout(() => enCurso.push(inyectar(falla, s)), s * 1000));
 
@@ -225,8 +198,6 @@ monitoreando = false;
 await monitor;
 dejarElNodoAndando();
 
-// ---------------------------------------------------------------- 4: pm2 despues y log de arranques
-
 if (ENTORNO === "azure") {
   console.log("[4/5] foto de pm2 despues y log de arranques y apagados");
   fs.writeFileSync(archivo("pm2-despues.json"), enNodo(FOTO_PM2) + "\n");
@@ -235,8 +206,6 @@ if (ENTORNO === "azure") {
     enNodo("pm2 logs app --lines 3000 --nostream --raw 2>/dev/null | grep -E 'listening|received|shutting|unhandled|failed|Error' | tail -n 100") + "\n"
   );
 }
-
-// ---------------------------------------------------------------- 5: meta y analisis
 
 const sh = (c) => {
   try { return execSync(c, { cwd: RAIZ, encoding: "utf8" }).trim(); } catch { return "?"; }

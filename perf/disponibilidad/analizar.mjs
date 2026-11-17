@@ -1,17 +1,8 @@
 #!/usr/bin/env node
-// Analiza una corrida de disponibilidad a partir de los archivos crudos (no usa nada mas).
-//
-//   node perf/disponibilidad/analizar.mjs perf/results/<caso>
-//
-// Lee exchange-disponibilidad.json (Artillery) y exchange-disponibilidad/{pedidos,salud,fallas}.jsonl, meta.txt,
-// pm2-*.json. Escribe exchange-disponibilidad/resumen.md y resumen.json.
-//
-// Definiciones (las mismas del TP 1 y del plan del grupo):
-// - atendido: respuesta 2xx o 4xx (403 y 422 son decisiones de negocio, 400 es la validacion funcionando).
-// - arca_503: 503 con "ARCA no disponible". Es la dependencia externa: pasa sin ninguna falla nuestra (~6 %).
-// - falla propia: cualquier otro 5xx o un pedido sin respuesta (conexion rechazada o cortada, timeout de 10 s).
-// - cada pedido se cuenta en el segundo en que SALIO, no en el que volvio.
-// - t_rec: desde la falla hasta el primer segundo de 3 seguidos sin fallas propias (tope: la falla siguiente).
+// Definiciones (las del TP 1):
+// - atendido: 2xx o 4xx. falla propia: un 5xx que no es el 503 de ARCA, o un pedido sin respuesta.
+// - cada pedido cuenta en el segundo en que salio.
+// - t_rec: desde la falla hasta el primer segundo de 3 seguidos sin fallas propias.
 import fs from "node:fs";
 import path from "node:path";
 
@@ -38,8 +29,6 @@ const percentil = (v, p) => {
   return o[Math.min(o.length - 1, Math.ceil((p / 100) * o.length) - 1)];
 };
 const pct = (a, b) => (b ? Math.round((1000 * a) / b) / 10 : null);
-
-// ---------------------------------------------------------------- pedidos
 
 const enviados = new Map();
 const respuestas = new Map();
@@ -70,7 +59,6 @@ for (const p of pedidos) {
   else c.perdidos++;
 }
 
-// ventanas de 10 s, como el dashboard del TP 1
 const ventanas = [];
 for (let desde = 0; desde <= ultimoSeg; desde += 10) {
   const ps = pedidos.filter((p) => p.s >= desde && p.s < desde + 10);
@@ -88,11 +76,8 @@ for (let desde = 0; desde <= ultimoSeg; desde += 10) {
   });
 }
 
-// ---------------------------------------------------------------- efecto de cada falla
-
 const tFalla = (f) => f.t_nodo ?? f.t_lanzado;
 const fallasOrd = [...fallas].sort((a, b) => tFalla(a) - tFalla(b));
-// las fallas que restauran no abren un evento propio: se reportan dentro del evento que cierran
 const RESTAURA = { "pm2-start": "pm2-stop", "kill-CONT": "kill-STOP" };
 const eventos = fallasOrd
   .filter((f) => !RESTAURA[f.falla])
@@ -138,8 +123,6 @@ const eventos = fallasOrd
     };
   });
 
-// ---------------------------------------------------------------- pedidos invalidos (E9)
-
 const invalidos = pedidos.filter((p) => p.invalido);
 const porStatus = (lista) => lista.reduce((o, p) => ((o[p.status ?? "sin respuesta"] = (o[p.status ?? "sin respuesta"] ?? 0) + 1), o), {});
 const medianaDe = (lista) => percentil(lista.filter((p) => p.ms !== null).map((p) => p.ms), 50);
@@ -151,8 +134,6 @@ const e9 = {
   mediana_400_ms: medianaDe(invalidos.filter((p) => p.status === 400)),
   validos_en_la_ventana: porStatus(pedidos.filter((p) => !p.invalido && p.s >= 30 && p.s < 40)),
 };
-
-// ---------------------------------------------------------------- referencia sin fallas y totales
 
 const latPorStatus = Object.fromEntries(
   [200, 403, 422].map((st) => {
@@ -177,8 +158,6 @@ const reinicios = pm2Antes && pm2Despues ? pm2Despues[0]?.reinicios - pm2Antes[0
 
 const resumen = { meta: meta.trim(), totales, referencia_sin_fallas: latPorStatus, e9, eventos, reinicios_pm2: reinicios, pm2: { antes: pm2Antes, despues: pm2Despues }, ventanas };
 fs.writeFileSync(path.join(dir, "resumen.json"), JSON.stringify(resumen, null, 2) + "\n");
-
-// ---------------------------------------------------------------- resumen.md
 
 const fila = (celdas) => `| ${celdas.map((c) => (c === null || c === undefined ? "—" : c)).join(" | ")} |`;
 const md = [

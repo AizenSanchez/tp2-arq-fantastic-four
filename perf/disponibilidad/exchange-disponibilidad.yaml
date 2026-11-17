@@ -1,8 +1,4 @@
-# Disponibilidad y fallas (bloque 3): junta E3 (kill -9), E4 (stop), E9 (pedido invalido), E14 (monitor de salud)
-# y E18 (proceso congelado) del TP 1 en una sola corrida de carga constante.
-# La carga la pone este YAML; las fallas las inyecta correr.mjs en el nodo, a tiempos fijos (ver README.md).
-# No se corre solo: correr.mjs fija INICIO_MS, RATE, DURACION y el archivo de pedidos.
-# Predicciones: perf/predicciones/disponibilidad.md
+# Lo lanza correr.mjs, que define RATE, DURACION, INICIO_MS y PEDIDOS_JSONL.
 config:
   processor: "./procesadores.cjs"
   http:
@@ -12,10 +8,8 @@ config:
       arrivalRate: "{{ $processEnvironment.RATE }}"
       duration: "{{ $processEnvironment.DURACION }}"
   environments:
-    # contra docker-compose.local.yml: solo sirve para ensayar los scripts, las fallas son aproximaciones con docker
     local:
       target: "http://localhost:3000"
-    # contra el balanceador de Azure: TARGET sale de node/lb_dns (lo hace correr.mjs)
     azure:
       target: "{{ $processEnvironment.TARGET }}"
       plugins:
@@ -28,8 +22,7 @@ config:
               - "test:exchange-disponibilidad"
               - "caso:{{ $processEnvironment.CASO }}"
 
-# la mezcla de pares del TP 1: ARS<->USD 70 %, ARS<->EUR 20 %, ARS<->BRL 10 %, mitad compra y mitad venta.
-# Montos literales: $randomNumber devuelve texto y en el TP 1 corrompia los saldos. El dni lo pone preparar().
+# Montos literales: $randomNumber devuelve texto y en el TP 1 corrompia los saldos.
 scenarios:
   - name: "ARS -> USD"
     weight: 35
