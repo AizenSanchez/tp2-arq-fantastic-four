@@ -59,3 +59,29 @@ balanceador o Redis, y se busca con `system.net.bytes_rcvd` del nodo y el log de
 informe, y la diferencia se anota en los resultados.
 
 Las predicciones de E10, E7 y E8 van en un commit aparte, antes de cada corrida, con el resultado de esta.
+
+## 2. E10, lectura de tasas (`perf/tacticas-nginx/exchange-lectura-tasas.yaml`)
+
+Escrita con el resultado de la sección 1 (`perf/results/azure-1-nodo-b2als/exchange-capacidad/`): B ≥ 320 en este nodo,
+y el costo por pedido medido con la tasa (1,7 a 2,0 ms por POST a 120 o más, contra los 3,5 de la caracterización a
+20). GET /rates es un solo `HGETALL` a Redis.
+
+Carga: 12 req/s durante 30 s y 120 req/s durante 120 s; 80 % `GET /rates` (96/s) y 20 % `POST /exchange` (24/s, mitad
+ARS a USD y mitad USD a ARS). En total unos 14.760 pedidos: 11.800 GET y 2.950 POST. Reset antes con `ansible/reset.sh`.
+
+| Métrica | Predicción | Tipo | Cálculo |
+|---|---|---|---|
+| Errores y timeouts | 0 | esperado | 120 req/s es menos de la mitad de lo que el nodo atendió sin errores |
+| GET /rates en la app (`arvault.exchange.http.GET.rates`) | mediana ≤ 1,2 ms, p95 ≤ 5 ms | esperado | 0,84 / 1,2 ms a 20 req/s en la caracterización; con ρ del proceso ≈ 0,1 la espera en el event loop es de décimas de ms |
+| GET /rates en el cliente (`/rates`, `http.response_time`) | p50 163 ± 3 ms, p95 ≤ 175 ms | esperado | base de 162 / 169 ms más el servidor |
+| POST, 200 en el cliente (`http.response_time.2xx` de toda la corrida) | p95 1.350 ± 70 ms | esperado | 1.353 ms en la corrida de capacidad |
+| Mezcla de ARCA | 62 / 32 / 6 % ± 3 | esperado | |
+| CPU del proceso en la fase de 120 | 10 ± 4 % de un núcleo; /rates cerca de la mitad | esperado | 24 × 2,0 ms + 96 × 0,55 ms (0,55 = 2,0 × 0,93 / 3,5, la razón GET/POST de la caracterización) |
+| Redis | unas 450 operaciones/s, procesador ≤ 18 % | esperado | 96 + 24 × 14,5 (14,5 operaciones por POST en la corrida de capacidad); 13 % quieto y 23 % a 4.650 op/s |
+| Conntrack máximo | 9.000 a 14.500, sin `table full` | esperado | hasta 120 conexiones/s durante 120 s; en la capacidad se midió entre 0,65 y 0,9 de esa cuenta |
+
+**Decisión que se predice: no se repone la microcaché.** Ninguno de los criterios del plan se dispara: p95 de GET /rates
+en la app por debajo de 17 ms; /rates cerca del 50 % de la CPU del proceso, pero con el proceso al 10 % (el criterio
+pide más del 70 %); el p95 de los 200 de POST no pasa de 1,1 × (1.488 ms); Redis lejos del 50 %. Lo máximo que
+ahorraría una caché es el tiempo de servidor de /rates, ≤ 5 ms de 169 (≤ 3 %). Contra el TP 1: allá la caché bajó el
+P99 de 18 a 1 ms porque el proceso de la notebook atendía 800 req/s; acá el tiempo de /rates lo pone la red.
