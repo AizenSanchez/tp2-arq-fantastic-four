@@ -1,0 +1,17 @@
+# sudo dmesg, lineas de conntrack, leido a las 03:01 UTC:
+(ninguna)
+
+# nstat -az, contadores de TCP relevantes desde el arranque del nodo
+TcpAttemptFails                 56                 0.0
+TcpEstabResets                  20                 0.0
+TcpRetransSegs                  2332               0.0
+TcpExtListenOverflows           17788              0.0
+TcpExtListenDrops               17788              0.0
+TcpExtTCPTimeouts               2330               0.0
+TcpExtTCPAbortOnData            20                 0.0
+TcpExtTCPAbortOnClose           9                  0.0
+TcpExtTCPAbortOnMemory          0                  0.0
+TcpExtTCPAbortOnTimeout         0                  0.0
+TcpExtTCPBacklogDrop            0                  0.0
+TcpExtTCPReqQFullDrop           0                  0.0
+TcpExtTCPSynRetrans             2329               0.0
