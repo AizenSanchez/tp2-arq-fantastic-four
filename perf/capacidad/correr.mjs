@@ -254,6 +254,10 @@ fs.writeFileSync(
 const AZURE_MONITOR = [
   { recurso: "redis", tipo: "Microsoft.Cache/redisEnterprise", metricas: ["usedmemory", "operationsPerSecond", "percentProcessorTime"], agregaciones: ["Maximum", "Average"] },
   { recurso: "arca", tipo: "Microsoft.ContainerInstance/containerGroups", metricas: ["CpuUsage", "MemoryUsage"], agregaciones: ["Average", "Maximum"] },
+  // balanceador: estado del probe por nodo (como exportar-probe.mjs del bloque 3) y trafico que llega al frontend,
+  // para saber si los pedidos que vencen por timeout llegaron a Azure o se perdieron antes
+  { recurso: "lb-probe", tipo: "Microsoft.Network/loadBalancers", metricas: ["DipAvailability"], agregaciones: ["Average"], dimension: "BackendIPAddress" },
+  { recurso: "lb-trafico", tipo: "Microsoft.Network/loadBalancers", metricas: ["SYNCount", "ByteCount", "PacketCount"], agregaciones: ["Total"] },
 ];
 // los ids de Azure llevan el id de la suscripcion: no se guardan
 const sinIds = (texto) => {
@@ -276,7 +280,7 @@ if (ENTORNO === "azure") {
     try {
       const id = az("resource", "list", "-g", grupo, "--resource-type", m.tipo, "--query", "[0].id", "-o", "tsv");
       if (!id) throw new Error(`no hay ningun ${m.tipo} en ${grupo}`);
-      const json = az("monitor", "metrics", "list", "--resource", id, "--metrics", ...m.metricas, "--aggregation", ...m.agregaciones, "--interval", "PT1M", "--start-time", desde, "--end-time", hasta, "-o", "json");
+      const json = az("monitor", "metrics", "list", "--resource", id, "--metrics", ...m.metricas, ...(m.dimension ? ["--dimension", m.dimension] : []), "--aggregation", ...m.agregaciones, "--interval", "PT1M", "--start-time", desde, "--end-time", hasta, "-o", "json");
       fs.writeFileSync(path.join(dirMonitor, `${m.recurso}.json`), sinIds(json) + "\n");
       console.log(`      ${m.recurso}: ${m.metricas.join(", ")}`);
     } catch (err) {
@@ -289,8 +293,9 @@ if (ENTORNO === "azure") {
     path.join(dirMonitor, "LEEME.txt"),
     [
       `rango: ${desde} a ${hasta} (la corrida, con 2 min antes y despues), grano 1 min`,
-      ...AZURE_MONITOR.map((m) => `${m.recurso}: ${m.tipo}, metricas ${m.metricas.join(", ")}, agregaciones ${m.agregaciones.join(", ")}`),
+      ...AZURE_MONITOR.map((m) => `${m.recurso}: ${m.tipo}, metricas ${m.metricas.join(", ")}, agregaciones ${m.agregaciones.join(", ")}${m.dimension ? `, dimension ${m.dimension}` : ""}`),
       "CpuUsage de ACI esta en milicores (0,5 vCPU = 500). usedmemory y MemoryUsage en bytes.",
+      "DipAvailability: % de probes exitosos por nodo (BackendIPAddress). SYNCount, ByteCount y PacketCount: totales por minuto en el frontend del balanceador.",
       `para volver a exportar: az monitor metrics list --resource <id> --metrics ... --interval PT1M --start-time ${desde} --end-time ${hasta}`,
     ].join("\n") + "\n"
   );

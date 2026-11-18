@@ -21,7 +21,8 @@ function preparar(requestParams, context, ee, next) {
 
 function registrar(requestParams, response, context, ee, next) {
   const t1 = Date.now();
-  const linea = { t0: context.vars.t0, t1, status: response.statusCode, ms: t1 - context.vars.t0, escenario: context.vars.escenario };
+  // X-Node: el nodo que atendio (con varios nodos detras del balanceador es la unica forma de verlo desde afuera)
+  const linea = { t0: context.vars.t0, t1, status: response.statusCode, ms: t1 - context.vars.t0, escenario: context.vars.escenario, nodo: response.headers["x-node"] ?? null };
   // un 503 de ARCA es la dependencia externa; cualquier otro 503 seria nuestro
   if (response.statusCode === 503) {
     let body = {};
