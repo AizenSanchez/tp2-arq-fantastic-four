@@ -1,0 +1,4 @@
+InstanceId    LatestModelApplied    Location    ModelDefinitionApplied    Name       ProvisioningState    ResilientVMDeletionStatus    ResourceGroup       TimeCreated                        VmId
+------------  --------------------  ----------  ------------------------  ---------  -------------------  ---------------------------  ------------------  ---------------------------------  ------------------------------------
+0             True                  eastus2     VirtualMachineScaleSet    tp2vmss_0  Succeeded            Disabled                     tp2_resource_group  2026-11-18T14:16:00.9268765+00:00  a7421453-bd1f-47be-b194-17e1a78a122e
+1             True                  eastus2     VirtualMachineScaleSet    tp2vmss_1  Succeeded            Disabled                     tp2_resource_group  2026-11-18T14:16:00.9268765+00:00  98390abe-bfc7-4b40-9244-a5fea95c6ca1
