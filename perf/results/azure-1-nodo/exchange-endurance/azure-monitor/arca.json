@@ -1,0 +1,215 @@
+{
+  "cost": 64,
+  "interval": "PT1M",
+  "namespace": "Microsoft.ContainerInstance/containerGroups",
+  "resourceregion": "eastus2",
+  "timespan": "2026-11-17T07:57:22Z/2026-11-17T08:14:39Z",
+  "value": [
+    {
+      "displayDescription": "CPU usage on all cores in millicores.",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "CPU Usage",
+        "value": "CpuUsage"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 0,
+              "maximum": 0,
+              "timeStamp": "2026-11-17T07:57:00Z"
+            },
+            {
+              "average": 0,
+              "maximum": 0,
+              "timeStamp": "2026-11-17T07:58:00Z"
+            },
+            {
+              "average": 0,
+              "maximum": 0,
+              "timeStamp": "2026-11-17T07:59:00Z"
+            },
+            {
+              "average": 0,
+              "maximum": 0,
+              "timeStamp": "2026-11-17T08:00:00Z"
+            },
+            {
+              "average": 16,
+              "maximum": 22,
+              "timeStamp": "2026-11-17T08:01:00Z"
+            },
+            {
+              "average": 20,
+              "maximum": 20,
+              "timeStamp": "2026-11-17T08:02:00Z"
+            },
+            {
+              "average": 21,
+              "maximum": 21,
+              "timeStamp": "2026-11-17T08:03:00Z"
+            },
+            {
+              "average": 21,
+              "maximum": 21,
+              "timeStamp": "2026-11-17T08:04:00Z"
+            },
+            {
+              "average": 21,
+              "maximum": 21,
+              "timeStamp": "2026-11-17T08:05:00Z"
+            },
+            {
+              "average": 20.5,
+              "maximum": 21,
+              "timeStamp": "2026-11-17T08:06:00Z"
+            },
+            {
+              "average": 23,
+              "maximum": 23,
+              "timeStamp": "2026-11-17T08:07:00Z"
+            },
+            {
+              "average": 21,
+              "maximum": 21,
+              "timeStamp": "2026-11-17T08:08:00Z"
+            },
+            {
+              "average": 20.5,
+              "maximum": 21,
+              "timeStamp": "2026-11-17T08:09:00Z"
+            },
+            {
+              "average": 21.5,
+              "maximum": 22,
+              "timeStamp": "2026-11-17T08:10:00Z"
+            },
+            {
+              "average": 33,
+              "maximum": 37,
+              "timeStamp": "2026-11-17T08:11:00Z"
+            },
+            {
+              "average": 38.5,
+              "maximum": 40,
+              "timeStamp": "2026-11-17T08:12:00Z"
+            },
+            {
+              "average": 37,
+              "maximum": 37,
+              "timeStamp": "2026-11-17T08:13:00Z"
+            }
+          ],
+          "metadatavalues": []
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Count"
+    },
+    {
+      "displayDescription": "Total memory usage in byte.",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "Memory Usage",
+        "value": "MemoryUsage"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 37507072,
+              "maximum": 37507072,
+              "timeStamp": "2026-11-17T07:57:00Z"
+            },
+            {
+              "average": 37507072,
+              "maximum": 37507072,
+              "timeStamp": "2026-11-17T07:58:00Z"
+            },
+            {
+              "average": 37507072,
+              "maximum": 37507072,
+              "timeStamp": "2026-11-17T07:59:00Z"
+            },
+            {
+              "average": 37507072,
+              "maximum": 37507072,
+              "timeStamp": "2026-11-17T08:00:00Z"
+            },
+            {
+              "average": 35727360,
+              "maximum": 37040128,
+              "timeStamp": "2026-11-17T08:01:00Z"
+            },
+            {
+              "average": 29140992,
+              "maximum": 31776768,
+              "timeStamp": "2026-11-17T08:02:00Z"
+            },
+            {
+              "average": 21766144,
+              "maximum": 21766144,
+              "timeStamp": "2026-11-17T08:03:00Z"
+            },
+            {
+              "average": 21768192,
+              "maximum": 21770240,
+              "timeStamp": "2026-11-17T08:04:00Z"
+            },
+            {
+              "average": 21766144,
+              "maximum": 21766144,
+              "timeStamp": "2026-11-17T08:05:00Z"
+            },
+            {
+              "average": 21766144,
+              "maximum": 21766144,
+              "timeStamp": "2026-11-17T08:06:00Z"
+            },
+            {
+              "average": 21768192,
+              "maximum": 21770240,
+              "timeStamp": "2026-11-17T08:07:00Z"
+            },
+            {
+              "average": 21766144,
+              "maximum": 21766144,
+              "timeStamp": "2026-11-17T08:08:00Z"
+            },
+            {
+              "average": 21766144,
+              "maximum": 21766144,
+              "timeStamp": "2026-11-17T08:09:00Z"
+            },
+            {
+              "average": 21766144,
+              "maximum": 21766144,
+              "timeStamp": "2026-11-17T08:10:00Z"
+            },
+            {
+              "average": 22087680,
+              "maximum": 22347776,
+              "timeStamp": "2026-11-17T08:11:00Z"
+            },
+            {
+              "average": 21819392,
+              "maximum": 21819392,
+              "timeStamp": "2026-11-17T08:12:00Z"
+            },
+            {
+              "average": 21821440,
+              "maximum": 21823488,
+              "timeStamp": "2026-11-17T08:13:00Z"
+            }
+          ],
+          "metadatavalues": []
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Bytes"
+    }
+  ]
+}

@@ -1,0 +1,375 @@
+{
+  "caso": "local-1-nodo",
+  "corrida": "exchange-endurance",
+  "entorno": "local",
+  "rtt": {
+    "reutilizada": {
+      "p50_ms": 1.4,
+      "p95_ms": 4.1
+    },
+    "nueva": null
+  },
+  "recorte_s": {
+    "inicio": 5,
+    "fin": 2
+  },
+  "fases": [
+    {
+      "nombre": "endurance-120",
+      "tipo": "endurance",
+      "rate": 120,
+      "duracion": 600,
+      "desde_s": 0,
+      "hasta_s": 600,
+      "ventana_s": [
+        5,
+        598
+      ],
+      "segundos": 593,
+      "rate_nominal": 120,
+      "ofrecidos": 71160,
+      "enviados": 71168,
+      "enviados_por_s": 120,
+      "respuestas": 71168,
+      "respuestas_por_s": 120,
+      "por_s": {
+        "200": 74.5,
+        "403": 38.2,
+        "503": 7.4,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "cuentas": {
+        "200": 44167,
+        "403": 22628,
+        "503": 4373,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "otro_2xx_3xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "pct_403_de_respuestas": 31.8,
+      "pct_503_de_respuestas": 6.1,
+      "errores_propios": 0,
+      "pct_errores_propios": 0,
+      "pct_respuestas_de_ofrecido": 100,
+      "lat_200": {
+        "p50": 978,
+        "p95": 1190,
+        "p99": 1268
+      },
+      "lat_403": {
+        "p50": 380,
+        "p95": 539
+      },
+      "motivos_503": {
+        "http_5xx": 4373
+      },
+      "recursos": {
+        "app": {
+          "cpu_max": 69.8,
+          "cpu_media": 38.9,
+          "mem_max_mib": 179.5
+        },
+        "redis": {
+          "cpu_max": 29.2,
+          "cpu_media": 7.5,
+          "mem_max_mib": 41
+        },
+        "arca": {
+          "cpu_max": 20,
+          "cpu_media": 9.5,
+          "mem_max_mib": 17
+        }
+      },
+      "condiciones": {
+        "errores": true,
+        "respuestas": true,
+        "latencia": true
+      },
+      "cumple": true
+    },
+    {
+      "nombre": "tramo-240",
+      "tipo": "tramo",
+      "rate": 240,
+      "duracion": 180,
+      "desde_s": 600,
+      "hasta_s": 780,
+      "ventana_s": [
+        605,
+        778
+      ],
+      "segundos": 173,
+      "rate_nominal": 240,
+      "ofrecidos": 41520,
+      "enviados": 41525,
+      "enviados_por_s": 240,
+      "respuestas": 41525,
+      "respuestas_por_s": 240,
+      "por_s": {
+        "200": 149.3,
+        "403": 75.7,
+        "503": 15,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "cuentas": {
+        "200": 25834,
+        "403": 13093,
+        "503": 2598,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "otro_2xx_3xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "pct_403_de_respuestas": 31.5,
+      "pct_503_de_respuestas": 6.3,
+      "errores_propios": 0,
+      "pct_errores_propios": 0,
+      "pct_respuestas_de_ofrecido": 100,
+      "lat_200": {
+        "p50": 1036,
+        "p95": 1508,
+        "p99": 1763
+      },
+      "lat_403": {
+        "p50": 425,
+        "p95": 878
+      },
+      "motivos_503": {
+        "http_5xx": 2598
+      },
+      "recursos": {
+        "app": {
+          "cpu_max": 93,
+          "cpu_media": 70.6,
+          "mem_max_mib": 181
+        },
+        "redis": {
+          "cpu_max": 28.8,
+          "cpu_media": 9.9,
+          "mem_max_mib": 62.6
+        },
+        "arca": {
+          "cpu_max": 28.2,
+          "cpu_media": 18.1,
+          "mem_max_mib": 22
+        }
+      },
+      "condiciones": {
+        "errores": true,
+        "respuestas": true,
+        "latencia": true
+      },
+      "cumple": true
+    }
+  ],
+  "endurance": {
+    "pendiente_p95": {
+      "endurance-120": {
+        "pendiente_ms_por_min": 0.8,
+        "r2": 0.13,
+        "n": 10
+      },
+      "tramo-240": {
+        "pendiente_ms_por_min": 26,
+        "r2": 0.25,
+        "n": 3
+      }
+    },
+    "memoria": {
+      "endurance-120": {
+        "inicio_mib": {
+          "app": 178.2,
+          "redis": 9.1
+        },
+        "fin_mib": {
+          "app": 178.7,
+          "redis": 40.5
+        }
+      },
+      "tramo-240": {
+        "inicio_mib": {
+          "app": 179.8,
+          "redis": 42.3
+        },
+        "fin_mib": {
+          "app": 179.9,
+          "redis": 61.6
+        }
+      }
+    },
+    "minutos": [
+      {
+        "minuto": 0,
+        "fase": "endurance-120",
+        "enviados": 7186,
+        "errores_propios": 0,
+        "p50_200": 978,
+        "p95_200": 1181,
+        "mem_app_mib": 179.1,
+        "mem_redis_mib": 52.8
+      },
+      {
+        "minuto": 1,
+        "fase": "endurance-120",
+        "enviados": 7201,
+        "errores_propios": 0,
+        "p50_200": 978,
+        "p95_200": 1187,
+        "mem_app_mib": 179.4,
+        "mem_redis_mib": 12.8
+      },
+      {
+        "minuto": 2,
+        "fase": "endurance-120",
+        "enviados": 7201,
+        "errores_propios": 0,
+        "p50_200": 975,
+        "p95_200": 1181,
+        "mem_app_mib": 179.1,
+        "mem_redis_mib": 16.4
+      },
+      {
+        "minuto": 3,
+        "fase": "endurance-120",
+        "enviados": 7202,
+        "errores_propios": 0,
+        "p50_200": 980,
+        "p95_200": 1195,
+        "mem_app_mib": 179,
+        "mem_redis_mib": 19.7
+      },
+      {
+        "minuto": 4,
+        "fase": "endurance-120",
+        "enviados": 7200,
+        "errores_propios": 0,
+        "p50_200": 977,
+        "p95_200": 1192,
+        "mem_app_mib": 179.1,
+        "mem_redis_mib": 23.3
+      },
+      {
+        "minuto": 5,
+        "fase": "endurance-120",
+        "enviados": 7201,
+        "errores_propios": 0,
+        "p50_200": 982,
+        "p95_200": 1204,
+        "mem_app_mib": 179.3,
+        "mem_redis_mib": 26.9
+      },
+      {
+        "minuto": 6,
+        "fase": "endurance-120",
+        "enviados": 7202,
+        "errores_propios": 0,
+        "p50_200": 978,
+        "p95_200": 1184,
+        "mem_app_mib": 179,
+        "mem_redis_mib": 30.3
+      },
+      {
+        "minuto": 7,
+        "fase": "endurance-120",
+        "enviados": 7200,
+        "errores_propios": 0,
+        "p50_200": 977,
+        "p95_200": 1191,
+        "mem_app_mib": 179.3,
+        "mem_redis_mib": 33.9
+      },
+      {
+        "minuto": 8,
+        "fase": "endurance-120",
+        "enviados": 7200,
+        "errores_propios": 0,
+        "p50_200": 978,
+        "p95_200": 1191,
+        "mem_app_mib": 179.5,
+        "mem_redis_mib": 37.5
+      },
+      {
+        "minuto": 9,
+        "fase": "endurance-120",
+        "enviados": 7204,
+        "errores_propios": 0,
+        "p50_200": 977,
+        "p95_200": 1190,
+        "mem_app_mib": 179.4,
+        "mem_redis_mib": 41.2
+      },
+      {
+        "minuto": 10,
+        "fase": "tramo-240",
+        "enviados": 14396,
+        "errores_propios": 0,
+        "p50_200": 1027,
+        "p95_200": 1488,
+        "mem_app_mib": 180.8,
+        "mem_redis_mib": 48.1
+      },
+      {
+        "minuto": 11,
+        "fase": "tramo-240",
+        "enviados": 14401,
+        "errores_propios": 0,
+        "p50_200": 1027,
+        "p95_200": 1437,
+        "mem_app_mib": 180.7,
+        "mem_redis_mib": 55.4
+      },
+      {
+        "minuto": 12,
+        "fase": "tramo-240",
+        "enviados": 14393,
+        "errores_propios": 0,
+        "p50_200": 1050,
+        "p95_200": 1540,
+        "mem_app_mib": 181,
+        "mem_redis_mib": 62.8
+      },
+      {
+        "minuto": 13,
+        "fase": "fin",
+        "enviados": 13,
+        "errores_propios": 0,
+        "p50_200": 895,
+        "p95_200": 1085,
+        "mem_app_mib": 178.4,
+        "mem_redis_mib": 62.8
+      }
+    ]
+  },
+  "artillery": {
+    "response_time_2xx": {
+      "n": 71542,
+      "p50": 1002.4,
+      "p95": 1274.3,
+      "p99": 1620
+    },
+    "response_time_4xx": {
+      "n": 36522,
+      "p50": 391.6,
+      "p95": 608,
+      "p99": 982.6
+    },
+    "codigos": {
+      "http.codes.503": 7136,
+      "http.codes.403": 36522,
+      "http.codes.200": 71542
+    },
+    "errores": {},
+    "escenarios_creados": 115200,
+    "escenarios_fallidos": 0,
+    "lineas_en_pedidos_jsonl": 115200
+  }
+}

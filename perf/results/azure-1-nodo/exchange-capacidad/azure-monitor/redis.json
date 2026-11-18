@@ -1,0 +1,288 @@
+{
+  "cost": 84,
+  "interval": "PT1M",
+  "namespace": "Microsoft.Cache/redisEnterprise",
+  "resourceregion": "eastus2",
+  "timespan": "2026-11-17T07:35:18Z/2026-11-17T07:50:39Z",
+  "value": [
+    {
+      "displayDescription": "The amount of cache memory used for key/value pairs, in bytes.",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "Used Memory",
+        "value": "usedmemory"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 2157624,
+              "maximum": 2162744,
+              "timeStamp": "2026-11-17T07:35:00Z"
+            },
+            {
+              "average": 2157630,
+              "maximum": 2162756,
+              "timeStamp": "2026-11-17T07:36:00Z"
+            },
+            {
+              "average": 2132024,
+              "maximum": 2142264,
+              "timeStamp": "2026-11-17T07:37:00Z"
+            },
+            {
+              "average": 2156728,
+              "maximum": 2191672,
+              "timeStamp": "2026-11-17T07:38:00Z"
+            },
+            {
+              "average": 2585677.5,
+              "maximum": 2658437,
+              "timeStamp": "2026-11-17T07:39:00Z"
+            },
+            {
+              "average": 3063527.5,
+              "maximum": 3218239,
+              "timeStamp": "2026-11-17T07:40:00Z"
+            },
+            {
+              "average": 4045025,
+              "maximum": 4367655,
+              "timeStamp": "2026-11-17T07:41:00Z"
+            },
+            {
+              "average": 6006413.5,
+              "maximum": 6610948,
+              "timeStamp": "2026-11-17T07:42:00Z"
+            },
+            {
+              "average": 9209518.5,
+              "maximum": 10148129,
+              "timeStamp": "2026-11-17T07:43:00Z"
+            },
+            {
+              "average": 13660350.5,
+              "maximum": 14903738,
+              "timeStamp": "2026-11-17T07:44:00Z"
+            },
+            {
+              "average": 19121946.5,
+              "maximum": 20491284,
+              "timeStamp": "2026-11-17T07:45:00Z"
+            },
+            {
+              "average": 23309432,
+              "maximum": 23755044,
+              "timeStamp": "2026-11-17T07:46:00Z"
+            },
+            {
+              "average": 23805712,
+              "maximum": 23815952,
+              "timeStamp": "2026-11-17T07:47:00Z"
+            },
+            {
+              "average": 23933386.5,
+              "maximum": 24061061,
+              "timeStamp": "2026-11-17T07:48:00Z"
+            },
+            {
+              "average": 24523506,
+              "maximum": 24677383,
+              "timeStamp": "2026-11-17T07:49:00Z"
+            }
+          ],
+          "metadatavalues": []
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Bytes"
+    },
+    {
+      "displayDescription": "The rate of operations executed on the cache, in operations per second.",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "Operations Per Second",
+        "value": "operationsPerSecond"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 1,
+              "maximum": 1,
+              "timeStamp": "2026-11-17T07:35:00Z"
+            },
+            {
+              "average": 1,
+              "maximum": 1,
+              "timeStamp": "2026-11-17T07:36:00Z"
+            },
+            {
+              "average": 1,
+              "maximum": 1,
+              "timeStamp": "2026-11-17T07:37:00Z"
+            },
+            {
+              "average": 1.5,
+              "maximum": 2,
+              "timeStamp": "2026-11-17T07:38:00Z"
+            },
+            {
+              "average": 145.5,
+              "maximum": 146,
+              "timeStamp": "2026-11-17T07:39:00Z"
+            },
+            {
+              "average": 301.5,
+              "maximum": 315,
+              "timeStamp": "2026-11-17T07:40:00Z"
+            },
+            {
+              "average": 579.5,
+              "maximum": 580,
+              "timeStamp": "2026-11-17T07:41:00Z"
+            },
+            {
+              "average": 1159,
+              "maximum": 1170,
+              "timeStamp": "2026-11-17T07:42:00Z"
+            },
+            {
+              "average": 1752,
+              "maximum": 1761,
+              "timeStamp": "2026-11-17T07:43:00Z"
+            },
+            {
+              "average": 2309,
+              "maximum": 2310,
+              "timeStamp": "2026-11-17T07:44:00Z"
+            },
+            {
+              "average": 2734,
+              "maximum": 2994,
+              "timeStamp": "2026-11-17T07:45:00Z"
+            },
+            {
+              "average": 1210.5,
+              "maximum": 2419,
+              "timeStamp": "2026-11-17T07:46:00Z"
+            },
+            {
+              "average": 1,
+              "maximum": 1,
+              "timeStamp": "2026-11-17T07:47:00Z"
+            },
+            {
+              "average": 150,
+              "maximum": 299,
+              "timeStamp": "2026-11-17T07:48:00Z"
+            },
+            {
+              "average": 294,
+              "maximum": 297,
+              "timeStamp": "2026-11-17T07:49:00Z"
+            }
+          ],
+          "metadatavalues": []
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "CountPerSecond"
+    },
+    {
+      "displayDescription": "The CPU utilization of the cache as a percentage.",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "CPU",
+        "value": "percentProcessorTime"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 29.5,
+              "maximum": 31,
+              "timeStamp": "2026-11-17T07:35:00Z"
+            },
+            {
+              "average": 31,
+              "maximum": 33,
+              "timeStamp": "2026-11-17T07:36:00Z"
+            },
+            {
+              "average": 31,
+              "maximum": 34,
+              "timeStamp": "2026-11-17T07:37:00Z"
+            },
+            {
+              "average": 29.5,
+              "maximum": 32,
+              "timeStamp": "2026-11-17T07:38:00Z"
+            },
+            {
+              "average": 31.5,
+              "maximum": 34,
+              "timeStamp": "2026-11-17T07:39:00Z"
+            },
+            {
+              "average": 32,
+              "maximum": 34,
+              "timeStamp": "2026-11-17T07:40:00Z"
+            },
+            {
+              "average": 34,
+              "maximum": 37,
+              "timeStamp": "2026-11-17T07:41:00Z"
+            },
+            {
+              "average": 34.5,
+              "maximum": 36,
+              "timeStamp": "2026-11-17T07:42:00Z"
+            },
+            {
+              "average": 37,
+              "maximum": 38,
+              "timeStamp": "2026-11-17T07:43:00Z"
+            },
+            {
+              "average": 37.5,
+              "maximum": 39,
+              "timeStamp": "2026-11-17T07:44:00Z"
+            },
+            {
+              "average": 40,
+              "maximum": 42,
+              "timeStamp": "2026-11-17T07:45:00Z"
+            },
+            {
+              "average": 35.5,
+              "maximum": 40,
+              "timeStamp": "2026-11-17T07:46:00Z"
+            },
+            {
+              "average": 31.5,
+              "maximum": 33,
+              "timeStamp": "2026-11-17T07:47:00Z"
+            },
+            {
+              "average": 32.5,
+              "maximum": 33,
+              "timeStamp": "2026-11-17T07:48:00Z"
+            },
+            {
+              "average": 33,
+              "maximum": 35,
+              "timeStamp": "2026-11-17T07:49:00Z"
+            }
+          ],
+          "metadatavalues": []
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Percent"
+    }
+  ]
+}
