@@ -113,9 +113,13 @@ La segunda es la fase `firstByte` de got (`timings.response − timings.upload`,
 - `rtt.json`: las muestras de `GET /` con conexión reutilizada y con conexión nueva, con su p50, p95 y el connect.
 - `meta.txt`: inicio y fin UTC, fases, commit, `git status`, versiones, máquina y conexión; en Azure, además,
   `terraform output` de `vmss_instances`, `vmss_sku` y `redis_sku`, y la región.
-- `azure-monitor/` (solo Azure): Redis y ARCA no tienen agente de Datadog, así que `correr.mjs` exporta sus métricas
-  de Azure Monitor con `az monitor metrics list`, en el rango de la corrida más 2 min antes y después, con grano de
-  1 min. Espera `AZURE_MONITOR_ESPERA_S` antes, porque Azure Monitor publica con 1 a 3 min de demora:
+- `azure-monitor/` (solo Azure): Redis y ARCA no tienen agente de Datadog, así que sus métricas, y las del balanceador,
+  salen de Azure Monitor. Al final de cada corrida, `correr.mjs` espera `AZURE_MONITOR_ESPERA_S` (Azure Monitor
+  publica con 1 a 3 min de demora) y llama a `exportar-azure-monitor.mjs <caso> <corrida>`. Ese script usa
+  `az monitor metrics list` en el rango de la corrida más 2 min antes y después, con grano de 1 min. Mientras la infra
+  exista, se puede volver a correr a mano. Las dimensiones van con `--filter "<dim> eq '*'"`, porque con
+  `--dimension` el tráfico del balanceador vuelve vacío. Si una métrica vuelve sin series, reintenta hasta 3 veces.
+  Archivos:
   - `redis.json`: `usedmemory` (bytes), `operationsPerSecond` y `percentProcessorTime` (%), con máximo y promedio;
   - `arca.json`: `CpuUsage` (milicores: 0,5 vCPU = 500) y `MemoryUsage` (bytes), con promedio y máximo;
   - `lb-probe.json`: `DipAvailability` del balanceador por `BackendIPAddress` (% de probes exitosos por nodo);
