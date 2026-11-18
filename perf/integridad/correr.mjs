@@ -16,6 +16,7 @@
 // RTT_MS (latencia de red base, para comparar latencias), CONEXION (cable o wifi), DATADOG_API_KEY (solo azure).
 import { spawn, execSync } from "node:child_process";
 import crypto from "node:crypto";
+import nodeHttp from "node:http";
 import { capturarInfra, exportarAzureMonitor, lineasDeAzureParaMeta, medirRtt } from "./azure.mjs";
 import fs from "node:fs";
 import os from "node:os";
@@ -190,19 +191,41 @@ async function lanzarDuplicados() {
   const archivo = path.join(extras, "pedidos.jsonl");
   const dniAlAzar = () => String(1000000 + Math.floor(Math.random() * (99999999 - 1000000 + 1)));
   const nodoAlAzar = () => NODOS[Math.floor(Math.random() * NODOS.length)];
+  // una conexion nueva por pedido (agent: false), como hace Artillery: con fetch las conexiones se reutilizan, y los dos
+  // pedidos de un par caian siempre en el mismo nodo (el balanceador reparte por conexion)
+  const enviar = (base, cuerpo, headers) =>
+    new Promise((resolve, reject) => {
+      const url = new URL(`${base}/exchange`);
+      const req = nodeHttp.request(
+        { hostname: url.hostname, port: url.port || 80, path: url.pathname, method: "POST", agent: false, headers, timeout: 10000 },
+        (res) => {
+          let texto = "";
+          res.setEncoding("utf8");
+          res.on("data", (d) => (texto += d));
+          res.on("end", () => resolve({ status: res.statusCode, headers: res.headers, texto }));
+        }
+      );
+      req.on("timeout", () => req.destroy(Object.assign(new Error("sin respuesta en 10 s"), { code: "TIMEOUT_DEL_CLIENTE" })));
+      req.on("error", reject);
+      req.end(cuerpo);
+    });
+  const errores = path.join(extras, "errores.jsonl");
+  fs.rmSync(errores, { force: true });
   const pedir = async (key, dni, intento) => {
     const t0 = Date.now();
+    const cuerpo = JSON.stringify({ baseCurrency: "ARS", counterCurrency: "USD", baseAmount: 1000, baseAccountId: 101, counterAccountId: 102, dni });
     try {
-      const r = await fetch(`${nodoAlAzar()}/exchange`, {
-        method: "POST",
-        headers: { "content-type": "application/json", "Idempotency-Key": key },
-        body: JSON.stringify({ baseCurrency: "ARS", counterCurrency: "USD", baseAmount: 1000, baseAccountId: 101, counterAccountId: 102, dni }),
-        signal: AbortSignal.timeout(10000),
-      });
-      const cuerpo = await r.json().catch(() => ({}));
-      fs.appendFileSync(archivo, JSON.stringify({ t: Date.now(), key, intento, status: r.status, id: cuerpo.id ?? null, node: r.headers.get("x-node"), retryAfter: r.headers.get("retry-after"), ms: Date.now() - t0 }) + "\n");
-    } catch {
+      const r = await enviar(nodoAlAzar(), cuerpo, { "content-type": "application/json", "content-length": Buffer.byteLength(cuerpo), "Idempotency-Key": key });
+      let json = {};
+      try {
+        json = JSON.parse(r.texto);
+      } catch {
+        // la respuesta no era JSON: queda sin id
+      }
+      fs.appendFileSync(archivo, JSON.stringify({ t: Date.now(), key, intento, status: r.status, id: json.id ?? null, node: r.headers["x-node"] ?? null, retryAfter: r.headers["retry-after"] ?? null, ms: Date.now() - t0 }) + "\n");
+    } catch (err) {
       erroresDelLanzador++;
+      fs.appendFileSync(errores, JSON.stringify({ t: Date.now(), key, intento, error: err.code ?? err.message, ms: Date.now() - t0 }) + "\n");
     }
   };
   await Promise.all(
