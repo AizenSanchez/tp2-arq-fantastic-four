@@ -71,6 +71,15 @@ Segundos desde el inicio de la corrida. t_rec: hasta el primer segundo de 3 segu
 
 0 s → 200 · 70 s → UND_ERR_SOCKET · 71 s → 200 · 127 s → ECONNREFUSED · 155.1 s → TimeoutError · 170.1 s → 200
 
+## Estado del probe del balanceador por nodo (Azure Monitor, % de probes exitosos por minuto)
+
+| IP del nodo | 01:48 (-160 s) | 01:49 (-100 s) | 01:50 (-40 s) | 01:51 (20 s) | 01:52 (80 s) | 01:53 (140 s) | 01:54 (200 s) | 01:55 (260 s) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 10.0.2.4 | 100 | 100 | 100 | 100 | 100 | 100 | 50 | 100 |
+| 10.0.2.5 | — | — | — | — | — | — | — | — |
+
+Qué IP es cada nodo: `azure-monitor/LEEME.txt`. El segundo entre paréntesis es el comienzo de cada minuto desde el inicio de la corrida.
+
 ## Ventanas de 10 s
 
 | desde (s) | enviados | % atendido | 503 ARCA | otros 5xx | sin respuesta | p50 (ms) | p95 (ms) |
