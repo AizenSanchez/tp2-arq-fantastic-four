@@ -1,0 +1,1130 @@
+{
+  "caso": "azure-1-nodo",
+  "corrida": "exchange-disponibilidad",
+  "desde": "2026-11-18T01:49:40.000Z",
+  "hasta": "2026-11-18T01:55:32.000Z",
+  "hosts": [
+    "tp2vmss000000"
+  ],
+  "metricas_artillery_activas": [
+    "artillery.errors.ECONNREFUSED",
+    "artillery.errors.ECONNRESET",
+    "artillery.errors.ERR_SOCKET_TIMEOUT",
+    "artillery.http.codes.200",
+    "artillery.http.codes.400",
+    "artillery.http.codes.403",
+    "artillery.http.codes.503",
+    "artillery.http.downloaded_bytes",
+    "artillery.http.request_rate",
+    "artillery.http.requests",
+    "artillery.http.response_time.2xx.count",
+    "artillery.http.response_time.2xx.max",
+    "artillery.http.response_time.2xx.mean",
+    "artillery.http.response_time.2xx.median",
+    "artillery.http.response_time.2xx.min",
+    "artillery.http.response_time.2xx.p50",
+    "artillery.http.response_time.2xx.p75",
+    "artillery.http.response_time.2xx.p90",
+    "artillery.http.response_time.2xx.p95",
+    "artillery.http.response_time.2xx.p99",
+    "artillery.http.response_time.2xx.p999",
+    "artillery.http.response_time.4xx.count",
+    "artillery.http.response_time.4xx.max",
+    "artillery.http.response_time.4xx.mean",
+    "artillery.http.response_time.4xx.median",
+    "artillery.http.response_time.4xx.min",
+    "artillery.http.response_time.4xx.p50",
+    "artillery.http.response_time.4xx.p75",
+    "artillery.http.response_time.4xx.p90",
+    "artillery.http.response_time.4xx.p95",
+    "artillery.http.response_time.4xx.p99",
+    "artillery.http.response_time.4xx.p999",
+    "artillery.http.response_time.5xx.count",
+    "artillery.http.response_time.5xx.max",
+    "artillery.http.response_time.5xx.mean",
+    "artillery.http.response_time.5xx.median",
+    "artillery.http.response_time.5xx.min",
+    "artillery.http.response_time.5xx.p50",
+    "artillery.http.response_time.5xx.p75",
+    "artillery.http.response_time.5xx.p90",
+    "artillery.http.response_time.5xx.p95",
+    "artillery.http.response_time.5xx.p99",
+    "artillery.http.response_time.5xx.p999",
+    "artillery.http.response_time.count",
+    "artillery.http.response_time.max",
+    "artillery.http.response_time.mean",
+    "artillery.http.response_time.median",
+    "artillery.http.response_time.min",
+    "artillery.http.response_time.p50",
+    "artillery.http.response_time.p75",
+    "artillery.http.response_time.p90",
+    "artillery.http.response_time.p95",
+    "artillery.http.response_time.p99",
+    "artillery.http.response_time.p999",
+    "artillery.http.responses",
+    "artillery.pedidos_invalidos_enviados",
+    "artillery.plugins.metrics_by_endpoint.exchange.codes.200",
+    "artillery.plugins.metrics_by_endpoint.exchange.codes.400",
+    "artillery.plugins.metrics_by_endpoint.exchange.codes.403",
+    "artillery.plugins.metrics_by_endpoint.exchange.codes.503",
+    "artillery.plugins.metrics_by_endpoint.exchange.errors.ECONNREFUSED",
+    "artillery.plugins.metrics_by_endpoint.exchange.errors.ECONNRESET",
+    "artillery.plugins.metrics_by_endpoint.exchange.errors.ERR_SOCKET_TIMEOUT",
+    "artillery.plugins.metrics_by_endpoint.response_time.exchange.count",
+    "artillery.plugins.metrics_by_endpoint.response_time.exchange.max",
+    "artillery.plugins.metrics_by_endpoint.response_time.exchange.mean",
+    "artillery.plugins.metrics_by_endpoint.response_time.exchange.median",
+    "artillery.plugins.metrics_by_endpoint.response_time.exchange.min",
+    "artillery.plugins.metrics_by_endpoint.response_time.exchange.p50",
+    "artillery.plugins.metrics_by_endpoint.response_time.exchange.p75",
+    "artillery.plugins.metrics_by_endpoint.response_time.exchange.p90",
+    "artillery.plugins.metrics_by_endpoint.response_time.exchange.p95",
+    "artillery.plugins.metrics_by_endpoint.response_time.exchange.p99",
+    "artillery.plugins.metrics_by_endpoint.response_time.exchange.p999",
+    "artillery.vusers.completed",
+    "artillery.vusers.created",
+    "artillery.vusers.created_by_name.ARS_BRL",
+    "artillery.vusers.created_by_name.ARS_EUR",
+    "artillery.vusers.created_by_name.ARS_USD",
+    "artillery.vusers.created_by_name.BRL_ARS",
+    "artillery.vusers.created_by_name.EUR_ARS",
+    "artillery.vusers.created_by_name.USD_ARS",
+    "artillery.vusers.failed",
+    "artillery.vusers.session_length.count",
+    "artillery.vusers.session_length.max",
+    "artillery.vusers.session_length.mean",
+    "artillery.vusers.session_length.median",
+    "artillery.vusers.session_length.min",
+    "artillery.vusers.session_length.p50",
+    "artillery.vusers.session_length.p75",
+    "artillery.vusers.session_length.p90",
+    "artillery.vusers.session_length.p95",
+    "artillery.vusers.session_length.p99",
+    "artillery.vusers.session_length.p999"
+  ],
+  "elegidas": {
+    "tasa": "artillery.http.request_rate",
+    "p95": "artillery.http.response_time.2xx.p95",
+    "p99": "artillery.http.response_time.2xx.p99",
+    "codigos": [
+      "artillery.http.codes.200",
+      "artillery.http.codes.400",
+      "artillery.http.codes.403",
+      "artillery.http.codes.503"
+    ],
+    "errores": [
+      "artillery.errors.ECONNREFUSED",
+      "artillery.errors.ECONNRESET",
+      "artillery.errors.ERR_SOCKET_TIMEOUT"
+    ]
+  },
+  "series": [
+    {
+      "metrica": "artillery.http.request_rate",
+      "query": "avg:artillery.http.request_rate{caso:azure-1-nodo,test:exchange-disponibilidad}",
+      "series": [
+        {
+          "scope": "caso:azure-1-nodo,test:exchange-disponibilidad",
+          "interval_s": 2,
+          "unidad": null,
+          "puntos": [
+            [
+              1794966676000,
+              30
+            ],
+            [
+              1794966686000,
+              20
+            ],
+            [
+              1794966696000,
+              20
+            ],
+            [
+              1794966706000,
+              20
+            ],
+            [
+              1794966716000,
+              20
+            ],
+            [
+              1794966726000,
+              20
+            ],
+            [
+              1794966736000,
+              20
+            ],
+            [
+              1794966746000,
+              20
+            ],
+            [
+              1794966756000,
+              20
+            ],
+            [
+              1794966766000,
+              20
+            ],
+            [
+              1794966776000,
+              20
+            ],
+            [
+              1794966786000,
+              20
+            ],
+            [
+              1794966796000,
+              20
+            ],
+            [
+              1794966806000,
+              20
+            ],
+            [
+              1794966816000,
+              20
+            ],
+            [
+              1794966826000,
+              20
+            ],
+            [
+              1794966836000,
+              20
+            ],
+            [
+              1794966846000,
+              20
+            ],
+            [
+              1794966856000,
+              20
+            ],
+            [
+              1794966870000,
+              20
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "metrica": "artillery.http.response_time.2xx.p95",
+      "query": "avg:artillery.http.response_time.2xx.p95{caso:azure-1-nodo,test:exchange-disponibilidad}",
+      "series": [
+        {
+          "scope": "caso:azure-1-nodo,test:exchange-disponibilidad",
+          "interval_s": 2,
+          "unidad": null,
+          "puntos": [
+            [
+              1794966676000,
+              1326.4
+            ],
+            [
+              1794966686000,
+              1326.4
+            ],
+            [
+              1794966696000,
+              1353.1
+            ],
+            [
+              1794966706000,
+              1300.1
+            ],
+            [
+              1794966716000,
+              1353.1
+            ],
+            [
+              1794966726000,
+              1326.4
+            ],
+            [
+              1794966736000,
+              1326.4
+            ],
+            [
+              1794966746000,
+              1326.4
+            ],
+            [
+              1794966756000,
+              1300.1
+            ],
+            [
+              1794966766000,
+              1300.1
+            ],
+            [
+              1794966776000,
+              1326.4
+            ],
+            [
+              1794966826000,
+              1300.1
+            ],
+            [
+              1794966836000,
+              1326.4
+            ],
+            [
+              1794966846000,
+              1300.1
+            ],
+            [
+              1794966856000,
+              1353.1
+            ],
+            [
+              1794966870000,
+              1326.4
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "metrica": "artillery.http.response_time.2xx.p99",
+      "query": "avg:artillery.http.response_time.2xx.p99{caso:azure-1-nodo,test:exchange-disponibilidad}",
+      "series": [
+        {
+          "scope": "caso:azure-1-nodo,test:exchange-disponibilidad",
+          "interval_s": 2,
+          "unidad": null,
+          "puntos": [
+            [
+              1794966676000,
+              1326.4
+            ],
+            [
+              1794966686000,
+              1380.5
+            ],
+            [
+              1794966696000,
+              1408.4
+            ],
+            [
+              1794966706000,
+              1353.1
+            ],
+            [
+              1794966716000,
+              1380.5
+            ],
+            [
+              1794966726000,
+              1326.4
+            ],
+            [
+              1794966736000,
+              1380.5
+            ],
+            [
+              1794966746000,
+              1380.5
+            ],
+            [
+              1794966756000,
+              1408.4
+            ],
+            [
+              1794966766000,
+              1353.1
+            ],
+            [
+              1794966776000,
+              1436.8
+            ],
+            [
+              1794966826000,
+              1408.4
+            ],
+            [
+              1794966836000,
+              1408.4
+            ],
+            [
+              1794966846000,
+              1353.1
+            ],
+            [
+              1794966856000,
+              1436.8
+            ],
+            [
+              1794966870000,
+              1380.5
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "metrica": "artillery.http.codes.200",
+      "query": "sum:artillery.http.codes.200{caso:azure-1-nodo,test:exchange-disponibilidad}.as_count()",
+      "series": [
+        {
+          "scope": "caso:azure-1-nodo,test:exchange-disponibilidad",
+          "interval_s": 2,
+          "unidad": null,
+          "puntos": [
+            [
+              1794966676000,
+              21
+            ],
+            [
+              1794966686000,
+              115
+            ],
+            [
+              1794966696000,
+              116
+            ],
+            [
+              1794966706000,
+              123
+            ],
+            [
+              1794966716000,
+              119
+            ],
+            [
+              1794966726000,
+              114
+            ],
+            [
+              1794966736000,
+              108
+            ],
+            [
+              1794966746000,
+              142
+            ],
+            [
+              1794966756000,
+              123
+            ],
+            [
+              1794966766000,
+              120
+            ],
+            [
+              1794966776000,
+              84
+            ],
+            [
+              1794966826000,
+              205
+            ],
+            [
+              1794966836000,
+              127
+            ],
+            [
+              1794966846000,
+              111
+            ],
+            [
+              1794966856000,
+              132
+            ],
+            [
+              1794966870000,
+              221
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "metrica": "artillery.http.codes.400",
+      "query": "sum:artillery.http.codes.400{caso:azure-1-nodo,test:exchange-disponibilidad}.as_count()",
+      "series": [
+        {
+          "scope": "caso:azure-1-nodo,test:exchange-disponibilidad",
+          "interval_s": 2,
+          "unidad": null,
+          "puntos": [
+            [
+              1794966686000,
+              31
+            ],
+            [
+              1794966696000,
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "metrica": "artillery.http.codes.403",
+      "query": "sum:artillery.http.codes.403{caso:azure-1-nodo,test:exchange-disponibilidad}.as_count()",
+      "series": [
+        {
+          "scope": "caso:azure-1-nodo,test:exchange-disponibilidad",
+          "interval_s": 2,
+          "unidad": null,
+          "puntos": [
+            [
+              1794966676000,
+              14
+            ],
+            [
+              1794966686000,
+              46
+            ],
+            [
+              1794966696000,
+              71
+            ],
+            [
+              1794966706000,
+              66
+            ],
+            [
+              1794966716000,
+              61
+            ],
+            [
+              1794966726000,
+              51
+            ],
+            [
+              1794966736000,
+              75
+            ],
+            [
+              1794966746000,
+              46
+            ],
+            [
+              1794966756000,
+              62
+            ],
+            [
+              1794966766000,
+              70
+            ],
+            [
+              1794966776000,
+              56
+            ],
+            [
+              1794966816000,
+              15
+            ],
+            [
+              1794966826000,
+              101
+            ],
+            [
+              1794966836000,
+              61
+            ],
+            [
+              1794966846000,
+              66
+            ],
+            [
+              1794966856000,
+              62
+            ],
+            [
+              1794966870000,
+              111
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "metrica": "artillery.http.codes.503",
+      "query": "sum:artillery.http.codes.503{caso:azure-1-nodo,test:exchange-disponibilidad}.as_count()",
+      "series": [
+        {
+          "scope": "caso:azure-1-nodo,test:exchange-disponibilidad",
+          "interval_s": 2,
+          "unidad": null,
+          "puntos": [
+            [
+              1794966676000,
+              2
+            ],
+            [
+              1794966686000,
+              12
+            ],
+            [
+              1794966696000,
+              15
+            ],
+            [
+              1794966706000,
+              10
+            ],
+            [
+              1794966716000,
+              14
+            ],
+            [
+              1794966726000,
+              10
+            ],
+            [
+              1794966736000,
+              19
+            ],
+            [
+              1794966746000,
+              8
+            ],
+            [
+              1794966756000,
+              16
+            ],
+            [
+              1794966766000,
+              13
+            ],
+            [
+              1794966776000,
+              9
+            ],
+            [
+              1794966816000,
+              1
+            ],
+            [
+              1794966826000,
+              20
+            ],
+            [
+              1794966836000,
+              11
+            ],
+            [
+              1794966846000,
+              20
+            ],
+            [
+              1794966856000,
+              13
+            ],
+            [
+              1794966870000,
+              25
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "metrica": "artillery.errors.ECONNREFUSED",
+      "query": "sum:artillery.errors.ECONNREFUSED{caso:azure-1-nodo,test:exchange-disponibilidad}.as_count()",
+      "series": [
+        {
+          "scope": "caso:azure-1-nodo,test:exchange-disponibilidad",
+          "interval_s": 2,
+          "unidad": null,
+          "puntos": [
+            [
+              1794966726000,
+              3
+            ],
+            [
+              1794966776000,
+              65
+            ],
+            [
+              1794966786000,
+              203
+            ],
+            [
+              1794966796000,
+              200
+            ],
+            [
+              1794966806000,
+              85
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "metrica": "artillery.errors.ECONNRESET",
+      "query": "sum:artillery.errors.ECONNRESET{caso:azure-1-nodo,test:exchange-disponibilidad}.as_count()",
+      "series": [
+        {
+          "scope": "caso:azure-1-nodo,test:exchange-disponibilidad",
+          "interval_s": 2,
+          "unidad": null,
+          "puntos": [
+            [
+              1794966726000,
+              23
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "metrica": "artillery.errors.ERR_SOCKET_TIMEOUT",
+      "query": "sum:artillery.errors.ERR_SOCKET_TIMEOUT{caso:azure-1-nodo,test:exchange-disponibilidad}.as_count()",
+      "series": [
+        {
+          "scope": "caso:azure-1-nodo,test:exchange-disponibilidad",
+          "interval_s": 2,
+          "unidad": null,
+          "puntos": [
+            [
+              1794966816000,
+              118
+            ],
+            [
+              1794966826000,
+              38
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "metrica": "system.cpu.user",
+      "host": "tp2vmss000000",
+      "query": "avg:system.cpu.user{host:tp2vmss000000}",
+      "series": [
+        {
+          "scope": "host:tp2vmss000000",
+          "interval_s": 2,
+          "unidad": "percent",
+          "puntos": [
+            [
+              1794966590000,
+              0.2673796791437673
+            ],
+            [
+              1794966606000,
+              0.3340013360084812
+            ],
+            [
+              1794966620000,
+              1.5374331550722
+            ],
+            [
+              1794966636000,
+              2.0749665327971694
+            ],
+            [
+              1794966650000,
+              1.6700066800233435
+            ],
+            [
+              1794966666000,
+              0.401069518718772
+            ],
+            [
+              1794966680000,
+              4.158283031530404
+            ],
+            [
+              1794966696000,
+              4.236718224580678
+            ],
+            [
+              1794966710000,
+              7.69230769233226
+            ],
+            [
+              1794966726000,
+              5.298457411142325
+            ],
+            [
+              1794966740000,
+              4.676018704065665
+            ],
+            [
+              1794966756000,
+              3.4946236559127626
+            ],
+            [
+              1794966770000,
+              4.088471849853797
+            ],
+            [
+              1794966786000,
+              0.20053475935860574
+            ],
+            [
+              1794966800000,
+              2.805611222450612
+            ],
+            [
+              1794966816000,
+              4.755525787008496
+            ],
+            [
+              1794966830000,
+              4.233870967739816
+            ],
+            [
+              1794966846000,
+              3.8873994637970872
+            ],
+            [
+              1794966860000,
+              4.161073825512377
+            ],
+            [
+              1794966876000,
+              3.150134048248707
+            ],
+            [
+              1794966890000,
+              3.2085561497407316
+            ],
+            [
+              1794966906000,
+              1.4018691588804906
+            ],
+            [
+              1794966920000,
+              1.1363636363565897
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "metrica": "system.cpu.system",
+      "host": "tp2vmss000000",
+      "query": "avg:system.cpu.system{host:tp2vmss000000}",
+      "series": [
+        {
+          "scope": "host:tp2vmss000000",
+          "interval_s": 2,
+          "unidad": "percent",
+          "puntos": [
+            [
+              1794966590000,
+              0.2005347593578255
+            ],
+            [
+              1794966606000,
+              0.13360053440278494
+            ],
+            [
+              1794966620000,
+              0.9358288770010643
+            ],
+            [
+              1794966636000,
+              0.9370816599729889
+            ],
+            [
+              1794966650000,
+              0.6680026720087299
+            ],
+            [
+              1794966666000,
+              0.20053475936014595
+            ],
+            [
+              1794966680000,
+              1.2743125419199681
+            ],
+            [
+              1794966696000,
+              1.210490921308656
+            ],
+            [
+              1794966710000,
+              2.74247491639705
+            ],
+            [
+              1794966726000,
+              1.4755197853808955
+            ],
+            [
+              1794966740000,
+              1.4696058784207247
+            ],
+            [
+              1794966756000,
+              1.209677419354888
+            ],
+            [
+              1794966770000,
+              1.5415549597805527
+            ],
+            [
+              1794966786000,
+              0.13368983957240382
+            ],
+            [
+              1794966800000,
+              1.0688042752196425
+            ],
+            [
+              1794966816000,
+              1.4065639651716988
+            ],
+            [
+              1794966830000,
+              1.2768817204293106
+            ],
+            [
+              1794966846000,
+              1.1394101876640854
+            ],
+            [
+              1794966860000,
+              1.2751677852382546
+            ],
+            [
+              1794966876000,
+              1.0053619302919297
+            ],
+            [
+              1794966890000,
+              1.470588235297962
+            ],
+            [
+              1794966906000,
+              0.6675567423240792
+            ],
+            [
+              1794966920000,
+              0.3342245989284087
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "metrica": "system.mem.used",
+      "host": "tp2vmss000000",
+      "query": "avg:system.mem.used{host:tp2vmss000000}",
+      "series": [
+        {
+          "scope": "host:tp2vmss000000",
+          "interval_s": 2,
+          "unidad": "byte",
+          "puntos": [
+            [
+              1794966580000,
+              1704816640
+            ],
+            [
+              1794966596000,
+              1704816640
+            ],
+            [
+              1794966610000,
+              1704816640
+            ],
+            [
+              1794966626000,
+              1721524224
+            ],
+            [
+              1794966640000,
+              1719484416
+            ],
+            [
+              1794966656000,
+              1719484416
+            ],
+            [
+              1794966670000,
+              1719730176
+            ],
+            [
+              1794966686000,
+              1719730176
+            ],
+            [
+              1794966700000,
+              1731792896
+            ],
+            [
+              1794966716000,
+              1736769536
+            ],
+            [
+              1794966730000,
+              1738575872
+            ],
+            [
+              1794966746000,
+              1746575360
+            ],
+            [
+              1794966760000,
+              1750446080
+            ],
+            [
+              1794966776000,
+              1677410304
+            ],
+            [
+              1794966790000,
+              1669152768
+            ],
+            [
+              1794966806000,
+              1700999168
+            ],
+            [
+              1794966820000,
+              1732816896
+            ],
+            [
+              1794966836000,
+              1736687616
+            ],
+            [
+              1794966850000,
+              1740558336
+            ],
+            [
+              1794966866000,
+              1740558336
+            ],
+            [
+              1794966880000,
+              1786724352
+            ],
+            [
+              1794966896000,
+              1787969536
+            ],
+            [
+              1794966910000,
+              1787969536
+            ],
+            [
+              1794966926000,
+              1787797504
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "metrica": "system.net.bytes_rcvd",
+      "host": "tp2vmss000000",
+      "query": "avg:system.net.bytes_rcvd{host:tp2vmss000000}",
+      "series": [
+        {
+          "scope": "host:tp2vmss000000",
+          "interval_s": 2,
+          "unidad": "byte",
+          "puntos": [
+            [
+              1794966588000,
+              459.3528419169
+            ],
+            [
+              1794966602000,
+              602.5537985132387
+            ],
+            [
+              1794966618000,
+              1125.8112115143404
+            ],
+            [
+              1794966632000,
+              7193.409477725283
+            ],
+            [
+              1794966648000,
+              5790.332170050754
+            ],
+            [
+              1794966662000,
+              1213.3838313376575
+            ],
+            [
+              1794966678000,
+              27607.839570125278
+            ],
+            [
+              1794966692000,
+              42362.21328490751
+            ],
+            [
+              1794966708000,
+              43144.74603436095
+            ],
+            [
+              1794966722000,
+              45950.808924624966
+            ],
+            [
+              1794966738000,
+              42931.1535251016
+            ],
+            [
+              1794966752000,
+              43301.77215583593
+            ],
+            [
+              1794966768000,
+              43801.17032832132
+            ],
+            [
+              1794966782000,
+              1990.0368494818103
+            ],
+            [
+              1794966798000,
+              7045.970159642845
+            ],
+            [
+              1794966812000,
+              28472.406324526568
+            ],
+            [
+              1794966828000,
+              44040.80064823825
+            ],
+            [
+              1794966842000,
+              42808.054277018375
+            ],
+            [
+              1794966858000,
+              42549.554148144416
+            ],
+            [
+              1794966872000,
+              28362.28177431127
+            ],
+            [
+              1794966888000,
+              11011.814717974674
+            ],
+            [
+              1794966902000,
+              5616.769836091404
+            ],
+            [
+              1794966918000,
+              938.5211294236516
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "avisos": []
+}

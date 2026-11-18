@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Baja de Datadog las series y los graficos de una corrida, en el rango de su meta.txt (con 1 min de margen).
-//   DATADOG_API_KEY=... DD_APP_KEY=... node perf/capacidad/capturar-datadog.mjs <caso> <capacidad|endurance>
+//   DATADOG_API_KEY=... DD_APP_KEY=... node perf/capacidad/capturar-datadog.mjs <caso> <capacidad|endurance|disponibilidad>
 // Las dos keys solo por entorno (read -s): no se escriben en ningun archivo.
 // Deja en perf/results/<caso>/exchange-<corrida>/datadog/: series.json y un PNG por grafico.
 //
@@ -16,8 +16,8 @@ import path from "node:path";
 
 const RAIZ = path.resolve(import.meta.dirname, "../..");
 const [caso, corrida] = process.argv.slice(2);
-if (!caso || !["capacidad", "endurance"].includes(corrida)) {
-  console.error("uso: node perf/capacidad/capturar-datadog.mjs <caso> <capacidad|endurance>");
+if (!caso || !["capacidad", "endurance", "disponibilidad"].includes(corrida)) {
+  console.error("uso: node perf/capacidad/capturar-datadog.mjs <caso> <capacidad|endurance|disponibilidad>");
   process.exit(2);
 }
 const API_KEY = process.env.DATADOG_API_KEY;
