@@ -1,0 +1,11 @@
+# Override de docker-compose.local.yml con los limites de Azure, para que la corrida local se parezca a la nube:
+#   app  = Standard_F1als_v7 (1 vCPU, 2 GiB)
+#   arca = ACI con 0,5 vCPU
+# Redis queda sin limite (en Azure es Azure Managed Redis Balanced_B0, que no se puede imitar con un tope de CPU).
+# Uso: docker compose -f docker-compose.local.yml -f perf/capacidad/docker-compose.capacidad.yml up -d --build
+services:
+  app:
+    cpus: 1
+    mem_limit: 2g
+  arca:
+    cpus: 0.5

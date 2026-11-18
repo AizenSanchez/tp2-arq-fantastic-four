@@ -52,7 +52,7 @@ En esta máquina ya están instalados Terraform 1.13.5 y Ansible 2.22 con `datad
 
 ## 4. Variable `node_instances` (🤖)
 
-El caso de 2 nodos necesita la variable `node_instances` (`terraform apply -var node_instances=2`). Esta rama la trae en el commit `9b2d360`, copiado del commit `aeab8f6` del trabajo del bloque 3 (valor por defecto 1), y no hay que repetirlo. Si `main` ya la define, al mergear alcanza con quedarse con la de `main`.
+La variable `node_instances` fija la cantidad de nodos. Esta rama la trajo en el commit `9b2d360` (copia de `aeab8f6`, con valor por defecto 1); al mergear `main` quedó la definición de `main` (`240a951`), con valor por defecto **2**. Por eso el caso 1 nodo se despliega con `-var node_instances=1` y el de 2 nodos con `-var node_instances=2` (o sin `-var`). Las corridas ya medidas no cambian: cada `meta.txt` registra `terraform output vmss_instances`.
 
 Los `meta.txt` de los resultados citan los commits desde los que se desplegó y se midió: esos commits están en esta rama.
 
@@ -62,7 +62,7 @@ Los `meta.txt` de los resultados citan los commits desde los que se desplegó y 
 
 ```bash
 terraform init
-terraform plan -out tfplan         # revisar: solo debe CREAR recursos, ninguno "replaced"
+terraform plan -var node_instances=1 -out tfplan   # caso 1 nodo (main tiene default 2); revisar: solo debe CREAR recursos, ninguno "replaced"
 terraform apply tfplan             # unos 15 a 45 min: Redis es lo que más tarda
 ansible/setup.sh                   # agente de Datadog, Node 24 y pm2 en cada nodo
 ansible/deploy.sh                  # empaqueta node/ (exige node/infra.json) y lo instala

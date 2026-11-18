@@ -1,0 +1,16 @@
+corrida: exchange-capacidad   caso: azure-1-nodo   entorno: azure   target: http://ppqqurpdgg.eastus2.cloudapp.azure.com
+inicio UTC: 2026-11-17T07:37:18.424Z
+fin UTC: 2026-11-17T07:48:39.813Z
+zona horaria: UTC
+fases: [{"nombre":"escalon-10","tipo":"escalon","rate":10,"duracion":60},{"nombre":"escalon-20","tipo":"escalon","rate":20,"duracion":60},{"nombre":"escalon-40","tipo":"escalon","rate":40,"duracion":60},{"nombre":"escalon-80","tipo":"escalon","rate":80,"duracion":60},{"nombre":"escalon-120","tipo":"escalon","rate":120,"duracion":60},{"nombre":"escalon-160","tipo":"escalon","rate":160,"duracion":60},{"nombre":"escalon-200","tipo":"escalon","rate":200,"duracion":60},{"nombre":"escalon-240","tipo":"escalon","rate":240,"duracion":60},{"nombre":"escalon-320","tipo":"escalon","rate":320,"duracion":60},{"nombre":"bajada-20","tipo":"bajada","rate":20,"duracion":120}]
+RTT de base (GET /): conexion reutilizada p50 142.8 ms, p95 144.3 ms; conexion nueva p50 293.8 ms, p95 308.6 ms
+commit: fa3a97616b0c9589883ce0f3f4920abf0814a937
+git status --porcelain (sin perf/results):
+M perf/root.yaml
+artillery: Artillery: 2.0.34
+node: v24.22.3   maquina: DESKTOP-BV02RG7 (8 CPU, 8 GiB)   conexion: wifi
+terraform output vmss_instances: 1
+terraform output vmss_sku: "Standard_F1als_v7"
+terraform output redis_sku: "Balanced_B0"
+region: eastus2 (default de variables.tf)
+codigo de salida de artillery: 0

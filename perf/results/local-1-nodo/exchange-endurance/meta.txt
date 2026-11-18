@@ -1,0 +1,15 @@
+corrida: exchange-endurance   caso: local-1-nodo   entorno: local   target: http://localhost:3000
+inicio UTC: 2026-11-17T06:48:40.564Z
+fin UTC: 2026-11-17T07:01:46.103Z
+zona horaria: UTC
+fases: [{"nombre":"endurance-120","tipo":"endurance","rate":120,"duracion":600},{"nombre":"tramo-240","tipo":"tramo","rate":240,"duracion":180}]
+RTT de base (GET /): p50 1.4 ms, p95 4.1 ms
+commit: 7104bfee8ea14c5862f6705ff81543c05ce7e607
+git status --porcelain (sin perf/results):
+M perf/capacidad/README.md
+ M perf/capacidad/analizar.mjs
+ M perf/capacidad/correr.mjs
+ M perf/root.yaml
+artillery: Artillery: 2.0.34
+node: v24.22.3   maquina: DESKTOP-BV02RG7 (8 CPU, 8 GiB)   conexion: local
+codigo de salida de artillery: 0

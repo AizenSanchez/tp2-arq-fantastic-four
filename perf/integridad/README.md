@@ -36,7 +36,7 @@ TARGETS=http://localhost:3000,http://localhost:3001 node perf/integridad/correr.
 
 Prerrequisitos y orden completo: ver `perf/integridad/SETUP-AZURE.md`.
 
-Con la infra desplegada (`terraform apply` y `ansible/setup.sh` + `ansible/deploy.sh`), y **un escenario a la vez** (cambian la tasa y el saldo de USD, que son estado compartido):
+Con la infra desplegada (`terraform apply -var node_instances=1` para el caso 1 nodo, porque en `main` el default es 2, y `ansible/setup.sh` + `ansible/deploy.sh`), y **un escenario a la vez** (cambian la tasa y el saldo de USD, que son estado compartido):
 
 ```bash
 read -s DATADOG_API_KEY; export DATADOG_API_KEY     # nunca en un archivo
