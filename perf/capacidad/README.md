@@ -119,7 +119,8 @@ La segunda es la fase `firstByte` de got (`timings.response − timings.upload`,
   - `redis.json`: `usedmemory` (bytes), `operationsPerSecond` y `percentProcessorTime` (%), con máximo y promedio;
   - `arca.json`: `CpuUsage` (milicores: 0,5 vCPU = 500) y `MemoryUsage` (bytes), con promedio y máximo;
   - `lb-probe.json`: `DipAvailability` del balanceador por `BackendIPAddress` (% de probes exitosos por nodo);
-  - `lb-trafico.json`: `SYNCount`, `ByteCount` y `PacketCount` del frontend del balanceador, por minuto. Sirven para
+  - `lb-trafico.json`: `SYNCount`, `ByteCount` y `PacketCount` del frontend del balanceador, por minuto y por
+    `Direction` (entrante y saliente). Sirven para
     saber si los pedidos que vencen por timeout llegaron a Azure;
   - `LEEME.txt`: el rango y cómo volver a exportar; un `<recurso>.error.txt` si alguna exportación falló.
 

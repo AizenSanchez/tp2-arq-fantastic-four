@@ -257,7 +257,7 @@ const AZURE_MONITOR = [
   // balanceador: estado del probe por nodo (como exportar-probe.mjs del bloque 3) y trafico que llega al frontend,
   // para saber si los pedidos que vencen por timeout llegaron a Azure o se perdieron antes
   { recurso: "lb-probe", tipo: "Microsoft.Network/loadBalancers", metricas: ["DipAvailability"], agregaciones: ["Average"], dimension: "BackendIPAddress" },
-  { recurso: "lb-trafico", tipo: "Microsoft.Network/loadBalancers", metricas: ["SYNCount", "ByteCount", "PacketCount"], agregaciones: ["Total"] },
+  { recurso: "lb-trafico", tipo: "Microsoft.Network/loadBalancers", metricas: ["SYNCount", "ByteCount", "PacketCount"], agregaciones: ["Total"], dimension: "Direction" },
 ];
 // los ids de Azure llevan el id de la suscripcion: no se guardan
 const sinIds = (texto) => {
@@ -295,7 +295,7 @@ if (ENTORNO === "azure") {
       `rango: ${desde} a ${hasta} (la corrida, con 2 min antes y despues), grano 1 min`,
       ...AZURE_MONITOR.map((m) => `${m.recurso}: ${m.tipo}, metricas ${m.metricas.join(", ")}, agregaciones ${m.agregaciones.join(", ")}${m.dimension ? `, dimension ${m.dimension}` : ""}`),
       "CpuUsage de ACI esta en milicores (0,5 vCPU = 500). usedmemory y MemoryUsage en bytes.",
-      "DipAvailability: % de probes exitosos por nodo (BackendIPAddress). SYNCount, ByteCount y PacketCount: totales por minuto en el frontend del balanceador.",
+      "DipAvailability: % de probes exitosos por nodo (BackendIPAddress). SYNCount, ByteCount y PacketCount: totales por minuto en el frontend del balanceador, separados por Direction (entrante y saliente).",
       `para volver a exportar: az monitor metrics list --resource <id> --metrics ... --interval PT1M --start-time ${desde} --end-time ${hasta}`,
     ].join("\n") + "\n"
   );
