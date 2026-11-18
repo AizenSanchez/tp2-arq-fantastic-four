@@ -131,3 +131,78 @@ ARS a USD aprobado de 1.000 ARS saca 0,66 USD: en E8 salen unos 1.030 USD y entr
 
 **Lectura que se predice.** La carga representativa no se acerca a ningún límite, así que ninguna de las dos tácticas
 cambia algo: sin caché las lecturas tardan lo que tarda la red (≈ 162 ms) y sin limitador no hay nada que rechazar.
+
+## 5. E7 alto, pico por encima del límite del nodo (`perf/tacticas-nginx/exchange-spike-alto.yaml`), 1 nodo
+
+Agregada el 2026-11-18, antes de correrla. E7 a 2B (240) quedó en el 75 % de lo que el nodo atendió en la capacidad,
+así que no muestra qué pasa sin `limit_req` cuando el pico sí excede. Misma infraestructura recreada (1 nodo
+`Standard_B2als_v2`, Redis `Balanced_B0`, northcentralus), desde la generadora por cable, reset antes con
+`ansible/reset.sh`. Carga: solo ARS a USD, 24 req/s durante 60 s, **720 req/s (6B) durante 20 s** y 24 req/s durante
+120 s; unos 18.720 pedidos (14.400 en el pico).
+
+**Techo del nodo.** Con la CPU de la capacidad alineada al primer pedido (la tabla de `observaciones.md` empieza
+17,6 s antes que Artillery), el proceso usa el 57 % de un núcleo a 320 y el costo marginal es de unos 1,7 ms por POST:
+el techo de un núcleo queda en unos 570 req/s. Las corridas a la misma tasa variaron bastante (2,4 contra 3,5 ms a 20),
+así que se toma **techo entre 500 y 650**. A 720 eso da ρ entre 1,11 y 1,44.
+
+| Métrica | Predicción | Tipo | Cálculo |
+|---|---|---|---|
+| CPU del proceso en el pico | 95 a 100 % de un núcleo | esperado | ρ > 1 |
+| Cola al final del pico | 2 a 9 s de trabajo | esperado | (ρ − 1) × 20 s |
+| p95 de los 200 en las ventanas del pico | **≥ 2,7 s** (más de 2 × los ≈ 1,33 s de antes) | esperado | base de 1,1 s más la espera en el event loop, que crece en el pico |
+| 503 por `timeout` de ARCA en el pico | **sube a 20 a 60 % de las respuestas** del pico (antes ≈ 0) | esperado | el `AbortSignal.timeout` de 1 s corre desde que la app llama a ARCA; con el event loop atrasado más de unos 500 ms, la respuesta de ARCA se procesa después de que venció el timer |
+| 200 en el pico | bajan de 62 % a 25 a 50 % | esperado | lo que se va a 503 sale de los 200 y de los 403 en proporción |
+| Timeouts del cliente (10 s) | 0 a 1 % del pico | esperado | la cola llega a 10 s solo con el techo en 500 |
+| CPU del nodo y créditos | VM a 60 a 75 %; créditos bajan menos de 2 | esperado | 1 núcleo de JS más el kernel, 20 s |
+| Conntrack máximo | 15.000 a 22.000, sin `table full` | esperado | 14.400 del pico más las de la fase de 24 que siguen vivas |
+| Recuperación (`t_rec`, primera ventana de 10 s con el p95 de antes) | 10 a 20 s | esperado | la cola se vacía al 93 % de capacidad libre: entre 2 y 10 s, más la ventana |
+| Generadora | crea los 14.400 usuarios del pico (± 1 %) y no avisa CPU alta | condición | si no, la corrida no vale como pico de 6B |
+
+**Criterio para reponer el limitador** (el mismo de `TP2/bloque2-de-cero/plan-bloque2.md`, sección 8, escrito antes de
+E7 pero fuera del repo; queda acá antes de esta corrida). Se considera que el exceso degrada a los aceptados si en el
+pico o en la recuperación pasa cualquiera de estas: p95 de los 200 en una ventana del pico > 2 × el de la primera fase;
+503 > 11 % de las respuestas del pico (6 de base + 5); timeouts o errores del cliente ≥ 1 %; recuperación > 30 s.
+
+**Lo que se predice:** con 1 nodo el criterio **se dispara** (p95 y 503). Que se dispare con 1 nodo no decide todavía:
+la sección 6 mide si con 2 nodos el mismo pico entra. Si entra, la respuesta a un pico de 6B es escalar (Increase
+Resources, 04, pág. 8) y el limitador queda como protección para lo que excede a N nodos; un limitador en la app
+gasta CPU del mismo hilo para rechazar (aceptar la conexión, parsear y contestar 429), así que protege menos que nginx.
+
+## 6. Caso escalado: 2 nodos (E10, E8 y E7 alto)
+
+Agregada el 2026-11-18, antes de escalar. Mismo despliegue con `instances = 2` en `node.tf`, mismo Redis y ARCA, el Load
+Balancer de Azure con su regla de siempre (distribución por hash de 5 tuplas: cada conexión nueva cae en un nodo al
+azar). Escenarios sin cambios: `exchange-lectura-tasas.yaml`, `exchange-representativa.yaml` y
+`exchange-spike-alto.yaml`.
+
+| Escenario | Métrica | Predicción | Tipo | Cálculo |
+|---|---|---|---|---|
+| todos | Reparto entre nodos | 50 ± 3 % de los pedidos en cada nodo | esperado | hash de 5 tuplas con miles de conexiones |
+| E10 | Errores | 0 | esperado | 60 req/s por nodo |
+| E10 | `/rates` en el cliente | p50 159 ± 3, p95 ≤ 170 ms | esperado | la latencia la pone la red; igual que con 1 nodo |
+| E10 | `GET.rates` en la app | p95 ≤ 1,2 ms | esperado | 1,06 ms con 1 nodo, ahora con la mitad de carga |
+| E10 | CPU del proceso | 6 ± 2 % de un núcleo en cada nodo | esperado | la mitad de 11,6 % |
+| E10 | Redis | 417 a 481 op/s, igual que con 1 nodo | esperado | la carga total no cambia |
+| E10 | Conntrack máximo | 5.000 a 7.000 en cada nodo | esperado | la mitad de 12.105 |
+| E8 | Errores | 0 | esperado | |
+| E8 | `/rates` y `/accounts` | p50 162 ± 3, p95 ≤ 172 ms | esperado | igual que con 1 nodo |
+| E8 | `/exchange` | p95 1.326 ± 70 ms | esperado | idem |
+| E8 | `vusers.session_length` | mediana 3.300 a 3.800, p95 ≤ 5.000 ms | esperado | idem |
+| E8 | CPU del proceso | 2,3 ± 1,5 % por nodo | esperado | la mitad de 4,6 % |
+| E8 | Conntrack máximo | 1.000 a 1.700 por nodo | esperado | la mitad de 2.502 |
+| E7 alto | Errores y timeouts | 0 | esperado | 360 req/s por nodo: ρ entre 0,55 y 0,72 |
+| E7 alto | p95 de los 200 en el pico | ≤ 1,1 × el de la primera fase | esperado | la espera en el event loop a ρ = 0,7 es de unos milisegundos |
+| E7 alto | 503 en el pico | 6 ± 3 %, igual que fuera del pico | esperado | ARCA a 720 req/s: unos 225 de 500 milicores (99 a 320) |
+| E7 alto | CPU del proceso en el pico | 55 a 75 % por nodo | esperado | 320 → 57 %, más 40 × 0,17 |
+| E7 alto | Conntrack máximo | 8.000 a 11.000 por nodo | esperado | la mitad de la sección 5 |
+| E7 alto | Recuperación | 0 s | esperado | no se forma cola |
+| E7 alto | Criterio del limitador | no se dispara | esperado | |
+
+**Riesgo que se mira.** En E7 alto, Redis recibe unas 720 × 14,5 = 10.400 op/s durante 20 s, más del doble de lo que
+vio en la capacidad (4.650). Azure Monitor tiene grano de 1 minuto y no ve un pico de 20 s, así que Redis se mira por
+`POST.exchange` en la app: si su p95 sube más de 10 % con la CPU de los nodos por debajo del 75 %, el límite es Redis o
+ARCA (`arca.ms`), no los nodos, y se informa así.
+
+**Decisión que se predice para el bloque: no se repone ninguna táctica de nginx.** La microcaché por lo de las
+secciones 2 y 4, que el caso escalado no cambia (la latencia de `/rates` sigue siendo la red). El `limit_req` porque un
+pico de 6B, que sí degrada a 1 nodo, entra con 2: la táctica que resuelve el pico es la cantidad de nodos.
