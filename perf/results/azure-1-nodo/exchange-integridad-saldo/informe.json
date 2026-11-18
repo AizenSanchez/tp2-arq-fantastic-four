@@ -1,0 +1,175 @@
+{
+  "escenario": "exchange-integridad-saldo",
+  "caso": "azure-1-nodo",
+  "entorno": "azure",
+  "resultado": "INVARIANTES OK",
+  "inicioUTC": "2026-11-18T14:50:11.773Z",
+  "finUTC": "2026-11-18T14:51:15.844Z",
+  "nodos": [
+    "http://qhybdyddqz.eastus2.cloudapp.azure.com"
+  ],
+  "pedidos": 400,
+  "respuestasPorEstado": {
+    "200": 20,
+    "403": 130,
+    "422": 226,
+    "503": 24
+  },
+  "pedidosPorNodo": {
+    "tp2vmss000000": 400
+  },
+  "latenciaPorEstado": {
+    "200": {
+      "n": 20,
+      "mediana": 1308,
+      "p95": 1508
+    },
+    "403": {
+      "n": 130,
+      "mediana": 659,
+      "p95": 912
+    },
+    "422": {
+      "n": 226,
+      "mediana": 685,
+      "p95": 881
+    },
+    "503": {
+      "n": 24,
+      "mediana": 395,
+      "p95": 710
+    }
+  },
+  "capacidad": 20,
+  "aprobadosPorNodo": {
+    "tp2vmss000000": 20
+  },
+  "comprobaciones": [
+    {
+      "tipo": "exacta",
+      "nombre": "todos los pedidos tienen respuesta registrada",
+      "ok": true,
+      "detalle": "400 de 400"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "sin errores propios (otros estados, timeouts, conexiones caidas)",
+      "ok": true,
+      "detalle": "otros estados: 0, errores de Artillery: 0, estados: {\"200\":20,\"403\":130,\"422\":226,\"503\":24}"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "el saldo de USD nunca fue negativo",
+      "ok": true,
+      "detalle": "minimo visto: 0 en 57 lecturas"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "aprobados (200) = 20",
+      "ok": true,
+      "detalle": "20"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "saldo final de USD = saldo inicial - 5 x aprobados",
+      "ok": true,
+      "detalle": "0"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "saldo final de ARS = saldo inicial + 5.000 x aprobados",
+      "ok": true,
+      "detalle": "120100000"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "entradas nuevas del log = pedidos respondidos",
+      "ok": true,
+      "detalle": "400 contra 400"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "entradas del log con ok:true = aprobados",
+      "ok": true,
+      "detalle": "20 contra 20 respuestas 200"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "[servidor] entradas ok:true en el log = 20",
+      "ok": true,
+      "detalle": "20"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "[servidor] saldo final de USD = inicial - 5 x entradas ok:true",
+      "ok": true,
+      "detalle": "0"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "[servidor] saldo final de ARS = inicial + 5.000 x entradas ok:true",
+      "ok": true,
+      "detalle": "120100000"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "pedidos que llegan a la reserva (200 + 422)",
+      "ok": true,
+      "detalle": "246 (rango 215 a 255)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "422 (sin fondos)",
+      "ok": true,
+      "detalle": "226 (rango 195 a 235)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "403 (ARCA rechaza)",
+      "ok": true,
+      "detalle": "130 (rango 126 a 162)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "503 (ARCA no disponible)",
+      "ok": true,
+      "detalle": "24 (rango 12 a 30)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "en la rafaga: aprobados",
+      "ok": true,
+      "detalle": "20 (rango 20 a 20)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "en la rafaga: 422",
+      "ok": true,
+      "detalle": "34 (rango 29 a 49)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "en la rafaga: 403",
+      "ok": true,
+      "detalle": "41 (rango 26 a 46)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "en la rafaga: 503",
+      "ok": true,
+      "detalle": "5 (rango 0 a 10)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "mediana de un 200 (RTT + 985 ms)",
+      "ok": true,
+      "detalle": "1308 (rango 1273.8 a 1513.8)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "mediana de un 422 (RTT + 385 ms)",
+      "ok": false,
+      "detalle": "685 (rango 713.8 a 873.8)"
+    }
+  ]
+}

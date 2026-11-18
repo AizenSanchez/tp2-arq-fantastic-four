@@ -1,0 +1,7 @@
+Capturas del dashboard "TP2 arVault" (Datadog, sitio us5) de esta corrida: exchange-integridad-reintentos, caso azure-1-nodo.
+Rango de la corrida (meta.txt): 2026-11-18 14:55:01 a 14:55:57 UTC. Rango del dashboard: 1 minuto antes y 1 minuto despues,
+o sea 14:54:01 a 14:56:57 UTC (en hora local, UTC-03:00: 11:54 a 11:56, lo que muestra el selector de tiempo de cada captura).
+Filtro: test = exchange-integridad-reintentos. Las metricas de la app, de ARCA y de los nodos no llevan ese tag, asi que muestran todo el rango.
+URL: https://us5.datadoghq.com/dashboard/hqx-a77-75c?from_ts=1795013641514&to_ts=1795013817099&live=false&tpl_var_test%5B0%5D=exchange-integridad-reintentos
+01: Artillery, pedidos por segundo ofrecidos y respuestas por codigo.  02: latencias de Artillery y tiempos de la app.
+Esta corrida tuvo un pedido perdido por el cliente (ERR_SOCKET_TIMEOUT); se repitio como caso azure-1-nodo-repeticion.

@@ -1,0 +1,138 @@
+{
+  "cost": 24,
+  "interval": "PT1M",
+  "namespace": "Microsoft.Cache/redisEnterprise",
+  "resourceregion": "eastus2",
+  "timespan": "2026-11-18T14:57:40Z/2026-11-18T15:02:41Z",
+  "value": [
+    {
+      "displayDescription": "The amount of cache memory used for key/value pairs, in bytes.",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "Used Memory",
+        "value": "usedmemory"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 2511965.5,
+              "maximum": 2673343,
+              "timeStamp": "2026-11-18T14:57:00Z"
+            },
+            {
+              "average": 2617664,
+              "maximum": 2627904,
+              "timeStamp": "2026-11-18T14:58:00Z"
+            },
+            {
+              "average": 2607424,
+              "maximum": 2607424,
+              "timeStamp": "2026-11-18T14:59:00Z"
+            },
+            {
+              "average": 2607424,
+              "maximum": 2607424,
+              "timeStamp": "2026-11-18T15:00:00Z"
+            },
+            {
+              "average": 2437042,
+              "maximum": 2506104,
+              "timeStamp": "2026-11-18T15:01:00Z"
+            }
+          ],
+          "metadatavalues": []
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Bytes"
+    },
+    {
+      "displayDescription": "The rate of operations executed on the cache, in operations per second.",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "Operations Per Second",
+        "value": "operationsPerSecond"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 44,
+              "maximum": 86,
+              "timeStamp": "2026-11-18T14:57:00Z"
+            },
+            {
+              "average": 1,
+              "maximum": 1,
+              "timeStamp": "2026-11-18T14:58:00Z"
+            },
+            {
+              "average": 1,
+              "maximum": 1,
+              "timeStamp": "2026-11-18T14:59:00Z"
+            },
+            {
+              "average": 1,
+              "maximum": 1,
+              "timeStamp": "2026-11-18T15:00:00Z"
+            },
+            {
+              "average": 3,
+              "maximum": 4,
+              "timeStamp": "2026-11-18T15:01:00Z"
+            }
+          ],
+          "metadatavalues": []
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "CountPerSecond"
+    },
+    {
+      "displayDescription": "The CPU utilization of the cache as a percentage.",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "CPU",
+        "value": "percentProcessorTime"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 18,
+              "maximum": 19,
+              "timeStamp": "2026-11-18T14:57:00Z"
+            },
+            {
+              "average": 17,
+              "maximum": 18,
+              "timeStamp": "2026-11-18T14:58:00Z"
+            },
+            {
+              "average": 16.5,
+              "maximum": 17,
+              "timeStamp": "2026-11-18T14:59:00Z"
+            },
+            {
+              "average": 17,
+              "maximum": 18,
+              "timeStamp": "2026-11-18T15:00:00Z"
+            },
+            {
+              "average": 16.5,
+              "maximum": 17,
+              "timeStamp": "2026-11-18T15:01:00Z"
+            }
+          ],
+          "metadatavalues": []
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Percent"
+    }
+  ]
+}

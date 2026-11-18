@@ -1,0 +1,6 @@
+Capturas del dashboard "TP2 arVault" (Datadog, sitio us5) de esta corrida: exchange-integridad-duplicados, caso azure-1-nodo.
+Rango de la corrida (meta.txt): 2026-11-18 15:04:29 a 15:04:41 UTC. Rango del dashboard: 1 minuto antes y 1 minuto despues (en hora local, UTC-03:00: 12:03 a 12:05, lo que muestra el selector de tiempo).
+Filtro: test = exchange-integridad-duplicados. Las metricas de la app, de ARCA y de los nodos no llevan ese tag, asi que muestran todo el rango.
+URL: https://us5.datadoghq.com/dashboard/hqx-a77-75c?from_ts=1795014209943&to_ts=1795014341048&live=false&tpl_var_test%5B0%5D=exchange-integridad-duplicados
+01: Artillery, pedidos por segundo ofrecidos y respuestas por codigo.  02: latencias de Artillery y tiempos de la app.
+Los paneles de Artillery estan VACIOS a proposito: este escenario usa un lanzador propio (no Artillery), asi que su evidencia cruda es pedidos.jsonl; solo los paneles de la app tienen datos.

@@ -1,0 +1,20 @@
+escenario: exchange-integridad-reintentos
+caso: azure-1-nodo
+entorno: azure
+inicio UTC: 2026-11-18T14:55:01.514Z
+fin UTC: 2026-11-18T14:55:57.099Z
+nodos: http://qhybdyddqz.eastus2.cloudapp.azure.com
+commit: 1c8ded6fbb53538bbe24aa781e619cc51d0ce0f3
+git status --porcelain (sin perf/results):
+?? evidencia/azure-1-nodo/
+artillery: Artillery: 2.0.34
+node: v22.22.0
+maquina: 192.168.1.51
+conexion: wifi
+RTT de base (GET /): conexion reutilizada p50 171.7 ms, p95 205.9 ms; conexion nueva p50 285.9 ms, p95 402.7 ms
+RTT usado para comparar con las predicciones (ms): 285.9
+terraform output vmss_instances: 1
+terraform output vmss_sku: "Standard_F1als_v7"
+terraform output redis_sku: "Balanced_B0"
+region: eastus2
+zona horaria: America/Buenos_Aires
