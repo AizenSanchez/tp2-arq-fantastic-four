@@ -206,3 +206,21 @@ ARCA (`arca.ms`), no los nodos, y se informa así.
 **Decisión que se predice para el bloque: no se repone ninguna táctica de nginx.** La microcaché por lo de las
 secciones 2 y 4, que el caso escalado no cambia (la latencia de `/rates` sigue siendo la red). El `limit_req` porque un
 pico de 6B, que sí degrada a 1 nodo, entra con 2: la táctica que resuelve el pico es la cantidad de nodos.
+
+---
+
+**Fe de erratas (18/11).** Lo de arriba queda como se commiteó antes de cada corrida; acá van correcciones de nombres
+y de cuentas. Los resultados están en `perf/results/resultados-tacticas-nginx.md`.
+
+- ρ es la utilización del proceso: tasa por CPU por pedido. La fórmula M/D/1 de la sección 1 no es de la materia; la
+  usamos solo para estimar el orden de la espera.
+- En la sección 5, escalar a más nodos es Maintain Multiple Copies of Computations con Scale out (04 Tácticas, págs. 8
+  y 9) detrás del Load Balancer, no Increase Resources, que es darle más recursos al mismo nodo.
+- La CPU del proceso en E10 con 1 nodo es 12,2 %, no 11,6: la sección 6 parte de ese valor.
+- Cuentas que estaban mal y no cambian ningún resultado: E10 hace 4 × las lecturas de E8, no el triple (sección 4); el
+  centro de `vusers.session_length` suma unos 3.500, no 3.300; `GET /accounts` son 2 `HGETALL` (36 lecturas, no 24);
+  el tope de 14.500 de conntrack en E10 no sale de 0,9 × 14.400; los créditos de la sección 1 no tienen cuenta; y el
+  p95 ≥ 2,7 s de E7 alto es una cota abierta, que cualquier valor alto cumple.
+- Dos valores salen de la tabla de CPU sin alinear al primer pedido: el 2,4 ms a 20 de la sección 5 alineado da
+  2,65, y los 1,7 a 2,0 ms por POST de la sección 2 dan 1,78 a 2,13. No cambia el techo de 500 a 650.
+- De los cuatro umbrales del criterio del limitador, dos salen del plan y dos se agregaron en la sección 5.
