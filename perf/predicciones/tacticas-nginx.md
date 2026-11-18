@@ -106,3 +106,28 @@ durante 20 s** y 24 req/s durante 120 s; unos 9.120 pedidos (4.800 en el pico). 
 pedidos aceptados a través de un recurso de la app. A 2B no se degrada nada: el pico entra entero. En el TP 1 el
 integrado rechazó con 429 el 21,9 % del pico (13.314 de 60.800); acá se predice 0 % rechazado y el mismo p95. Un
 limitador a 2B solo rechazaría pedidos que el nodo atiende bien.
+
+## 4. E8, carga representativa (`perf/tacticas-nginx/exchange-representativa.yaml`)
+
+Escrita con los resultados de las secciones 1 a 3. Carga: 12 usuarios por segundo durante 600 s (7.200 usuarios); cada
+uno hace `GET /rates`, espera 1, 2 o 3 s, hace un `POST /exchange` (35 % ARS a USD, 35 % USD a ARS, 10 % ARS a EUR, 10 %
+EUR a ARS, 5 % ARS a BRL, 5 % BRL a ARS) y `GET /accounts`, por la misma conexión. Unos 36 pedidos/s (21.600 en total).
+Reset antes con `ansible/reset.sh`. Los saldos del banco alcanzan (60.000 USD, 40.000 EUR, 60.000 BRL y 120 M ARS; un
+ARS a USD aprobado de 1.000 ARS saca 0,66 USD: en E8 salen unos 1.030 USD y entran unos 1.560).
+
+| Métrica | Predicción | Tipo | Cálculo |
+|---|---|---|---|
+| Errores, timeouts y usuarios fallidos | 0 | esperado | 36 pedidos/s, un 30 % de B y un 11 % de lo que el nodo atendió |
+| Mezcla de ARCA (sobre los POST) | 62 / 32 / 6 % ± 3 | esperado | |
+| `/rates` en el cliente | p50 163 ± 3 ms, p95 ≤ 175 ms | esperado | E10 |
+| `/accounts` en el cliente | p50 163 ± 3 ms, p95 ≤ 182 ms | esperado | caracterización: 162 / 176 ms |
+| `/exchange` en el cliente (todos los códigos) | p95 1.300 ± 70 ms | esperado | E10 |
+| `GET.rates` y `GET.accounts` en la app | p95 ≤ 3 ms | esperado | E10: 1,1 ms con el triple de lecturas |
+| `vusers.session_length` | mediana 3.300 ± 500 ms, p95 ≤ 5.000 ms | esperado | handshake + GET (≈ 325) + espera media de 2.000 + POST (mediana ≈ 1.000) + GET (≈ 162) |
+| CPU del proceso | 4 ± 2 % de un núcleo | esperado | 12 × 2,0 + 24 × 0,6 ms |
+| Redis | unas 200 op/s, procesador ≤ 16 % | esperado | 24 lecturas + 12 × 14,5 |
+| Conntrack máximo | 1.400 a 3.000, sin `table full` | esperado | 12 conexiones/s × 120 s más las de ARCA, con el factor de E7 (entradas que duran los 120 s) |
+| Créditos de CPU | suben | esperado | la VM queda debajo del 30 % de base |
+
+**Lectura que se predice.** La carga representativa no se acerca a ningún límite, así que ninguna de las dos tácticas
+cambia algo: sin caché las lecturas tardan lo que tarda la red (≈ 162 ms) y sin limitador no hay nada que rechazar.
