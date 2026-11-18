@@ -30,3 +30,21 @@ services:
         condition: service_healthy
       arca:
         condition: service_started
+
+  # Segundo nodo para ensayar en local el caso de varios nodos: docker compose --profile dos-nodos up -d
+  # Comparte el mismo Redis y el mismo ARCA. Diferencia con Azure: aca no hay balanceador, los scripts
+  # de perf/integridad eligen el nodo al azar en cada conexion (variable TARGETS).
+  app2:
+    profiles: ["dos-nodos"]
+    build: ./node
+    ports:
+      - "127.0.0.1:3001:3000"
+    environment:
+      REDIS_URL: redis://redis:6379
+      ARCA_URI: http://arca:8080
+      METRICS_ADAPTER: "null"
+    depends_on:
+      redis:
+        condition: service_healthy
+      arca:
+        condition: service_started
