@@ -145,6 +145,25 @@ const rttReutilizada = rtt ? { p50_ms: rtt.reutilizada?.p50_ms ?? rtt.p50_ms, p9
 const rttNueva = rtt?.nueva ? { p50_ms: rtt.nueva.p50_ms, p95_ms: rtt.nueva.p95_ms, connect_p50_ms: rtt.nueva.connect_p50_ms } : null;
 const resumen = { caso, corrida: nombre, entorno: ENTORNO, rtt: rtt && { reutilizada: rttReutilizada, nueva: rttNueva }, recorte_s: { inicio: RECORTE_S, fin: RECORTE_FIN_S }, fases: porFase };
 
+// ------------------------------------------------------------------ reparto por nodo (header X-Node)
+
+// los timeouts y errores de conexion no traen nodo: el reparto es sobre las respuestas
+const NODOS = [...new Set(pedidos.map((p) => p.nodo).filter(Boolean))].sort();
+const repartir = (ps) => {
+  const respondidos = ps.filter((p) => p.nodo);
+  return Object.fromEntries(
+    NODOS.map((n) => {
+      const del = respondidos.filter((p) => p.nodo === n);
+      const lat = del.filter((p) => p.clase === "200").map((p) => p.ms);
+      return [n, { respuestas: del.length, pct: pct(del.length, respondidos.length), p50_200: percentil(lat, 50), p95_200: percentil(lat, 95) }];
+    })
+  );
+};
+if (NODOS.length > 1) {
+  resumen.nodos = NODOS;
+  for (const f of porFase) f.por_nodo = repartir(pedidos.filter((p) => p.s >= f.ventana_s[0] && p.s < f.ventana_s[1]));
+}
+
 // ------------------------------------------------------------------ capacidad: B y recuperacion
 
 const ventanas5 = (desdeS, hastaS) => {
@@ -212,6 +231,7 @@ if (corrida === "endurance") {
       p95_200: percentil(ps.filter((p) => p.clase === "200").map((p) => p.ms), 95),
       mem_app_mib: rec?.app.mem_max_mib ?? null,
       mem_redis_mib: rec?.redis.mem_max_mib ?? null,
+      ...(NODOS.length > 1 && { por_nodo: repartir(ps) }),
     });
   }
   const pendientes = Object.fromEntries(
@@ -314,7 +334,20 @@ if (recursos.length) {
     ""
   );
 } else {
-  md.push("## Recursos", "", "Sin muestreo local. En Azure: el nodo en Datadog (horas UTC de meta.txt) y Redis y ARCA en `azure-monitor/`.", "");
+  md.push("## Recursos", "", "Sin muestreo local. En Azure: los nodos en Datadog (`datadog/`, horas UTC de meta.txt) y Redis, ARCA y el balanceador en `azure-monitor/`.", "");
+}
+
+if (resumen.nodos) {
+  md.push(
+    "## Reparto por nodo (header `X-Node`)",
+    "",
+    "Sobre las respuestas HTTP (los timeouts y errores de conexión no traen nodo). Latencias de los 200 en ms.",
+    "",
+    fila(["fase", ...NODOS.flatMap((n) => [`${n} respuestas (%)`, `${n} 200 p50`, `${n} 200 p95`])]),
+    sep(1 + 3 * NODOS.length),
+    ...porFase.map((f) => fila([f.nombre, ...NODOS.flatMap((n) => [`${f.por_nodo[n].respuestas} (${v(f.por_nodo[n].pct)} %)`, f.por_nodo[n].p50_200, f.por_nodo[n].p95_200])])),
+    ""
+  );
 }
 
 if (resumen.throughput_sostenido) {
@@ -359,6 +392,16 @@ if (resumen.endurance) {
     ...e.minutos.map((m) => fila([m.minuto, m.fase, m.enviados, m.errores_propios, m.p50_200, m.p95_200, m.mem_app_mib, m.mem_redis_mib])),
     ""
   );
+  if (resumen.nodos) {
+    md.push(
+      "### Por minuto y nodo",
+      "",
+      fila(["minuto", ...NODOS.flatMap((n) => [`${n} respuestas (%)`, `${n} 200 p95`])]),
+      sep(1 + 2 * NODOS.length),
+      ...e.minutos.map((m) => fila([m.minuto, ...NODOS.flatMap((n) => [`${m.por_nodo[n].respuestas} (${v(m.por_nodo[n].pct)} %)`, m.por_nodo[n].p95_200])])),
+      ""
+    );
+  }
 }
 md.push(
   "## Control contra Artillery",

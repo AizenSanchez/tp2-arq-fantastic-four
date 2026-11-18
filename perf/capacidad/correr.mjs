@@ -249,51 +249,18 @@ fs.writeFileSync(
   ].join("\n") + "\n"
 );
 
-// Redis administrado y ACI no tienen agente de Datadog: sus metricas salen de Azure Monitor (grano minimo 1 min).
-// Nombres verificados con az monitor metrics list-definitions. CpuUsage de ACI esta en milicores (0,5 vCPU = 500).
-const AZURE_MONITOR = [
-  { recurso: "redis", tipo: "Microsoft.Cache/redisEnterprise", metricas: ["usedmemory", "operationsPerSecond", "percentProcessorTime"], agregaciones: ["Maximum", "Average"] },
-  { recurso: "arca", tipo: "Microsoft.ContainerInstance/containerGroups", metricas: ["CpuUsage", "MemoryUsage"], agregaciones: ["Average", "Maximum"] },
-];
-// los ids de Azure llevan el id de la suscripcion: no se guardan
-const sinIds = (texto) => {
-  const limpiar = (x) =>
-    Array.isArray(x) ? x.map(limpiar) : x && typeof x === "object" ? Object.fromEntries(Object.entries(x).filter(([k]) => k !== "id").map(([k, v]) => [k, limpiar(v)])) : x;
-  return JSON.stringify(limpiar(JSON.parse(texto)), null, 2).replace(/subscriptions\/[0-9a-f-]{36}/gi, "subscriptions/<suscripcion>");
-};
+// Redis, ARCA y el balanceador, desde Azure Monitor: ver exportar-azure-monitor.mjs
 if (ENTORNO === "azure") {
   // Azure Monitor publica con 1 a 3 min de demora: sin esperar, faltan los ultimos minutos
   const espera = Number(process.env.AZURE_MONITOR_ESPERA_S ?? 180);
-  const grupo = process.env.AZURE_GRUPO ?? "tp2_resource_group";
-  const desde = new Date(inicio.getTime() - 2 * 60000).toISOString();
-  const hasta = new Date(fin.getTime() + 2 * 60000).toISOString();
-  console.log(`[5/5] Azure Monitor (Redis y ARCA) de ${desde} a ${hasta}, despues de esperar ${espera} s a que se publiquen`);
+  console.log(`[5/5] Azure Monitor (Redis, ARCA y balanceador), despues de esperar ${espera} s a que se publiquen`);
   await dormir(espera * 1000);
-  const dirMonitor = archivo("azure-monitor");
-  fs.mkdirSync(dirMonitor, { recursive: true });
-  const az = (...a) => execFileSync("az", a, { cwd: RAIZ, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
-  for (const m of AZURE_MONITOR) {
-    try {
-      const id = az("resource", "list", "-g", grupo, "--resource-type", m.tipo, "--query", "[0].id", "-o", "tsv");
-      if (!id) throw new Error(`no hay ningun ${m.tipo} en ${grupo}`);
-      const json = az("monitor", "metrics", "list", "--resource", id, "--metrics", ...m.metricas, "--aggregation", ...m.agregaciones, "--interval", "PT1M", "--start-time", desde, "--end-time", hasta, "-o", "json");
-      fs.writeFileSync(path.join(dirMonitor, `${m.recurso}.json`), sinIds(json) + "\n");
-      console.log(`      ${m.recurso}: ${m.metricas.join(", ")}`);
-    } catch (err) {
-      const detalle = String(err.stderr || err.message).trim().slice(0, 500);
-      fs.writeFileSync(path.join(dirMonitor, `${m.recurso}.error.txt`), detalle.replace(/subscriptions\/[0-9a-f-]{36}/gi, "subscriptions/<suscripcion>") + "\n");
-      console.error(`      ${m.recurso}: no se pudo exportar (${detalle.split("\n")[0]})`);
-    }
+  // si falla, la corrida igual sirve: queda un <recurso>.error.txt y se puede volver a exportar
+  try {
+    execFileSync(process.execPath, [path.join(AQUI, "exportar-azure-monitor.mjs"), caso, corrida], { stdio: "inherit" });
+  } catch {
+    console.error("      alguna exportacion de Azure Monitor fallo: ver azure-monitor/*.error.txt");
   }
-  fs.writeFileSync(
-    path.join(dirMonitor, "LEEME.txt"),
-    [
-      `rango: ${desde} a ${hasta} (la corrida, con 2 min antes y despues), grano 1 min`,
-      ...AZURE_MONITOR.map((m) => `${m.recurso}: ${m.tipo}, metricas ${m.metricas.join(", ")}, agregaciones ${m.agregaciones.join(", ")}`),
-      "CpuUsage de ACI esta en milicores (0,5 vCPU = 500). usedmemory y MemoryUsage en bytes.",
-      `para volver a exportar: az monitor metrics list --resource <id> --metrics ... --interval PT1M --start-time ${desde} --end-time ${hasta}`,
-    ].join("\n") + "\n"
-  );
 }
 
 console.log(ENTORNO === "azure" ? "      analisis" : "[5/5] analisis");

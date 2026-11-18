@@ -8,6 +8,9 @@
 // con el prefijo "artillery.": los contadores (http.codes.200, errors.*) como count, los resumenes como gauges con
 // sufijo (http.response_time.p95, http.response_time.2xx.p95) y las tasas como gauge (http.request_rate).
 // Lleva los tags test:exchange-<corrida> y caso:<caso>.
+//
+// Nodos: DD_HOSTS (lista separada por coma); si no esta, los valores de X-Node que quedaron en pedidos.jsonl (el
+// hostname de cada nodo, que es el host de Datadog); si tampoco hay, DD_HOST o tp2vmss000000.
 import fs from "node:fs";
 import path from "node:path";
 
@@ -24,7 +27,6 @@ if (!API_KEY || !APP_KEY) {
   process.exit(2);
 }
 const API = process.env.DATADOG_API_URL ?? "https://api.us5.datadoghq.com";
-const HOST = process.env.DD_HOST ?? "tp2vmss000000";
 const MARGEN_S = 60;
 
 const nombre = `exchange-${corrida}`;
@@ -34,6 +36,21 @@ if (!meta) {
   console.error(`no hay ${path.relative(RAIZ, dir)}/meta.txt: la corrida no termino`);
   process.exit(2);
 }
+const nodosDePedidos = () => {
+  const f = path.join(dir, "pedidos.jsonl");
+  if (!fs.existsSync(f)) return [];
+  const vistos = new Set();
+  for (const l of fs.readFileSync(f, "utf8").split("\n")) {
+    const m = l.match(/"nodo":"([^"]+)"/);
+    if (m) vistos.add(m[1]);
+  }
+  return [...vistos].sort();
+};
+const HOSTS = process.env.DD_HOSTS
+  ? process.env.DD_HOSTS.split(",").map((h) => h.trim()).filter(Boolean)
+  : nodosDePedidos().length
+    ? nodosDePedidos()
+    : [process.env.DD_HOST ?? "tp2vmss000000"];
 const desde = Math.floor(Date.parse(meta.match(/^inicio UTC: (\S+)/m)[1]) / 1000) - MARGEN_S;
 const hasta = Math.ceil(Date.parse(meta.match(/^fin UTC: (\S+)/m)[1]) / 1000) + MARGEN_S;
 const salida = path.join(dir, "datadog");
@@ -54,7 +71,7 @@ async function dd(ruta, params) {
   return JSON.parse(texto);
 }
 
-console.log(`rango: ${new Date(desde * 1000).toISOString()} a ${new Date(hasta * 1000).toISOString()} (corrida con ${MARGEN_S} s de margen)`);
+console.log(`rango: ${new Date(desde * 1000).toISOString()} a ${new Date(hasta * 1000).toISOString()} (corrida con ${MARGEN_S} s de margen), hosts: ${HOSTS.join(", ")}`);
 
 // ------------------------------------------------------------------ 1: metricas de Artillery activas
 
@@ -86,31 +103,36 @@ const esCount = (m) => m.startsWith("artillery.http.codes.") || m.startsWith("ar
 const consulta = (m, alcance) => (esCount(m) ? `sum:${m}{${alcance}}.as_count()` : `avg:${m}{${alcance}}`);
 const consultas = [
   ...[elegidas.tasa, elegidas.p95, elegidas.p99, ...elegidas.codigos, ...elegidas.errores].filter(Boolean).map((m) => ({ metrica: m, q: consulta(m, TAGS) })),
-  ...["system.cpu.user", "system.cpu.system", "system.mem.used"].map((m) => ({ metrica: m, q: `avg:${m}{host:${HOST}}` })),
+  // system.net.bytes_rcvd: si el trafico llega o no a cada nodo (para separar la red de la generadora de los nodos)
+  ...HOSTS.flatMap((h) => ["system.cpu.user", "system.cpu.system", "system.mem.used", "system.net.bytes_rcvd"].map((m) => ({ metrica: m, host: h, q: `avg:${m}{host:${h}}` }))),
 ];
 const series = [];
-for (const { metrica, q } of consultas) {
+for (const { metrica, host, q } of consultas) {
   try {
     const r = await dd("/api/v1/query", { from: desde, to: hasta, query: q });
     const s = (r.series ?? []).map((x) => ({ scope: x.scope, interval_s: x.interval, unidad: x.unit?.[0]?.name ?? null, puntos: x.pointlist }));
     if (!s.length || s.every((x) => !x.puntos?.length)) avisar(`${metrica}: sin datos para ${q}`);
-    series.push({ metrica, query: q, series: s });
-    console.log(`  ${metrica}: ${s.reduce((n, x) => n + (x.puntos?.length ?? 0), 0)} puntos`);
+    series.push({ metrica, ...(host && { host }), query: q, series: s });
+    console.log(`  ${metrica}${host ? ` (${host})` : ""}: ${s.reduce((n, x) => n + (x.puntos?.length ?? 0), 0)} puntos`);
   } catch (err) {
     avisar(`${metrica}: ${err.message}`);
-    series.push({ metrica, query: q, error: err.message });
+    series.push({ metrica, ...(host && { host }), query: q, error: err.message });
   }
 }
 fs.writeFileSync(
   path.join(salida, "series.json"),
-  JSON.stringify({ caso, corrida: nombre, desde: new Date(desde * 1000).toISOString(), hasta: new Date(hasta * 1000).toISOString(), host: HOST, metricas_artillery_activas: activas, elegidas, series, avisos }, null, 2) + "\n"
+  JSON.stringify({ caso, corrida: nombre, desde: new Date(desde * 1000).toISOString(), hasta: new Date(hasta * 1000).toISOString(), hosts: HOSTS, metricas_artillery_activas: activas, elegidas, series, avisos }, null, 2) + "\n"
 );
 
 // ------------------------------------------------------------------ 3: graficos
 
 const graficos = [
-  { archivo: "cpu-nodo.png", titulo: `CPU del nodo ${HOST} (%)`, qs: [`avg:system.cpu.user{host:${HOST}}`, `avg:system.cpu.system{host:${HOST}}`], tipo: "area" },
-  { archivo: "memoria-nodo.png", titulo: `Memoria usada del nodo ${HOST}`, qs: [`avg:system.mem.used{host:${HOST}}`], tipo: "line" },
+  // con un nodo, user y system apilados (como en el caso de 1 nodo); con varios, una serie user + system por nodo
+  HOSTS.length === 1
+    ? { archivo: "cpu-nodo.png", titulo: `CPU del nodo ${HOSTS[0]} (%)`, qs: [`avg:system.cpu.user{host:${HOSTS[0]}}`, `avg:system.cpu.system{host:${HOSTS[0]}}`], tipo: "area" }
+    : { archivo: "cpu-nodo.png", titulo: `CPU por nodo, user + system (%): ${HOSTS.join(", ")}`, qs: HOSTS.map((h) => `avg:system.cpu.user{host:${h}} + avg:system.cpu.system{host:${h}}`), tipo: "line" },
+  { archivo: "memoria-nodo.png", titulo: `Memoria usada por nodo: ${HOSTS.join(", ")}`, qs: HOSTS.map((h) => `avg:system.mem.used{host:${h}}`), tipo: "line" },
+  { archivo: "red-nodo.png", titulo: `Bytes recibidos por nodo: ${HOSTS.join(", ")}`, qs: HOSTS.map((h) => `avg:system.net.bytes_rcvd{host:${h}}`), tipo: "line" },
   { archivo: "artillery-p95.png", titulo: `Artillery http.response_time p95 / p99 (ms), ${caso}`, qs: [elegidas.p95, elegidas.p99].filter(Boolean).map((m) => consulta(m, TAGS)), tipo: "line" },
   { archivo: "artillery-codigos.png", titulo: `Artillery codigos y errores por intervalo, ${caso}`, qs: [...elegidas.codigos, ...elegidas.errores].map((m) => consulta(m, TAGS)), tipo: "bars" },
 ];

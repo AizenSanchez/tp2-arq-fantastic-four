@@ -1,0 +1,9 @@
+rango: 2026-11-18T14:46:58.206Z a 2026-11-18T15:04:12.765Z (la corrida, con 2 min antes y despues), grano 1 min; exportado el 2026-11-18T15:08:01.652Z
+redis: Microsoft.Cache/redisEnterprise, metricas usedmemory, operationsPerSecond, percentProcessorTime, agregaciones Maximum, Average
+arca: Microsoft.ContainerInstance/containerGroups, metricas CpuUsage, MemoryUsage, agregaciones Average, Maximum
+lb-probe: Microsoft.Network/loadBalancers, metricas DipAvailability, agregaciones Average, separado por BackendIPAddress
+lb-trafico: Microsoft.Network/loadBalancers, metricas SYNCount, ByteCount, PacketCount, agregaciones Total, separado por Direction
+CpuUsage de ACI esta en milicores (0,5 vCPU = 500). usedmemory y MemoryUsage en bytes.
+DipAvailability: % de probes exitosos por nodo (BackendIPAddress). SYNCount, ByteCount y PacketCount: totales por minuto en el frontend del balanceador, separados por Direction (In = entrante, Out = saliente).
+Las marcas de tiempo de Azure Monitor pueden ir corridas 1 a 2 min respecto de la carga: comparar con meta.txt y Datadog.
+para volver a exportar (mientras exista la infra): node perf/capacidad/exportar-azure-monitor.mjs azure-escalado endurance

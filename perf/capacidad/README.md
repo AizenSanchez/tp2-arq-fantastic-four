@@ -55,12 +55,22 @@ export CONEXION=cable                                              # o wifi, que
 ESCALONES=10,20,40,80,120,160,200,240,320 node perf/capacidad/correr.mjs capacidad azure-1-nodo --env azure
 RATE_ENDURANCE=<0,5·B> RATE_TRAMO=<B> node perf/capacidad/correr.mjs endurance azure-1-nodo --env azure
 
+# las dos corridas seguidas, sin intervención: capacidad, controles, pausa, endurance con 0,5·B y B, y Datadog
+CONEXION=wifi ESCALONES=... node perf/capacidad/correr-bloque.mjs azure-escalado --env azure
+
 # volver a analizar sin correr
 node perf/capacidad/analizar.mjs <caso> <capacidad|endurance>
 ```
 
-Después de cada corrida en Azure, las series y los gráficos de Datadog (métricas `artillery.*` de la corrida y CPU y
-memoria del nodo `tp2vmss000000`) se bajan a `datadog/` con:
+`correr-bloque.mjs` corre la endurance solo si la capacidad es válida. Los controles son: Artillery termina con
+código 0, hay una línea en `pedidos.jsonl` por cada usuario creado, los errores de conexión son menos del 5 % y B está
+calculado y es menor que el escalón más alto. Si algún control falla, para y lo explica. `PAUSA_S` (120) es el tiempo
+sin carga entre las dos corridas. Las capturas de Datadog las hace solo en Azure y si están las dos keys. No commitea.
+
+Después de cada corrida en Azure, las series y los gráficos de Datadog se bajan a `datadog/`: las métricas
+`artillery.*` de la corrida, y CPU, memoria y bytes recibidos de cada nodo. Los nodos salen de `DD_HOSTS` (lista
+separada por coma) o, si no está, de los valores de `X-Node` en `pedidos.jsonl`. Si tampoco hay, se usa
+`tp2vmss000000`.
 
 ```bash
 read -s DD_APP_KEY; export DD_APP_KEY                             # además de DATADOG_API_KEY; nunca en un archivo
@@ -94,17 +104,28 @@ La segunda es la fase `firstByte` de got (`timings.response − timings.upload`,
 
 - `exchange-<corrida>.json`: el reporte crudo de Artillery (`--output`).
 - `pedidos.jsonl`: una línea por pedido: `t0` (salida), `t1` (llegada), `status` (código HTTP, o `ERR_SOCKET_TIMEOUT`,
-  `ECONNREFUSED`...), `ms`, `escenario` (par de monedas) y, en los 503, si vino de ARCA y el motivo.
+  `ECONNREFUSED`...), `ms`, `escenario` (par de monedas), `nodo` (header `X-Node`, el hostname del nodo que atendió;
+  no está en los timeouts ni en los errores de conexión) y, en los 503, si vino de ARCA y el motivo. Con más de un
+  nodo, `resumen.md` agrega el reparto por nodo (por fase y, en endurance, por minuto).
 - `recursos.jsonl` (solo local): CPU (% de un núcleo) y memoria de app, redis y arca cada 1 s, de `docker stats`.
-  En Azure no se muestrea: el nodo lo cubre Datadog y Redis y ARCA, `azure-monitor/`, con las horas UTC de `meta.txt`.
+  En Azure no se muestrea: los nodos los cubre Datadog (`datadog/`), y Redis, ARCA y el balanceador
+  `azure-monitor/`, con las horas UTC de `meta.txt`.
 - `rtt.json`: las muestras de `GET /` con conexión reutilizada y con conexión nueva, con su p50, p95 y el connect.
 - `meta.txt`: inicio y fin UTC, fases, commit, `git status`, versiones, máquina y conexión; en Azure, además,
   `terraform output` de `vmss_instances`, `vmss_sku` y `redis_sku`, y la región.
-- `azure-monitor/` (solo Azure): Redis y ARCA no tienen agente de Datadog, así que `correr.mjs` exporta sus métricas
-  de Azure Monitor con `az monitor metrics list`, en el rango de la corrida más 2 min antes y después, con grano de
-  1 min. Espera `AZURE_MONITOR_ESPERA_S` antes, porque Azure Monitor publica con 1 a 3 min de demora:
+- `azure-monitor/` (solo Azure): Redis y ARCA no tienen agente de Datadog, así que sus métricas, y las del balanceador,
+  salen de Azure Monitor. Al final de cada corrida, `correr.mjs` espera `AZURE_MONITOR_ESPERA_S` (Azure Monitor
+  publica con 1 a 3 min de demora) y llama a `exportar-azure-monitor.mjs <caso> <corrida>`. Ese script usa
+  `az monitor metrics list` en el rango de la corrida más 2 min antes y después, con grano de 1 min. Mientras la infra
+  exista, se puede volver a correr a mano. Las dimensiones van con `--filter "<dim> eq '*'"`, porque con
+  `--dimension` el tráfico del balanceador vuelve vacío. Si una métrica vuelve sin series, reintenta hasta 3 veces.
+  Archivos:
   - `redis.json`: `usedmemory` (bytes), `operationsPerSecond` y `percentProcessorTime` (%), con máximo y promedio;
   - `arca.json`: `CpuUsage` (milicores: 0,5 vCPU = 500) y `MemoryUsage` (bytes), con promedio y máximo;
+  - `lb-probe.json`: `DipAvailability` del balanceador por `BackendIPAddress` (% de probes exitosos por nodo);
+  - `lb-trafico.json`: `SYNCount`, `ByteCount` y `PacketCount` del frontend del balanceador, por minuto y por
+    `Direction` (entrante y saliente). Sirven para
+    saber si los pedidos que vencen por timeout llegaron a Azure;
   - `LEEME.txt`: el rango y cómo volver a exportar; un `<recurso>.error.txt` si alguna exportación falló.
 
   Los nombres se verificaron con `az monitor metrics list-definitions`. Los campos `id` se borran y cualquier
