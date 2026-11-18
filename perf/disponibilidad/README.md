@@ -50,4 +50,16 @@ Si la corrida se corta con Ctrl+C, el script manda `kill -CONT` y `pm2 start` pa
 
 ## Datadog
 
-Cada falla se publica como evento en Datadog, con la misma API key de Artillery.
+Después de cada corrida en Azure se bajan las series y los gráficos de Datadog y se comparan con los crudos (hace falta
+además una Application key):
+
+```bash
+DATADOG_API_KEY=... DD_APP_KEY=... node perf/capacidad/capturar-datadog.mjs <caso> disponibilidad
+DATADOG_API_KEY=... DD_APP_KEY=... node perf/disponibilidad/verificar-datadog.mjs perf/results/<caso>
+```
+
+Quedan en `perf/results/<caso>/exchange-disponibilidad/datadog/`: `series.json`, un PNG por gráfico y `verificacion.md`
+(códigos y errores de Artillery y `POST /exchange` por nodo, Datadog contra los crudos).
+
+Los eventos que publica `correr.mjs` en cada falla usan la API v1, que la organización no tiene habilitada (HTTP 403):
+la hora de cada falla está en `fallas.jsonl`.
