@@ -3,6 +3,7 @@
 import { spawn, execFile, execFileSync, execSync } from "node:child_process";
 import { promisify } from "node:util";
 import fs from "node:fs";
+import http from "node:http";
 import os from "node:os";
 import path from "node:path";
 
@@ -148,8 +149,28 @@ console.log(`[1/5] reinicio del estado: ${resetCmd}`);
 execSync(resetCmd, { cwd: RAIZ, stdio: "inherit" });
 await esperarSalud();
 
+// conexion nueva en cada muestra, como cada pedido de Artillery
+const getRaiz = () =>
+  new Promise((resolve, reject) => {
+    const t = process.hrtime.bigint();
+    http
+      .get(`${BASE}/`, { agent: false, timeout: 5000 }, (r) => {
+        r.resume();
+        r.on("end", () => resolve(Number(process.hrtime.bigint() - t) / 1e6));
+      })
+      .on("timeout", function () { this.destroy(new Error("timeout")); })
+      .on("error", reject);
+  });
+console.log("[2/5] latencia de base: 30 GET / sin carga");
+const muestras = [];
+for (let n = 0; n < 30; n++) muestras.push(Math.round(await getRaiz()));
+const orden = [...muestras].sort((a, b) => a - b);
+fs.writeFileSync(archivo("base.json"), JSON.stringify({ url: `${BASE}/`, conexion: "nueva", muestras_ms: muestras, min_ms: orden[0], p50_ms: orden[14], p95_ms: orden[28] }, null, 2) + "\n");
+
 if (ENTORNO === "azure") {
-  console.log("[2/5] foto de pm2 antes");
+  console.log("      infraestructura desplegada y foto de pm2 antes");
+  const infra = { "terraform-state-list.txt": "terraform state list", "terraform-output.txt": "terraform output", "vmss-list-instances.txt": "az vmss list-instances -g tp2_resource_group -n tp2vmss -o table" };
+  for (const [nombre, cmd] of Object.entries(infra)) fs.writeFileSync(archivo(nombre), execSync(cmd, { cwd: RAIZ, encoding: "utf8" }));
   fs.writeFileSync(archivo("pm2-antes.json"), enNodo(FOTO_PM2) + "\n");
 }
 

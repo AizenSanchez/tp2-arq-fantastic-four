@@ -21,6 +21,7 @@ const lineas = leerJsonl("pedidos.jsonl");
 const salud = leerJsonl("salud.jsonl");
 const fallas = leerJsonl("fallas.jsonl");
 const artillery = leerJson(path.join(dirCaso, "exchange-disponibilidad.json"));
+const base = leerJson(path.join(dir, "base.json"));
 
 const seg = (t) => Math.floor((t - ORIGEN) / 1000);
 const percentil = (v, p) => {
@@ -132,6 +133,7 @@ const e9 = {
   por_tipo: { dni: invalidos.filter((p) => p.invalido === "dni").length, moneda: invalidos.filter((p) => p.invalido === "moneda").length },
   respuestas: porStatus(invalidos),
   mediana_400_ms: medianaDe(invalidos.filter((p) => p.status === 400)),
+  mediana_400_menos_base_ms: base && invalidos.some((p) => p.status === 400) ? medianaDe(invalidos.filter((p) => p.status === 400)) - base.p50_ms : null,
   validos_en_la_ventana: porStatus(pedidos.filter((p) => !p.invalido && p.s >= 30 && p.s < 40)),
 };
 
@@ -156,7 +158,7 @@ const pm2Antes = leerJson(path.join(dir, "pm2-antes.json"));
 const pm2Despues = leerJson(path.join(dir, "pm2-despues.json"));
 const reinicios = pm2Antes && pm2Despues ? pm2Despues[0]?.reinicios - pm2Antes[0]?.reinicios : null;
 
-const resumen = { meta: meta.trim(), totales, referencia_sin_fallas: latPorStatus, e9, eventos, reinicios_pm2: reinicios, pm2: { antes: pm2Antes, despues: pm2Despues }, ventanas };
+const resumen = { meta: meta.trim(), base: base && { min_ms: base.min_ms, p50_ms: base.p50_ms, p95_ms: base.p95_ms }, totales, referencia_sin_fallas: latPorStatus, e9, eventos, reinicios_pm2: reinicios, pm2: { antes: pm2Antes, despues: pm2Despues }, ventanas };
 fs.writeFileSync(path.join(dir, "resumen.json"), JSON.stringify(resumen, null, 2) + "\n");
 
 const fila = (celdas) => `| ${celdas.map((c) => (c === null || c === undefined ? "—" : c)).join(" | ")} |`;
@@ -179,6 +181,10 @@ const md = [
   "",
   `Errores de Artillery: \`${JSON.stringify(totales.artillery_errores)}\``,
   "",
+  "## Latencia de base (30 `GET /` sin carga, conexión nueva)",
+  "",
+  base ? `mínimo ${base.min_ms} ms · p50 ${base.p50_ms} ms · p95 ${base.p95_ms} ms` : "no medida",
+  "",
   "## Referencia sin fallas (pedidos válidos de los segundos 5 a 30)",
   "",
   fila(["estado", "n", "mediana (ms)", "p95 (ms)"]),
@@ -188,7 +194,7 @@ const md = [
   "## Pedidos inválidos (E9, segundos 30 a 40)",
   "",
   `- Enviados: ${e9.enviados} (DNI inválido ${e9.por_tipo.dni}, moneda XYZ ${e9.por_tipo.moneda}).`,
-  `- Respuestas a los inválidos: \`${JSON.stringify(e9.respuestas)}\`. Mediana de un 400: ${e9.mediana_400_ms} ms.`,
+  `- Respuestas a los inválidos: \`${JSON.stringify(e9.respuestas)}\`. Mediana de un 400: ${e9.mediana_400_ms} ms (${e9.mediana_400_menos_base_ms ?? "—"} ms sobre la base).`,
   `- Respuestas a los válidos de la misma ventana: \`${JSON.stringify(e9.validos_en_la_ventana)}\`.`,
   "",
   "## Efecto de cada falla",

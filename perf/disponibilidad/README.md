@@ -39,9 +39,11 @@ Si la corrida se corta con Ctrl+C, el script manda `kill -CONT` y `pm2 start` pa
 
 - `exchange-disponibilidad.json`: el reporte crudo de Artillery.
 - `exchange-disponibilidad/pedidos.jsonl`: una línea cuando sale cada pedido y otra cuando vuelve (sin la segunda, se perdió).
+- `.../base.json`: 30 `GET /` sin carga antes de empezar, con conexión nueva (la latencia de red de base).
 - `.../salud.jsonl`: el monitor de `/health`.
 - `.../fallas.jsonl`: cada falla con la hora del nodo y la salida del comando.
-- `.../pm2-antes.json`, `pm2-despues.json` y `pm2-log-arranques.txt` (solo Azure): reinicios, `kill_timeout` y las líneas de arranque y apagado.
+- `.../terraform-state-list.txt`, `terraform-output.txt` y `vmss-list-instances.txt` (solo Azure): la infraestructura desplegada al empezar.
+- `.../pm2-antes.json`, `pm2-despues.json` y `pm2-log-arranques.txt` (solo Azure): reinicios y las líneas de arranque y apagado.
 - `.../meta.txt`: inicio y fin UTC, commit, `git status`, versiones, máquina y conexión.
 - `.../resumen.md` y `resumen.json`: los genera `analizar.mjs` solo a partir de los archivos anteriores.
 
