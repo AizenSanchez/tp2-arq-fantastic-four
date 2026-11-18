@@ -1,0 +1,85 @@
+Extracto del log de la app (pm2) de cada nodo: lineas JSON 'arca_validacion', 12 de cada resultado (aprobado con su codigoAutorizacion, rechazado y error) y el total de cada uno.
+Obtenido el 2026-11-18T16:02:27Z con: pm2 logs app --lines 30000 --nostream | grep arca_validacion (filtrado con node, ver el comando en este archivo).
+
+10.0.2.5 | CHANGED | rc=0 >>
+validaciones leidas: 2091 | aprobado: 1260 | rechazado: 718 | error: 113
+--- aprobado
+{"ts":"2026-11-18T15:52:46.169Z","evento":"arca_validacion","dni":"43779010","resultado":"aprobado","codigoAutorizacion":"c9423a14-74e3-4201-8155-ab012383177b","intentos":1,"ms":297}
+{"ts":"2026-11-18T15:52:46.218Z","evento":"arca_validacion","dni":"77277969","resultado":"aprobado","codigoAutorizacion":"caf6390c-ea0b-4d3f-8720-25ec8f159b17","intentos":1,"ms":450}
+{"ts":"2026-11-18T15:52:46.282Z","evento":"arca_validacion","dni":"45076212","resultado":"aprobado","codigoAutorizacion":"7d48bcbb-eb34-4327-a91a-ce630f5967a7","intentos":1,"ms":317}
+{"ts":"2026-11-18T15:52:46.668Z","evento":"arca_validacion","dni":"12369023","resultado":"aprobado","codigoAutorizacion":"fe182b7b-7b58-4725-a4d2-09909f33b1aa","intentos":1,"ms":497}
+{"ts":"2026-11-18T15:52:47.170Z","evento":"arca_validacion","dni":"97431076","resultado":"aprobado","codigoAutorizacion":"0cfc9958-4f17-420a-9856-6a58e58c5c5a","intentos":1,"ms":495}
+{"ts":"2026-11-18T15:52:47.771Z","evento":"arca_validacion","dni":"1194917","resultado":"aprobado","codigoAutorizacion":"ffd62288-b9a3-442c-b58a-61e5aa72bd97","intentos":2,"ms":336}
+{"ts":"2026-11-18T15:52:47.772Z","evento":"arca_validacion","dni":"97919838","resultado":"aprobado","codigoAutorizacion":"09d57c36-44fa-487d-88dc-83a77d9fdef3","intentos":1,"ms":452}
+{"ts":"2026-11-18T15:52:47.885Z","evento":"arca_validacion","dni":"54244572","resultado":"aprobado","codigoAutorizacion":"56a5d8c3-ab13-4e3a-a72a-41693fb34965","intentos":2,"ms":417}
+{"ts":"2026-11-18T15:52:48.044Z","evento":"arca_validacion","dni":"16209973","resultado":"aprobado","codigoAutorizacion":"215c41bb-8f92-4032-8ccc-d2770434dc6f","intentos":1,"ms":466}
+{"ts":"2026-11-18T15:52:48.157Z","evento":"arca_validacion","dni":"68353703","resultado":"aprobado","codigoAutorizacion":"4178d8cb-78f1-44ec-8ce2-485defaa560b","intentos":2,"ms":478}
+{"ts":"2026-11-18T15:52:48.485Z","evento":"arca_validacion","dni":"31511274","resultado":"aprobado","codigoAutorizacion":"0e0a8429-7b19-4341-a533-b74a859c9fd4","intentos":1,"ms":319}
+{"ts":"2026-11-18T15:52:48.829Z","evento":"arca_validacion","dni":"64812372","resultado":"aprobado","codigoAutorizacion":"72be059c-0a59-4984-9c11-5e768920c97a","intentos":1,"ms":310}
+--- rechazado
+{"ts":"2026-11-18T15:52:42.545Z","evento":"arca_validacion","dni":"26721894","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":277}
+{"ts":"2026-11-18T15:52:42.874Z","evento":"arca_validacion","dni":"89430194","resultado":"rechazado","codigoAutorizacion":null,"intentos":2,"ms":499}
+{"ts":"2026-11-18T15:52:43.577Z","evento":"arca_validacion","dni":"28929699","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":413}
+{"ts":"2026-11-18T15:52:45.635Z","evento":"arca_validacion","dni":"29838045","resultado":"rechazado","codigoAutorizacion":null,"intentos":2,"ms":465}
+{"ts":"2026-11-18T15:52:46.846Z","evento":"arca_validacion","dni":"50732153","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":478}
+{"ts":"2026-11-18T15:52:47.346Z","evento":"arca_validacion","dni":"88059516","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":256}
+{"ts":"2026-11-18T15:52:47.427Z","evento":"arca_validacion","dni":"41896616","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":436}
+{"ts":"2026-11-18T15:52:47.595Z","evento":"arca_validacion","dni":"5836035","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":424}
+{"ts":"2026-11-18T15:52:48.696Z","evento":"arca_validacion","dni":"94484455","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":225}
+{"ts":"2026-11-18T15:52:48.870Z","evento":"arca_validacion","dni":"33389536","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":256}
+{"ts":"2026-11-18T15:52:48.930Z","evento":"arca_validacion","dni":"64703595","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":262}
+{"ts":"2026-11-18T15:52:49.237Z","evento":"arca_validacion","dni":"22704531","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":368}
+--- error
+{"ts":"2026-11-18T15:42:57.749Z","evento":"arca_validacion","dni":"43458575","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":102,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:42:58.021Z","evento":"arca_validacion","dni":"41047121","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":103,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:46:43.881Z","evento":"arca_validacion","dni":"30410614","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":102,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:46:45.082Z","evento":"arca_validacion","dni":"96532601","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":101,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:46:45.182Z","evento":"arca_validacion","dni":"12163117","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":103,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:46:46.083Z","evento":"arca_validacion","dni":"97882229","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":102,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:46:46.584Z","evento":"arca_validacion","dni":"57698498","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":102,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:46:46.683Z","evento":"arca_validacion","dni":"60432739","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":102,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:46:47.687Z","evento":"arca_validacion","dni":"95460032","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":103,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:52:39.971Z","evento":"arca_validacion","dni":"62171352","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":103,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:52:44.380Z","evento":"arca_validacion","dni":"90605159","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":103,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:52:48.178Z","evento":"arca_validacion","dni":"33389536","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":102,"motivo":"http_5xx"}
+10.0.2.4 | CHANGED | rc=0 >>
+validaciones leidas: 5902 | aprobado: 3742 | rechazado: 1802 | error: 358
+--- aprobado
+{"ts":"2026-11-18T15:52:44.087Z","evento":"arca_validacion","dni":"11261591","resultado":"aprobado","codigoAutorizacion":"c086c5bf-bfb3-4f7e-b44d-111317ffa811","intentos":1,"ms":317}
+{"ts":"2026-11-18T15:52:44.624Z","evento":"arca_validacion","dni":"1230881","resultado":"aprobado","codigoAutorizacion":"c53bb8de-0bbb-4e85-b458-993d598d83b8","intentos":2,"ms":446}
+{"ts":"2026-11-18T15:52:44.766Z","evento":"arca_validacion","dni":"39914224","resultado":"aprobado","codigoAutorizacion":"67afbf9c-ce40-4a40-a577-96b79daac8cd","intentos":1,"ms":398}
+{"ts":"2026-11-18T15:52:45.138Z","evento":"arca_validacion","dni":"93385315","resultado":"aprobado","codigoAutorizacion":"3ec8f1b7-f9b6-4c11-9a0f-d75f3b6d21ae","intentos":2,"ms":570}
+{"ts":"2026-11-18T15:52:45.166Z","evento":"arca_validacion","dni":"35567855","resultado":"aprobado","codigoAutorizacion":"387d9f85-1ced-41d2-8ff9-1de261f33788","intentos":2,"ms":498}
+{"ts":"2026-11-18T15:52:46.038Z","evento":"arca_validacion","dni":"68435789","resultado":"aprobado","codigoAutorizacion":"5edb56e3-a6f0-4a97-9497-7425d0ac4489","intentos":2,"ms":569}
+{"ts":"2026-11-18T15:52:46.328Z","evento":"arca_validacion","dni":"57047647","resultado":"aprobado","codigoAutorizacion":"cd9598cc-f108-44c1-9361-83369a650ec1","intentos":1,"ms":262}
+{"ts":"2026-11-18T15:52:46.527Z","evento":"arca_validacion","dni":"18582856","resultado":"aprobado","codigoAutorizacion":"3a7f8ef1-0ed9-4250-bf46-438986890b49","intentos":1,"ms":258}
+{"ts":"2026-11-18T15:52:46.823Z","evento":"arca_validacion","dni":"45445570","resultado":"aprobado","codigoAutorizacion":"4e5a7d1b-51e9-4b07-aadb-30a16d2b5f83","intentos":1,"ms":256}
+{"ts":"2026-11-18T15:52:47.189Z","evento":"arca_validacion","dni":"57931220","resultado":"aprobado","codigoAutorizacion":"b20e795b-db6f-449c-9fba-df7d3f925f2c","intentos":2,"ms":317}
+{"ts":"2026-11-18T15:52:48.342Z","evento":"arca_validacion","dni":"45634542","resultado":"aprobado","codigoAutorizacion":"7791524d-2446-4a52-a844-a57874e36a26","intentos":1,"ms":317}
+{"ts":"2026-11-18T15:52:48.873Z","evento":"arca_validacion","dni":"16608495","resultado":"aprobado","codigoAutorizacion":"5083b19f-10cb-4a0f-8ba0-9f8d8087b65e","intentos":1,"ms":298}
+--- rechazado
+{"ts":"2026-11-18T15:52:42.986Z","evento":"arca_validacion","dni":"10671855","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":322}
+{"ts":"2026-11-18T15:52:43.413Z","evento":"arca_validacion","dni":"1079528","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":440}
+{"ts":"2026-11-18T15:52:44.279Z","evento":"arca_validacion","dni":"59024532","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":209}
+{"ts":"2026-11-18T15:52:44.435Z","evento":"arca_validacion","dni":"24751880","resultado":"rechazado","codigoAutorizacion":null,"intentos":2,"ms":467}
+{"ts":"2026-11-18T15:52:45.741Z","evento":"arca_validacion","dni":"53125777","resultado":"rechazado","codigoAutorizacion":null,"intentos":2,"ms":375}
+{"ts":"2026-11-18T15:52:46.268Z","evento":"arca_validacion","dni":"74360553","resultado":"rechazado","codigoAutorizacion":null,"intentos":2,"ms":598}
+{"ts":"2026-11-18T15:52:47.159Z","evento":"arca_validacion","dni":"94718126","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":377}
+{"ts":"2026-11-18T15:52:47.829Z","evento":"arca_validacion","dni":"24363582","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":465}
+{"ts":"2026-11-18T15:52:48.173Z","evento":"arca_validacion","dni":"77357227","resultado":"rechazado","codigoAutorizacion":null,"intentos":1,"ms":399}
+{"ts":"2026-11-18T15:52:48.481Z","evento":"arca_validacion","dni":"85424171","resultado":"rechazado","codigoAutorizacion":null,"intentos":2,"ms":509}
+{"ts":"2026-11-18T15:52:48.862Z","evento":"arca_validacion","dni":"76747737","resultado":"rechazado","codigoAutorizacion":null,"intentos":2,"ms":558}
+{"ts":"2026-11-18T15:52:49.212Z","evento":"arca_validacion","dni":"13362208","resultado":"rechazado","codigoAutorizacion":null,"intentos":2,"ms":436}
+--- error
+{"ts":"2026-11-18T15:42:54.861Z","evento":"arca_validacion","dni":"92891877","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":102,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:42:55.732Z","evento":"arca_validacion","dni":"31229675","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":101,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:42:55.925Z","evento":"arca_validacion","dni":"84318316","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":102,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:42:56.128Z","evento":"arca_validacion","dni":"77866495","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":103,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:42:56.138Z","evento":"arca_validacion","dni":"95625696","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":101,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:42:56.317Z","evento":"arca_validacion","dni":"66051438","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":102,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:42:56.496Z","evento":"arca_validacion","dni":"72539888","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":101,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:42:57.881Z","evento":"arca_validacion","dni":"86995788","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":102,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:42:57.882Z","evento":"arca_validacion","dni":"18778211","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":101,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:52:42.274Z","evento":"arca_validacion","dni":"24500449","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":103,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:52:46.720Z","evento":"arca_validacion","dni":"5836035","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":103,"motivo":"http_5xx"}
+{"ts":"2026-11-18T15:52:47.967Z","evento":"arca_validacion","dni":"45634542","resultado":"error","codigoAutorizacion":null,"intentos":2,"ms":102,"motivo":"http_5xx"}
