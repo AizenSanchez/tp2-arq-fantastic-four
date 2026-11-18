@@ -105,6 +105,10 @@ const eventos = fallasOrd
     const saludTramo = salud.filter((h) => seg(h.t) >= sFalla && seg(h.t) < tope);
     const saludMal = saludTramo.filter((h) => h.status !== 200);
     const lentos = pedidos.filter((p) => p.s >= sFalla && p.s < tope && p.clase === "atendido" && p.ms > 2000);
+    // t_rec cuenta por segundo de salida; esto es cuando el cliente vuelve a recibir respuestas
+    const tRestaura = restauracion ? tFalla(restauracion) : tFalla(f);
+    const primera = [...respuestas.values()].filter((r) => r.t0 > tFalla(f) && r.t1 > tRestaura).sort((a, b) => a.t1 - b.t1)[0];
+    const decimas = (ms) => Math.round(ms / 100) / 10;
     return {
       falla: f.falla,
       planificado_s: f.planificado_s,
@@ -115,6 +119,9 @@ const eventos = fallasOrd
       ultimo_seg_con_falla: malos.at(-1)?.s ?? null,
       t_rec_s: recupera === null ? null : recupera - sFalla,
       t_rec_desde_restauracion_s: recupera !== null && restauracion ? recupera - seg(tFalla(restauracion)) : null,
+      primera_respuesta_s: primera ? decimas(primera.t1 - ORIGEN) : null,
+      sin_respuestas_desde_la_falla_s: primera ? decimas(primera.t1 - tFalla(f)) : null,
+      sin_respuestas_desde_la_restauracion_s: primera && restauracion ? decimas(primera.t1 - tRestaura) : null,
       pedidos_afectados: enTramo.filter(propia).length,
       de_ellos_perdidos: enTramo.filter((p) => p.clase === "perdido").length,
       de_ellos_5xx: enTramo.filter((p) => p.clase === "error_5xx").length,
@@ -157,11 +164,19 @@ const totales = {
   artillery_errores: Object.fromEntries(Object.entries(artillery?.aggregate?.counters ?? {}).filter(([k]) => k.startsWith("errors."))),
   artillery_codigos: Object.fromEntries(Object.entries(artillery?.aggregate?.counters ?? {}).filter(([k]) => k.startsWith("http.codes."))),
 };
+const erroresPorPeriodo = (artillery?.intermediate ?? [])
+  .map((p) => ({ desde: seg(Number(p.firstMetricAt)), hasta: seg(Number(p.lastMetricAt)), errores: Object.fromEntries(Object.entries(p.counters).filter(([k]) => k.startsWith("errors."))) }))
+  .filter((p) => Object.keys(p.errores).length);
+const cambiosSalud = [];
+for (const h of salud) {
+  const estado = h.status ?? h.error;
+  if (estado !== cambiosSalud.at(-1)?.estado) cambiosSalud.push({ s: Math.round((h.t - ORIGEN) / 100) / 10, estado });
+}
 const pm2Antes = leerJson(path.join(dir, "pm2-antes.json"));
 const pm2Despues = leerJson(path.join(dir, "pm2-despues.json"));
 const reinicios = pm2Antes && pm2Despues ? pm2Despues[0]?.reinicios - pm2Antes[0]?.reinicios : null;
 
-const resumen = { meta: meta.trim(), base: base && { min_ms: base.min_ms, p50_ms: base.p50_ms, p95_ms: base.p95_ms }, totales, referencia_sin_fallas: latPorStatus, e9, eventos, reinicios_pm2: reinicios, pm2: { antes: pm2Antes, despues: pm2Despues }, ventanas };
+const resumen = { meta: meta.trim(), base: base && { min_ms: base.min_ms, p50_ms: base.p50_ms, p95_ms: base.p95_ms }, totales, referencia_sin_fallas: latPorStatus, e9, eventos, reinicios_pm2: reinicios, pm2: { antes: pm2Antes, despues: pm2Despues }, errores_por_periodo: erroresPorPeriodo, cambios_salud: cambiosSalud, ventanas };
 fs.writeFileSync(path.join(dir, "resumen.json"), JSON.stringify(resumen, null, 2) + "\n");
 
 const fila = (celdas) => `| ${celdas.map((c) => (c === null || c === undefined ? "—" : c)).join(" | ")} |`;
@@ -202,10 +217,10 @@ const md = [
   "",
   "## Efecto de cada falla",
   "",
-  "Segundos desde el inicio de la carga. t_rec: hasta el primer segundo de 3 seguidos sin fallas propias.",
+  "Segundos desde el inicio de la corrida. t_rec: hasta el primer segundo de 3 seguidos sin fallas propias, contando cada pedido en el segundo en que salió. Primera respuesta: cuándo le vuelve a llegar una respuesta a un pedido que salió después de la falla.",
   "",
-  fila(["falla", "plan (s)", "real (s)", "restaurada (s)", "fallas propias desde-hasta (s)", "t_rec (s)", "t_rec desde la restauración (s)", "pedidos afectados (perdidos / 5xx)", "atendidos > 2 s", "latencia máx (ms)", "/health no 200 (s)"]),
-  fila(Array(11).fill("---")),
+  fila(["falla", "plan (s)", "real (s)", "restaurada (s)", "fallas propias desde-hasta (s)", "t_rec (s)", "t_rec desde la restauración (s)", "primera respuesta (s)", "sin respuestas desde la falla / la restauración (s)", "pedidos afectados (perdidos / 5xx)", "atendidos > 2 s", "latencia máx (ms)", "/health no 200 (s)"]),
+  fila(Array(13).fill("---")),
   ...eventos.map((e) =>
     fila([
       e.falla + (e.error ? " (FALLÓ LA INYECCIÓN)" : ""),
@@ -215,12 +230,24 @@ const md = [
       e.primer_seg_con_falla === null ? "ninguna" : `${e.primer_seg_con_falla}–${e.ultimo_seg_con_falla}`,
       e.t_rec_s,
       e.t_rec_desde_restauracion_s,
+      e.primera_respuesta_s,
+      `${e.sin_respuestas_desde_la_falla_s ?? "—"} / ${e.sin_respuestas_desde_la_restauracion_s ?? "—"}`,
       `${e.pedidos_afectados} (${e.de_ellos_perdidos} / ${e.de_ellos_5xx})`,
       e.atendidos_lentos_mas_de_2s,
       e.latencia_max_ms,
       e.health_segundos_no_200 ? `${e.health_segundos_no_200} (${e.health_primer_no_200_s}–${e.health_ultimo_no_200_s})` : 0,
     ])
   ),
+  "",
+  "## Errores de Artillery por período (cuándo ocurrió el error, no cuándo salió el pedido)",
+  "",
+  fila(["período (s)", "errores"]),
+  fila(["---", "---"]),
+  ...erroresPorPeriodo.map((p) => fila([`${p.desde}–${p.hasta}`, `\`${JSON.stringify(p.errores)}\``])),
+  "",
+  "## Cambios de estado del monitor de /health",
+  "",
+  cambiosSalud.map((c) => `${c.s} s → ${c.estado}`).join(" · "),
   "",
   "## Ventanas de 10 s",
   "",

@@ -78,6 +78,9 @@
       "ultimo_seg_con_falla": 70,
       "t_rec_s": 2,
       "t_rec_desde_restauracion_s": null,
+      "primera_respuesta_s": 70.9,
+      "sin_respuestas_desde_la_falla_s": 1,
+      "sin_respuestas_desde_la_restauracion_s": null,
       "pedidos_afectados": 26,
       "de_ellos_perdidos": 26,
       "de_ellos_5xx": 0,
@@ -98,6 +101,9 @@
       "ultimo_seg_con_falla": 161,
       "t_rec_s": 36,
       "t_rec_desde_restauracion_s": 7,
+      "primera_respuesta_s": 169.2,
+      "sin_respuestas_desde_la_falla_s": 43.1,
+      "sin_respuestas_desde_la_restauracion_s": 13.8,
       "pedidos_afectados": 709,
       "de_ellos_perdidos": 709,
       "de_ellos_5xx": 0,
@@ -132,6 +138,84 @@
       }
     ]
   },
+  "errores_por_periodo": [
+    {
+      "desde": 69,
+      "hasta": 79,
+      "errores": {
+        "errors.ECONNRESET": 23,
+        "errors.ECONNREFUSED": 3
+      }
+    },
+    {
+      "desde": 119,
+      "hasta": 129,
+      "errores": {
+        "errors.ECONNREFUSED": 65
+      }
+    },
+    {
+      "desde": 129,
+      "hasta": 139,
+      "errores": {
+        "errors.ECONNREFUSED": 203
+      }
+    },
+    {
+      "desde": 139,
+      "hasta": 149,
+      "errores": {
+        "errors.ECONNREFUSED": 200
+      }
+    },
+    {
+      "desde": 149,
+      "hasta": 159,
+      "errores": {
+        "errors.ECONNREFUSED": 85
+      }
+    },
+    {
+      "desde": 159,
+      "hasta": 169,
+      "errores": {
+        "errors.ERR_SOCKET_TIMEOUT": 118
+      }
+    },
+    {
+      "desde": 169,
+      "hasta": 179,
+      "errores": {
+        "errors.ERR_SOCKET_TIMEOUT": 38
+      }
+    }
+  ],
+  "cambios_salud": [
+    {
+      "s": 0,
+      "estado": 200
+    },
+    {
+      "s": 70,
+      "estado": "UND_ERR_SOCKET"
+    },
+    {
+      "s": 71,
+      "estado": 200
+    },
+    {
+      "s": 127,
+      "estado": "ECONNREFUSED"
+    },
+    {
+      "s": 155.1,
+      "estado": "TimeoutError"
+    },
+    {
+      "s": 170.1,
+      "estado": 200
+    }
+  ],
   "ventanas": [
     {
       "desde": 0,

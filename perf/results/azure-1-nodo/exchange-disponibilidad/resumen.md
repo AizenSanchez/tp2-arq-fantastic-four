@@ -48,12 +48,28 @@ mínimo 300 ms · p50 314 ms · p95 328 ms
 
 ## Efecto de cada falla
 
-Segundos desde el inicio de la carga. t_rec: hasta el primer segundo de 3 seguidos sin fallas propias.
+Segundos desde el inicio de la corrida. t_rec: hasta el primer segundo de 3 seguidos sin fallas propias, contando cada pedido en el segundo en que salió. Primera respuesta: cuándo le vuelve a llegar una respuesta a un pedido que salió después de la falla.
 
-| falla | plan (s) | real (s) | restaurada (s) | fallas propias desde-hasta (s) | t_rec (s) | t_rec desde la restauración (s) | pedidos afectados (perdidos / 5xx) | atendidos > 2 s | latencia máx (ms) | /health no 200 (s) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| kill-9 | 60 | 69 | — | 68–70 | 2 | — | 26 (26 / 0) | 0 | 1824 | 1 (70–70) |
-| pm2-stop | 120 | 126 | 155 | 126–161 | 36 | 7 | 709 (709 / 0) | 134 | 8754 | 43 (127–169) |
+| falla | plan (s) | real (s) | restaurada (s) | fallas propias desde-hasta (s) | t_rec (s) | t_rec desde la restauración (s) | primera respuesta (s) | sin respuestas desde la falla / la restauración (s) | pedidos afectados (perdidos / 5xx) | atendidos > 2 s | latencia máx (ms) | /health no 200 (s) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| kill-9 | 60 | 69 | — | 68–70 | 2 | — | 70.9 | 1 / — | 26 (26 / 0) | 0 | 1824 | 1 (70–70) |
+| pm2-stop | 120 | 126 | 155 | 126–161 | 36 | 7 | 169.2 | 43.1 / 13.8 | 709 (709 / 0) | 134 | 8754 | 43 (127–169) |
+
+## Errores de Artillery por período (cuándo ocurrió el error, no cuándo salió el pedido)
+
+| período (s) | errores |
+| --- | --- |
+| 69–79 | `{"errors.ECONNRESET":23,"errors.ECONNREFUSED":3}` |
+| 119–129 | `{"errors.ECONNREFUSED":65}` |
+| 129–139 | `{"errors.ECONNREFUSED":203}` |
+| 139–149 | `{"errors.ECONNREFUSED":200}` |
+| 149–159 | `{"errors.ECONNREFUSED":85}` |
+| 159–169 | `{"errors.ERR_SOCKET_TIMEOUT":118}` |
+| 169–179 | `{"errors.ERR_SOCKET_TIMEOUT":38}` |
+
+## Cambios de estado del monitor de /health
+
+0 s → 200 · 70 s → UND_ERR_SOCKET · 71 s → 200 · 127 s → ECONNREFUSED · 155.1 s → TimeoutError · 170.1 s → 200
 
 ## Ventanas de 10 s
 
