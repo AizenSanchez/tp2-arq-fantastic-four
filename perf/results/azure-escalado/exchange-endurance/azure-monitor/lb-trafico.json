@@ -1,0 +1,558 @@
+{
+  "cost": 51,
+  "interval": "PT1M",
+  "namespace": "Microsoft.Network/loadBalancers",
+  "resourceregion": "eastus2",
+  "timespan": "2026-11-18T14:46:58Z/2026-11-18T15:04:12Z",
+  "value": [
+    {
+      "displayDescription": "Total number of SYN Packets transmitted within time period",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "SYN Count",
+        "value": "SYNCount"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "timeStamp": "2026-11-18T14:46:00Z",
+              "total": 0
+            },
+            {
+              "timeStamp": "2026-11-18T14:47:00Z",
+              "total": 0
+            },
+            {
+              "timeStamp": "2026-11-18T14:48:00Z",
+              "total": 3
+            },
+            {
+              "timeStamp": "2026-11-18T14:49:00Z",
+              "total": 0
+            },
+            {
+              "timeStamp": "2026-11-18T14:50:00Z",
+              "total": 1080
+            },
+            {
+              "timeStamp": "2026-11-18T14:51:00Z",
+              "total": 4822
+            },
+            {
+              "timeStamp": "2026-11-18T14:52:00Z",
+              "total": 4784
+            },
+            {
+              "timeStamp": "2026-11-18T14:53:00Z",
+              "total": 4827
+            },
+            {
+              "timeStamp": "2026-11-18T14:54:00Z",
+              "total": 4783
+            },
+            {
+              "timeStamp": "2026-11-18T14:55:00Z",
+              "total": 4823
+            },
+            {
+              "timeStamp": "2026-11-18T14:56:00Z",
+              "total": 4781
+            },
+            {
+              "timeStamp": "2026-11-18T14:57:00Z",
+              "total": 4827
+            },
+            {
+              "timeStamp": "2026-11-18T14:58:00Z",
+              "total": 4789
+            },
+            {
+              "timeStamp": "2026-11-18T14:59:00Z",
+              "total": 4781
+            },
+            {
+              "timeStamp": "2026-11-18T15:00:00Z",
+              "total": 5823
+            },
+            {
+              "timeStamp": "2026-11-18T15:01:00Z",
+              "total": 9647
+            },
+            {
+              "timeStamp": "2026-11-18T15:02:00Z",
+              "total": 9499
+            },
+            {
+              "timeStamp": "2026-11-18T15:03:00Z",
+              "total": 7388
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "Direction",
+                "value": "Direction"
+              },
+              "value": "In"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "timeStamp": "2026-11-18T14:46:00Z",
+              "total": 2
+            },
+            {
+              "timeStamp": "2026-11-18T14:47:00Z",
+              "total": 4
+            },
+            {
+              "timeStamp": "2026-11-18T14:48:00Z",
+              "total": 4
+            },
+            {
+              "timeStamp": "2026-11-18T14:49:00Z",
+              "total": 2
+            },
+            {
+              "timeStamp": "2026-11-18T14:50:00Z",
+              "total": 4
+            },
+            {
+              "timeStamp": "2026-11-18T14:51:00Z",
+              "total": 2
+            },
+            {
+              "timeStamp": "2026-11-18T14:52:00Z",
+              "total": 54
+            },
+            {
+              "timeStamp": "2026-11-18T14:53:00Z",
+              "total": 2
+            },
+            {
+              "timeStamp": "2026-11-18T14:54:00Z",
+              "total": 2
+            },
+            {
+              "timeStamp": "2026-11-18T14:55:00Z",
+              "total": 3
+            },
+            {
+              "timeStamp": "2026-11-18T14:56:00Z",
+              "total": 2
+            },
+            {
+              "timeStamp": "2026-11-18T14:57:00Z",
+              "total": 2
+            },
+            {
+              "timeStamp": "2026-11-18T14:58:00Z",
+              "total": 2
+            },
+            {
+              "timeStamp": "2026-11-18T14:59:00Z",
+              "total": 2
+            },
+            {
+              "timeStamp": "2026-11-18T15:00:00Z",
+              "total": 2
+            },
+            {
+              "timeStamp": "2026-11-18T15:01:00Z",
+              "total": 8
+            },
+            {
+              "timeStamp": "2026-11-18T15:02:00Z",
+              "total": 58
+            },
+            {
+              "timeStamp": "2026-11-18T15:03:00Z",
+              "total": 4
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "Direction",
+                "value": "Direction"
+              },
+              "value": "Out"
+            }
+          ]
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Count"
+    },
+    {
+      "displayDescription": "Total number of Bytes transmitted within time period",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "Byte Count",
+        "value": "ByteCount"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "timeStamp": "2026-11-18T14:46:00Z",
+              "total": 87611
+            },
+            {
+              "timeStamp": "2026-11-18T14:47:00Z",
+              "total": 99549
+            },
+            {
+              "timeStamp": "2026-11-18T14:48:00Z",
+              "total": 88660
+            },
+            {
+              "timeStamp": "2026-11-18T14:49:00Z",
+              "total": 85943
+            },
+            {
+              "timeStamp": "2026-11-18T14:50:00Z",
+              "total": 2748007
+            },
+            {
+              "timeStamp": "2026-11-18T14:51:00Z",
+              "total": 13112601
+            },
+            {
+              "timeStamp": "2026-11-18T14:52:00Z",
+              "total": 13212697
+            },
+            {
+              "timeStamp": "2026-11-18T14:53:00Z",
+              "total": 13109057
+            },
+            {
+              "timeStamp": "2026-11-18T14:54:00Z",
+              "total": 12969717
+            },
+            {
+              "timeStamp": "2026-11-18T14:55:00Z",
+              "total": 13137588
+            },
+            {
+              "timeStamp": "2026-11-18T14:56:00Z",
+              "total": 12999032
+            },
+            {
+              "timeStamp": "2026-11-18T14:57:00Z",
+              "total": 13121653
+            },
+            {
+              "timeStamp": "2026-11-18T14:58:00Z",
+              "total": 13037154
+            },
+            {
+              "timeStamp": "2026-11-18T14:59:00Z",
+              "total": 12963845
+            },
+            {
+              "timeStamp": "2026-11-18T15:00:00Z",
+              "total": 15563133
+            },
+            {
+              "timeStamp": "2026-11-18T15:01:00Z",
+              "total": 26071127
+            },
+            {
+              "timeStamp": "2026-11-18T15:02:00Z",
+              "total": 25833475
+            },
+            {
+              "timeStamp": "2026-11-18T15:03:00Z",
+              "total": 20315998
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "Direction",
+                "value": "Direction"
+              },
+              "value": "Out"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "timeStamp": "2026-11-18T14:46:00Z",
+              "total": 18407
+            },
+            {
+              "timeStamp": "2026-11-18T14:47:00Z",
+              "total": 27040
+            },
+            {
+              "timeStamp": "2026-11-18T14:48:00Z",
+              "total": 27440
+            },
+            {
+              "timeStamp": "2026-11-18T14:49:00Z",
+              "total": 17816
+            },
+            {
+              "timeStamp": "2026-11-18T14:50:00Z",
+              "total": 2543206
+            },
+            {
+              "timeStamp": "2026-11-18T14:51:00Z",
+              "total": 12318049
+            },
+            {
+              "timeStamp": "2026-11-18T14:52:00Z",
+              "total": 12486838
+            },
+            {
+              "timeStamp": "2026-11-18T14:53:00Z",
+              "total": 12320660
+            },
+            {
+              "timeStamp": "2026-11-18T14:54:00Z",
+              "total": 12199006
+            },
+            {
+              "timeStamp": "2026-11-18T14:55:00Z",
+              "total": 12342869
+            },
+            {
+              "timeStamp": "2026-11-18T14:56:00Z",
+              "total": 12206254
+            },
+            {
+              "timeStamp": "2026-11-18T14:57:00Z",
+              "total": 12336856
+            },
+            {
+              "timeStamp": "2026-11-18T14:58:00Z",
+              "total": 12239609
+            },
+            {
+              "timeStamp": "2026-11-18T14:59:00Z",
+              "total": 12174586
+            },
+            {
+              "timeStamp": "2026-11-18T15:00:00Z",
+              "total": 14671174
+            },
+            {
+              "timeStamp": "2026-11-18T15:01:00Z",
+              "total": 24540256
+            },
+            {
+              "timeStamp": "2026-11-18T15:02:00Z",
+              "total": 26478985
+            },
+            {
+              "timeStamp": "2026-11-18T15:03:00Z",
+              "total": 19046770
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "Direction",
+                "value": "Direction"
+              },
+              "value": "In"
+            }
+          ]
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Bytes"
+    },
+    {
+      "displayDescription": "Total number of Packets transmitted within time period",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "Packet Count",
+        "value": "PacketCount"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "timeStamp": "2026-11-18T14:46:00Z",
+              "total": 121
+            },
+            {
+              "timeStamp": "2026-11-18T14:47:00Z",
+              "total": 144
+            },
+            {
+              "timeStamp": "2026-11-18T14:48:00Z",
+              "total": 146
+            },
+            {
+              "timeStamp": "2026-11-18T14:49:00Z",
+              "total": 116
+            },
+            {
+              "timeStamp": "2026-11-18T14:50:00Z",
+              "total": 14138
+            },
+            {
+              "timeStamp": "2026-11-18T14:51:00Z",
+              "total": 72482
+            },
+            {
+              "timeStamp": "2026-11-18T14:52:00Z",
+              "total": 72624
+            },
+            {
+              "timeStamp": "2026-11-18T14:53:00Z",
+              "total": 72733
+            },
+            {
+              "timeStamp": "2026-11-18T14:54:00Z",
+              "total": 71881
+            },
+            {
+              "timeStamp": "2026-11-18T14:55:00Z",
+              "total": 72609
+            },
+            {
+              "timeStamp": "2026-11-18T14:56:00Z",
+              "total": 71871
+            },
+            {
+              "timeStamp": "2026-11-18T14:57:00Z",
+              "total": 72485
+            },
+            {
+              "timeStamp": "2026-11-18T14:58:00Z",
+              "total": 72025
+            },
+            {
+              "timeStamp": "2026-11-18T14:59:00Z",
+              "total": 71770
+            },
+            {
+              "timeStamp": "2026-11-18T15:00:00Z",
+              "total": 85423
+            },
+            {
+              "timeStamp": "2026-11-18T15:01:00Z",
+              "total": 144035
+            },
+            {
+              "timeStamp": "2026-11-18T15:02:00Z",
+              "total": 143956
+            },
+            {
+              "timeStamp": "2026-11-18T15:03:00Z",
+              "total": 113753
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "Direction",
+                "value": "Direction"
+              },
+              "value": "In"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "timeStamp": "2026-11-18T14:46:00Z",
+              "total": 165
+            },
+            {
+              "timeStamp": "2026-11-18T14:47:00Z",
+              "total": 197
+            },
+            {
+              "timeStamp": "2026-11-18T14:48:00Z",
+              "total": 192
+            },
+            {
+              "timeStamp": "2026-11-18T14:49:00Z",
+              "total": 163
+            },
+            {
+              "timeStamp": "2026-11-18T14:50:00Z",
+              "total": 12677
+            },
+            {
+              "timeStamp": "2026-11-18T14:51:00Z",
+              "total": 63429
+            },
+            {
+              "timeStamp": "2026-11-18T14:52:00Z",
+              "total": 63731
+            },
+            {
+              "timeStamp": "2026-11-18T14:53:00Z",
+              "total": 63752
+            },
+            {
+              "timeStamp": "2026-11-18T14:54:00Z",
+              "total": 62776
+            },
+            {
+              "timeStamp": "2026-11-18T14:55:00Z",
+              "total": 63683
+            },
+            {
+              "timeStamp": "2026-11-18T14:56:00Z",
+              "total": 62867
+            },
+            {
+              "timeStamp": "2026-11-18T14:57:00Z",
+              "total": 63442
+            },
+            {
+              "timeStamp": "2026-11-18T14:58:00Z",
+              "total": 63030
+            },
+            {
+              "timeStamp": "2026-11-18T14:59:00Z",
+              "total": 62871
+            },
+            {
+              "timeStamp": "2026-11-18T15:00:00Z",
+              "total": 75103
+            },
+            {
+              "timeStamp": "2026-11-18T15:01:00Z",
+              "total": 126296
+            },
+            {
+              "timeStamp": "2026-11-18T15:02:00Z",
+              "total": 125165
+            },
+            {
+              "timeStamp": "2026-11-18T15:03:00Z",
+              "total": 99227
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "Direction",
+                "value": "Direction"
+              },
+              "value": "Out"
+            }
+          ]
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Count"
+    }
+  ]
+}

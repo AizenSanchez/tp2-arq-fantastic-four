@@ -1,0 +1,556 @@
+{
+  "caso": "azure-escalado",
+  "corrida": "exchange-endurance",
+  "entorno": "azure",
+  "rtt": {
+    "reutilizada": {
+      "p50_ms": 143.8,
+      "p95_ms": 145.6
+    },
+    "nueva": {
+      "p50_ms": 296.6,
+      "p95_ms": 302.7,
+      "connect_p50_ms": 152.3
+    }
+  },
+  "recorte_s": {
+    "inicio": 5,
+    "fin": 2
+  },
+  "fases": [
+    {
+      "nombre": "endurance-80",
+      "tipo": "endurance",
+      "rate": 80,
+      "duracion": 600,
+      "desde_s": 0,
+      "hasta_s": 600,
+      "ventana_s": [
+        5,
+        598
+      ],
+      "segundos": 593,
+      "rate_nominal": 80,
+      "ofrecidos": 47440,
+      "enviados": 47442,
+      "enviados_por_s": 80,
+      "respuestas": 47442,
+      "respuestas_por_s": 80,
+      "por_s": {
+        "200": 49.5,
+        "403": 25.4,
+        "503": 5.1,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "cuentas": {
+        "200": 29377,
+        "403": 15045,
+        "503": 3020,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "otro_2xx_3xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "pct_403_de_respuestas": 31.7,
+      "pct_503_de_respuestas": 6.4,
+      "errores_propios": 0,
+      "pct_errores_propios": 0,
+      "pct_respuestas_de_ofrecido": 100,
+      "lat_200": {
+        "p50": 1272,
+        "p95": 1485,
+        "p99": 1571
+      },
+      "lat_403": {
+        "p50": 673,
+        "p95": 832
+      },
+      "motivos_503": {
+        "http_5xx": 3020
+      },
+      "recursos": null,
+      "condiciones": {
+        "errores": true,
+        "respuestas": true,
+        "latencia": true
+      },
+      "cumple": true,
+      "por_nodo": {
+        "tp2vmss000000": {
+          "respuestas": 23523,
+          "pct": 49.6,
+          "p50_200": 1273,
+          "p95_200": 1485
+        },
+        "tp2vmss000001": {
+          "respuestas": 23919,
+          "pct": 50.4,
+          "p50_200": 1272,
+          "p95_200": 1485
+        }
+      }
+    },
+    {
+      "nombre": "tramo-160",
+      "tipo": "tramo",
+      "rate": 160,
+      "duracion": 180,
+      "desde_s": 600,
+      "hasta_s": 780,
+      "ventana_s": [
+        605,
+        778
+      ],
+      "segundos": 173,
+      "rate_nominal": 160,
+      "ofrecidos": 27680,
+      "enviados": 27682,
+      "enviados_por_s": 160,
+      "respuestas": 27506,
+      "respuestas_por_s": 159,
+      "por_s": {
+        "200": 97.7,
+        "403": 51.4,
+        "503": 9.9,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "timeout": 1,
+        "conexion": 0
+      },
+      "cuentas": {
+        "200": 16901,
+        "403": 8886,
+        "503": 1719,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "otro_2xx_3xx": 0,
+        "timeout": 176,
+        "conexion": 0
+      },
+      "pct_403_de_respuestas": 32.3,
+      "pct_503_de_respuestas": 6.2,
+      "errores_propios": 176,
+      "pct_errores_propios": 0.6,
+      "pct_respuestas_de_ofrecido": 99.4,
+      "lat_200": {
+        "p50": 1283,
+        "p95": 1513,
+        "p99": 1676
+      },
+      "lat_403": {
+        "p50": 682,
+        "p95": 866
+      },
+      "motivos_503": {
+        "http_5xx": 1719
+      },
+      "recursos": null,
+      "condiciones": {
+        "errores": true,
+        "respuestas": true,
+        "latencia": true
+      },
+      "cumple": true,
+      "por_nodo": {
+        "tp2vmss000000": {
+          "respuestas": 13532,
+          "pct": 49.2,
+          "p50_200": 1281,
+          "p95_200": 1511
+        },
+        "tp2vmss000001": {
+          "respuestas": 13974,
+          "pct": 50.8,
+          "p50_200": 1285,
+          "p95_200": 1514
+        }
+      }
+    }
+  ],
+  "nodos": [
+    "tp2vmss000000",
+    "tp2vmss000001"
+  ],
+  "endurance": {
+    "pendiente_p95": {
+      "endurance-80": {
+        "pendiente_ms_por_min": -0.7,
+        "r2": 0.19,
+        "n": 10
+      },
+      "tramo-160": {
+        "pendiente_ms_por_min": -4.5,
+        "r2": 0.15,
+        "n": 3
+      }
+    },
+    "memoria": {},
+    "minutos": [
+      {
+        "minuto": 0,
+        "fase": "endurance-80",
+        "enviados": 4792,
+        "errores_propios": 0,
+        "p50_200": 1270,
+        "p95_200": 1496,
+        "mem_app_mib": null,
+        "mem_redis_mib": null,
+        "por_nodo": {
+          "tp2vmss000000": {
+            "respuestas": 2326,
+            "pct": 48.5,
+            "p50_200": 1273,
+            "p95_200": 1491
+          },
+          "tp2vmss000001": {
+            "respuestas": 2466,
+            "pct": 51.5,
+            "p50_200": 1268,
+            "p95_200": 1502
+          }
+        }
+      },
+      {
+        "minuto": 1,
+        "fase": "endurance-80",
+        "enviados": 4800,
+        "errores_propios": 0,
+        "p50_200": 1276,
+        "p95_200": 1488,
+        "mem_app_mib": null,
+        "mem_redis_mib": null,
+        "por_nodo": {
+          "tp2vmss000000": {
+            "respuestas": 2358,
+            "pct": 49.1,
+            "p50_200": 1271,
+            "p95_200": 1482
+          },
+          "tp2vmss000001": {
+            "respuestas": 2442,
+            "pct": 50.9,
+            "p50_200": 1283,
+            "p95_200": 1491
+          }
+        }
+      },
+      {
+        "minuto": 2,
+        "fase": "endurance-80",
+        "enviados": 4801,
+        "errores_propios": 0,
+        "p50_200": 1278,
+        "p95_200": 1481,
+        "mem_app_mib": null,
+        "mem_redis_mib": null,
+        "por_nodo": {
+          "tp2vmss000000": {
+            "respuestas": 2422,
+            "pct": 50.4,
+            "p50_200": 1277,
+            "p95_200": 1480
+          },
+          "tp2vmss000001": {
+            "respuestas": 2379,
+            "pct": 49.6,
+            "p50_200": 1278,
+            "p95_200": 1484
+          }
+        }
+      },
+      {
+        "minuto": 3,
+        "fase": "endurance-80",
+        "enviados": 4800,
+        "errores_propios": 0,
+        "p50_200": 1273,
+        "p95_200": 1488,
+        "mem_app_mib": null,
+        "mem_redis_mib": null,
+        "por_nodo": {
+          "tp2vmss000000": {
+            "respuestas": 2405,
+            "pct": 50.1,
+            "p50_200": 1268,
+            "p95_200": 1489
+          },
+          "tp2vmss000001": {
+            "respuestas": 2395,
+            "pct": 49.9,
+            "p50_200": 1274,
+            "p95_200": 1486
+          }
+        }
+      },
+      {
+        "minuto": 4,
+        "fase": "endurance-80",
+        "enviados": 4800,
+        "errores_propios": 0,
+        "p50_200": 1270,
+        "p95_200": 1483,
+        "mem_app_mib": null,
+        "mem_redis_mib": null,
+        "por_nodo": {
+          "tp2vmss000000": {
+            "respuestas": 2405,
+            "pct": 50.1,
+            "p50_200": 1273,
+            "p95_200": 1483
+          },
+          "tp2vmss000001": {
+            "respuestas": 2395,
+            "pct": 49.9,
+            "p50_200": 1268,
+            "p95_200": 1481
+          }
+        }
+      },
+      {
+        "minuto": 5,
+        "fase": "endurance-80",
+        "enviados": 4800,
+        "errores_propios": 0,
+        "p50_200": 1270,
+        "p95_200": 1485,
+        "mem_app_mib": null,
+        "mem_redis_mib": null,
+        "por_nodo": {
+          "tp2vmss000000": {
+            "respuestas": 2344,
+            "pct": 48.8,
+            "p50_200": 1270,
+            "p95_200": 1484
+          },
+          "tp2vmss000001": {
+            "respuestas": 2456,
+            "pct": 51.2,
+            "p50_200": 1269,
+            "p95_200": 1485
+          }
+        }
+      },
+      {
+        "minuto": 6,
+        "fase": "endurance-80",
+        "enviados": 4801,
+        "errores_propios": 0,
+        "p50_200": 1272,
+        "p95_200": 1482,
+        "mem_app_mib": null,
+        "mem_redis_mib": null,
+        "por_nodo": {
+          "tp2vmss000000": {
+            "respuestas": 2370,
+            "pct": 49.4,
+            "p50_200": 1273,
+            "p95_200": 1485
+          },
+          "tp2vmss000001": {
+            "respuestas": 2431,
+            "pct": 50.6,
+            "p50_200": 1269,
+            "p95_200": 1477
+          }
+        }
+      },
+      {
+        "minuto": 7,
+        "fase": "endurance-80",
+        "enviados": 4800,
+        "errores_propios": 0,
+        "p50_200": 1269,
+        "p95_200": 1480,
+        "mem_app_mib": null,
+        "mem_redis_mib": null,
+        "por_nodo": {
+          "tp2vmss000000": {
+            "respuestas": 2370,
+            "pct": 49.4,
+            "p50_200": 1270,
+            "p95_200": 1486
+          },
+          "tp2vmss000001": {
+            "respuestas": 2430,
+            "pct": 50.6,
+            "p50_200": 1269,
+            "p95_200": 1471
+          }
+        }
+      },
+      {
+        "minuto": 8,
+        "fase": "endurance-80",
+        "enviados": 4800,
+        "errores_propios": 0,
+        "p50_200": 1272,
+        "p95_200": 1488,
+        "mem_app_mib": null,
+        "mem_redis_mib": null,
+        "por_nodo": {
+          "tp2vmss000000": {
+            "respuestas": 2371,
+            "pct": 49.4,
+            "p50_200": 1272,
+            "p95_200": 1489
+          },
+          "tp2vmss000001": {
+            "respuestas": 2429,
+            "pct": 50.6,
+            "p50_200": 1272,
+            "p95_200": 1485
+          }
+        }
+      },
+      {
+        "minuto": 9,
+        "fase": "endurance-80",
+        "enviados": 4802,
+        "errores_propios": 0,
+        "p50_200": 1271,
+        "p95_200": 1486,
+        "mem_app_mib": null,
+        "mem_redis_mib": null,
+        "por_nodo": {
+          "tp2vmss000000": {
+            "respuestas": 2424,
+            "pct": 50.5,
+            "p50_200": 1279,
+            "p95_200": 1486
+          },
+          "tp2vmss000001": {
+            "respuestas": 2378,
+            "pct": 49.5,
+            "p50_200": 1262,
+            "p95_200": 1486
+          }
+        }
+      },
+      {
+        "minuto": 10,
+        "fase": "tramo-160",
+        "enviados": 9596,
+        "errores_propios": 0,
+        "p50_200": 1283,
+        "p95_200": 1510,
+        "mem_app_mib": null,
+        "mem_redis_mib": null,
+        "por_nodo": {
+          "tp2vmss000000": {
+            "respuestas": 4670,
+            "pct": 48.7,
+            "p50_200": 1282,
+            "p95_200": 1511
+          },
+          "tp2vmss000001": {
+            "respuestas": 4926,
+            "pct": 51.3,
+            "p50_200": 1284,
+            "p95_200": 1509
+          }
+        }
+      },
+      {
+        "minuto": 11,
+        "fase": "tramo-160",
+        "enviados": 9601,
+        "errores_propios": 0,
+        "p50_200": 1285,
+        "p95_200": 1524,
+        "mem_app_mib": null,
+        "mem_redis_mib": null,
+        "por_nodo": {
+          "tp2vmss000000": {
+            "respuestas": 4771,
+            "pct": 49.7,
+            "p50_200": 1282,
+            "p95_200": 1519
+          },
+          "tp2vmss000001": {
+            "respuestas": 4830,
+            "pct": 50.3,
+            "p50_200": 1289,
+            "p95_200": 1528
+          }
+        }
+      },
+      {
+        "minuto": 12,
+        "fase": "tramo-160",
+        "enviados": 9597,
+        "errores_propios": 176,
+        "p50_200": 1278,
+        "p95_200": 1501,
+        "mem_app_mib": null,
+        "mem_redis_mib": null,
+        "por_nodo": {
+          "tp2vmss000000": {
+            "respuestas": 4647,
+            "pct": 49.3,
+            "p50_200": 1277,
+            "p95_200": 1501
+          },
+          "tp2vmss000001": {
+            "respuestas": 4774,
+            "pct": 50.7,
+            "p50_200": 1280,
+            "p95_200": 1504
+          }
+        }
+      },
+      {
+        "minuto": 13,
+        "fase": "fin",
+        "enviados": 10,
+        "errores_propios": 0,
+        "p50_200": 1262,
+        "p95_200": 1388,
+        "mem_app_mib": null,
+        "mem_redis_mib": null,
+        "por_nodo": {
+          "tp2vmss000000": {
+            "respuestas": 3,
+            "pct": 30,
+            "p50_200": 1340,
+            "p95_200": 1340
+          },
+          "tp2vmss000001": {
+            "respuestas": 7,
+            "pct": 70,
+            "p50_200": 1262,
+            "p95_200": 1388
+          }
+        }
+      }
+    ]
+  },
+  "artillery": {
+    "response_time_2xx": {
+      "n": 47307,
+      "p50": 1130.2,
+      "p95": 1326.4,
+      "p99": 1408.4
+    },
+    "response_time_4xx": {
+      "n": 24467,
+      "p50": 518.1,
+      "p95": 671.9,
+      "p99": 727.9
+    },
+    "codigos": {
+      "http.codes.403": 24467,
+      "http.codes.200": 47307,
+      "http.codes.503": 4850
+    },
+    "errores": {
+      "errors.ERR_SOCKET_TIMEOUT": 176
+    },
+    "escenarios_creados": 76800,
+    "escenarios_fallidos": 176,
+    "lineas_en_pedidos_jsonl": 76800
+  }
+}

@@ -1,0 +1,16 @@
+corrida: exchange-endurance   caso: azure-escalado   entorno: azure   target: http://aqvautmvnv.eastus2.cloudapp.azure.com
+inicio UTC: 2026-11-18T14:48:58.206Z
+fin UTC: 2026-11-18T15:02:12.765Z
+zona horaria: UTC
+fases: [{"nombre":"endurance-80","tipo":"endurance","rate":80,"duracion":600},{"nombre":"tramo-160","tipo":"tramo","rate":160,"duracion":180}]
+RTT de base (GET /): conexion reutilizada p50 143.8 ms, p95 145.6 ms; conexion nueva p50 296.6 ms, p95 302.7 ms
+commit: c171d498c45957d12ad7894c0c526227933aec84
+git status --porcelain (sin perf/results):
+(vacio)
+artillery: Artillery: 2.0.34
+node: v24.22.3   maquina: DESKTOP-BV02RG7 (8 CPU, 8 GiB)   conexion: wifi
+terraform output vmss_instances: 2
+terraform output vmss_sku: "Standard_F1als_v7"
+terraform output redis_sku: "Balanced_B0"
+region: eastus2 (default de variables.tf)
+codigo de salida de artillery: 0

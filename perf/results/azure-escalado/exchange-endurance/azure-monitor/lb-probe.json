@@ -1,0 +1,192 @@
+{
+  "cost": 17,
+  "interval": "PT1M",
+  "namespace": "Microsoft.Network/loadBalancers",
+  "resourceregion": "eastus2",
+  "timespan": "2026-11-18T14:46:58Z/2026-11-18T15:04:12Z",
+  "value": [
+    {
+      "displayDescription": "Average Load Balancer health probe status per time duration",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "Health Probe Status",
+        "value": "DipAvailability"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:46:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:47:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:48:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:49:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:50:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:51:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:52:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:53:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:54:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:55:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:56:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:57:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:58:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:59:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T15:00:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T15:01:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T15:02:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T15:03:00Z"
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "BackendIPAddress",
+                "value": "BackendIPAddress"
+              },
+              "value": "10.0.2.4"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:46:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:47:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:48:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:49:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:50:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:51:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:52:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:53:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:54:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:55:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:56:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:57:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:58:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T14:59:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T15:00:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T15:01:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T15:02:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T15:03:00Z"
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "BackendIPAddress",
+                "value": "BackendIPAddress"
+              },
+              "value": "10.0.2.5"
+            }
+          ]
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Count"
+    }
+  ]
+}
