@@ -1,0 +1,160 @@
+{
+  "escenario": "exchange-integridad-duplicados",
+  "caso": "azure-2-nodos",
+  "entorno": "azure",
+  "resultado": "INVARIANTE ROTA",
+  "inicioUTC": "2026-11-18T15:46:38.401Z",
+  "finUTC": "2026-11-18T15:46:49.451Z",
+  "nodos": [
+    "http://qhybdyddqz.eastus2.cloudapp.azure.com"
+  ],
+  "pedidos": 299,
+  "respuestasPorEstado": {
+    "200": 125,
+    "403": 66,
+    "409": 101,
+    "503": 7
+  },
+  "pedidosPorNodo": {
+    "tp2vmss000001": 299
+  },
+  "latenciaPorEstado": {
+    "200": {
+      "n": 125,
+      "mediana": 906,
+      "p95": 1293
+    },
+    "403": {
+      "n": 66,
+      "mediana": 153,
+      "p95": 636
+    },
+    "409": {
+      "n": 101,
+      "mediana": 146,
+      "p95": 297
+    },
+    "503": {
+      "n": 7,
+      "mediana": 251,
+      "p95": 260
+    }
+  },
+  "pares": 99,
+  "paresConUn409": 99,
+  "ganadores": {
+    "200": 59,
+    "403": 33,
+    "503": 7
+  },
+  "paresEnNodosDistintos": 0,
+  "latencia409": {
+    "n": 101,
+    "mediana": 146,
+    "p95": 297
+  },
+  "comprobaciones": [
+    {
+      "tipo": "exacta",
+      "nombre": "todos los pedidos tienen respuesta registrada",
+      "ok": false,
+      "detalle": "299 de 300"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "sin errores propios (otros estados, timeouts, conexiones caidas)",
+      "ok": false,
+      "detalle": "otros estados: 0, errores de Artillery: 1, estados: {\"200\":125,\"403\":66,\"409\":101,\"503\":7}"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "el saldo de USD nunca fue negativo",
+      "ok": true,
+      "detalle": "minimo visto: 59955.717118308 en 11 lecturas"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "hay 100 pares con sus tres respuestas",
+      "ok": false,
+      "detalle": "99"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "pares con exactamente un 409 (en la nube puede haber diferencia de llegada)",
+      "ok": true,
+      "detalle": "99 (rango 95 a 100)"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "ningun par con dos 409",
+      "ok": true,
+      "detalle": "0 esperado"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "todo 409 lleva Retry-After: 1",
+      "ok": true,
+      "detalle": "101 respuestas 409"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "si el ganador fue 200 o 403, el otro pedido (si no fue 409) devolvio lo mismo",
+      "ok": true,
+      "detalle": "99 de 99"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "el tercer pedido repite la respuesta del ganador (200 o 403), mismo id",
+      "ok": true,
+      "detalle": "92 de 92"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "entradas del log con ok:true = aprobaciones distintas",
+      "ok": false,
+      "detalle": "67 contra 66"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "entradas nuevas del log = respuestas distintas + 503 (el que pierde con 409 no genera entrada)",
+      "ok": false,
+      "detalle": "107 contra 106"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "saldo de USD varia en -(suma de lo aprobado)",
+      "ok": true,
+      "detalle": "44.282881692000956 contra 44.28288169200264"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "saldo de ARS varia en +(suma de lo aprobado)",
+      "ok": true,
+      "detalle": "67000 contra 67000"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "ganador 200",
+      "ok": true,
+      "detalle": "59 (rango 52 a 76)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "ganador 403",
+      "ok": true,
+      "detalle": "33 (rango 18 a 42)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "ganador 503",
+      "ok": true,
+      "detalle": "7 (rango 1 a 12)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "mediana de un 409 (RTT + 5 ms)",
+      "ok": false,
+      "detalle": "146 (rango 290.3 a 350.3)"
+    }
+  ]
+}

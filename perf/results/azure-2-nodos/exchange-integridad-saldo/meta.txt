@@ -1,0 +1,23 @@
+escenario: exchange-integridad-saldo
+caso: azure-2-nodos
+entorno: azure
+inicio UTC: 2026-11-18T15:33:17.218Z
+fin UTC: 2026-11-18T15:34:11.179Z
+nodos: http://qhybdyddqz.eastus2.cloudapp.azure.com
+commit: 1ca79d00a92f9138c53bc1a4af7e6c7365bc437f
+git status --porcelain (sin perf/results):
+?? evidencia/azure-2-nodos/terraform-output.txt
+?? evidencia/azure-2-nodos/terraform-state-list.txt
+?? evidencia/azure-2-nodos/vmss-list-instances.txt
+?? tfplan2
+artillery: Artillery: 2.0.34
+node: v22.22.0
+maquina: 192.168.1.51
+conexion: wifi
+RTT de base (GET /): conexion reutilizada p50 141.8 ms, p95 143 ms; conexion nueva p50 288.9 ms, p95 427.8 ms
+RTT usado para comparar con las predicciones (ms): 288.9
+terraform output vmss_instances: 2
+terraform output vmss_sku: "Standard_F1als_v7"
+terraform output redis_sku: "Balanced_B0"
+region: eastus2
+zona horaria: America/Buenos_Aires

@@ -1,0 +1,5 @@
+rango: 2026-11-18T15:44:38.401Z a 2026-11-18T15:48:49.451Z (la corrida, con 2 min antes y despues), grano 1 min
+redis: Microsoft.Cache/redisEnterprise, metricas usedmemory, operationsPerSecond, percentProcessorTime, agregaciones Maximum, Average
+arca: Microsoft.ContainerInstance/containerGroups, metricas CpuUsage, MemoryUsage, agregaciones Average, Maximum
+CpuUsage de ACI esta en milicores (0,5 vCPU = 500). usedmemory y MemoryUsage en bytes.
+para volver a exportar: az monitor metrics list --resource <id> --metrics ... --interval PT1M --start-time 2026-11-18T15:44:38.401Z --end-time 2026-11-18T15:48:49.451Z

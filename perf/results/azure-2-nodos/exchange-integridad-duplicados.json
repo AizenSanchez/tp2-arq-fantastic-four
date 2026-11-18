@@ -1,0 +1,6 @@
+{
+  "motor": "propio",
+  "pares": 100,
+  "paresPorSegundo": 10,
+  "erroresDelLanzador": 1
+}
