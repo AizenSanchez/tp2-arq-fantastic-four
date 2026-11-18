@@ -47,7 +47,7 @@ variable "machine_sku" {
 }
 
 variable "node_instances" {
-  default = 1
+  default = 2
 }
 
 variable "redis_sku" {
