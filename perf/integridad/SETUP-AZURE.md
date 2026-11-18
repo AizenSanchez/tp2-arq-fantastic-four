@@ -20,16 +20,16 @@ En esta máquina ya están instalados Terraform 1.13.5 y Ansible 2.22 con `datad
 
 ## 2. Cuentas y secretos (👤)
 
-1. **Azure for Students** con el mail de la facultad. Después:
+1. **Cuenta de Azure.** Sirve una cuenta gratuita con crédito de prueba (US$ 200) o Azure for Students. En la gratuita, Azure no cobra durante la prueba: los servicios se pausan al terminar o al agotarse el crédito. **Nunca apretar *Upgrade to pay-as-you-go***: es lo único que la convierte en cuenta de pago. Después:
    ```bash
    az login                                   # abre el navegador
    az account show --query '{estado:state, nombre:name}' -o table
    az account show --query id -o tsv          # este es azure_sid (no es un secreto, pero tampoco se publica)
    az provider register --namespace Microsoft.Cache
    az provider register --namespace Microsoft.ContainerInstance
-   az vm list-usage --location eastus2 -o table | grep -i "Standard BS"   # hacen falta 3 vCPU de la familia B (jumpbox + 2 nodos)
+   az vm list-usage --location eastus2 -o table | grep -iE "Total Regional|Falsv7"   # hacen falta 3 vCPU (jumpbox + 2 nodos); una cuenta gratuita suele tener 4 por region
    ```
-2. **Par de claves SSH en el portal**: crear el grupo de recursos `keys` y dentro un recurso *SSH key* llamado `ssh_key` (*Generate new key pair*).
+2. **Par de claves SSH** (se puede hacer por terminal, sin que la privada se muestre nunca: `ssh-keygen -t rsa -b 4096 -m PEM -N "" -f key.pem`, y registrar solo la pública con `az group create -n keys -l eastus2` y `az sshkey create -g keys -n ssh_key --public-key @key.pem.pub`). Equivale a hacerlo en el portal: crear el grupo de recursos `keys` y dentro un recurso *SSH key* llamado `ssh_key` (*Generate new key pair*).
    Se descarga la clave privada **una sola vez**: guardarla como `key.pem` en la raíz del repo y `chmod 400 key.pem`.
 3. **Docker Hub**: cuenta gratuita y un token *Public Repo Read-only* (Account settings → Personal access tokens). Azure lo usa para bajar `arqsoft/arca:1.0.0`.
 4. **Datadog**: cuenta (pack de estudiante de GitHub o prueba de 14 días) y una **API key** (Organization Settings → API Keys). Anotar el *sitio*
@@ -37,6 +37,7 @@ En esta máquina ya están instalados Terraform 1.13.5 y Ansible 2.22 con `datad
 5. **`terraform.tfvars`** en la raíz del repo, escrito por la persona:
    ```properties
    azure_sid          = "<id de suscripcion>"
+   machine_sku        = "Standard_F1als_v7"   # ver el punto 3
    datadog_key        = "<API key de Datadog>"
    dockerhub_username = "<usuario>"
    dockerhub_token    = "<token>"
@@ -46,6 +47,7 @@ En esta máquina ya están instalados Terraform 1.13.5 y Ansible 2.22 con `datad
 
 - **Sitio de Datadog.** `ansible/vmss_setup.yml` tiene `datadog_site: "us5.datadoghq.com"`. Si tu cuenta es de otro sitio, cambialo **solo en tu copia** (no commitear) y exportá el mismo
   valor para Artillery: `export DATADOG_API_HOST=<tu sitio>`.
+- **Tamaño de las VMs (`machine_sku`).** El repo trae `Standard_B1s`, pero **en `eastus2` no está disponible para todas las suscripciones** (en la de Santiago no aparece, y Leticia y Aizen midieron con `Standard_F1als_v7`). Comprobarlo antes de desplegar: `az vm list-skus -l eastus2 --size Standard_B1s --resource-type virtualMachines -o table` (tarda un minuto; si no devuelve nada, no está). Se cambia en `terraform.tfvars` sin tocar código. Usar el mismo SKU que el resto del grupo hace comparables las mediciones. Cuesta ≈ US$ 0,06 por hora por VM (la B1s, 0,01): el despliegue completo con 2 nodos ronda US$ 0,26 por hora.
 - **Región.** El default es `eastus2`. Si `Standard_B1s` o Azure Managed Redis no están disponibles en tu suscripción, usar `westus2`: `-var region=westus2` en cada `terraform plan` / `apply`.
 
 ## 4. Rama de medición (🤖)
