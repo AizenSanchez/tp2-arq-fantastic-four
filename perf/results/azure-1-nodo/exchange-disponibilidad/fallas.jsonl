@@ -1,0 +1,3 @@
+{"falla":"kill-9","planificado_s":60,"t_lanzado":1794966700351,"t_nodo":1794966710183,"t_vuelta":1794966711040,"error":null,"salida":"1794966710183"}
+{"falla":"pm2-stop","planificado_s":120,"t_lanzado":1794966760350,"t_nodo":1794966766440,"t_vuelta":1794966769016,"error":null,"salida":"1794966766440"}
+{"falla":"pm2-start","planificado_s":150,"t_lanzado":1794966790350,"t_nodo":1794966795749,"t_vuelta":1794966796610,"error":null,"salida":"1794966795749"}

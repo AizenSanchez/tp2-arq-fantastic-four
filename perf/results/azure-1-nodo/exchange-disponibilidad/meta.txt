@@ -1,0 +1,13 @@
+caso: azure-1-nodo   entorno: azure   target: http://gunegfcioh.eastus2.cloudapp.azure.com
+inicio UTC: 2026-11-18T01:50:40.350Z
+fin UTC: 2026-11-18T01:54:31.044Z
+zona horaria: America/Buenos_Aires
+carga: 20 pedidos/s durante 200 s   fallas: kill-9@60s pm2-stop@120s pm2-start@150s   nodo: vmss[0]
+commit: 124070173bf1d8ee4fb0edc9b06e7e8c40f5f837
+git status --porcelain (sin perf/results):
+?? "Plan TP 2 \342\200\224 arVault en Azure (por integrante).pdf"
+?? "Plan TP 2 \342\200\224 versi\303\263n ag\303\251ntica (delegar en Claude).pdf"
+?? catalogo_tp1_a_tp2.md
+artillery: Artillery: 2.0.34
+node: v24.22.3   maquina: aizen-OMEN-by-HP-Laptop-16-b0xxx   conexion: cable
+codigo de salida de artillery: 0
