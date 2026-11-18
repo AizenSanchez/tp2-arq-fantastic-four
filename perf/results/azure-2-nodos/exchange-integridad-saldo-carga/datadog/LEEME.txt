@@ -4,3 +4,4 @@ Filtro: test = exchange-integridad-saldo-carga. Las metricas de la app, de ARCA 
 URL: https://us5.datadoghq.com/dashboard/hqx-a77-75c?from_ts=1795016466646&to_ts=1795016640911&live=false&tpl_var_test%5B0%5D=exchange-integridad-saldo-carga
 01-artillery: pedidos por segundo ofrecidos y respuestas por codigo.  02-latencia-y-app: latencias de Artillery y tiempos de la app.  03-nodos: memoria y red por nodo.
 En 03-nodos se ven los dos hosts (tp2vmss000000 y tp2vmss000001) con trafico de red simultaneo.
+04-cpu-nodos: CPU por nodo (system.cpu.user y system.cpu.system, % de un nucleo) y CPU robada. Valores marcados en el panel: usuario 7,85 % y sistema 2,36 % en el pico, en cada uno de los 2 nodos (100 pedidos por segundo).
