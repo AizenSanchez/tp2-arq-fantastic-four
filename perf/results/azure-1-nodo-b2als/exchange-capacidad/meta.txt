@@ -1,0 +1,16 @@
+corrida: exchange-capacidad   caso: azure-1-nodo-b2als   entorno: azure   target: http://pliokzzsno.northcentralus.cloudapp.azure.com
+inicio UTC: 2026-11-18T00:56:43.608Z
+fin UTC: 2026-11-18T01:08:04.362Z
+zona horaria: UTC
+fases: [{"nombre":"escalon-10","tipo":"escalon","rate":10,"duracion":60},{"nombre":"escalon-20","tipo":"escalon","rate":20,"duracion":60},{"nombre":"escalon-40","tipo":"escalon","rate":40,"duracion":60},{"nombre":"escalon-80","tipo":"escalon","rate":80,"duracion":60},{"nombre":"escalon-120","tipo":"escalon","rate":120,"duracion":60},{"nombre":"escalon-160","tipo":"escalon","rate":160,"duracion":60},{"nombre":"escalon-200","tipo":"escalon","rate":200,"duracion":60},{"nombre":"escalon-240","tipo":"escalon","rate":240,"duracion":60},{"nombre":"escalon-320","tipo":"escalon","rate":320,"duracion":60},{"nombre":"bajada-20","tipo":"bajada","rate":20,"duracion":120}]
+RTT de base (GET /): conexion reutilizada p50 160.3 ms, p95 164.1 ms; conexion nueva p50 324.9 ms, p95 340.2 ms
+commit: ?
+git status --porcelain (sin perf/results):
+?
+artillery: Artillery: 2.0.34
+node: v24.22.3   maquina: generadora (12 CPU, 16 GiB)   conexion: cable
+terraform output vmss_instances: ?
+terraform output vmss_sku: ?
+terraform output redis_sku: ?
+region: northcentralus
+codigo de salida de artillery: 0
