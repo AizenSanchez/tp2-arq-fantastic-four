@@ -436,9 +436,11 @@ if (escenario === "duplicados") {
   const ganadores = grupos.map((g) => noCuatrocientosNueve(g)[0]).filter(Boolean);
   const todos409 = pedidos.filter((p) => p.status === 409);
   // si el ganador fue 200 o 403 y el otro NO recibio 409 (ya habia terminado), tiene que haber recibido lo mismo
+  // un 503 libera la clave: otro pedido con la misma clave puede correr despues y aprobarse, asi que lo que no puede pasar
+  // es que los dos pedidos reciban una respuesta guardada (200 o 403) y sean distintas
   const sinLio = grupos.filter((g) => {
-    const [primero, segundo] = noCuatrocientosNueve(g);
-    return !segundo || ![200, 403].includes(primero.status) || (segundo.status === primero.status && segundo.id === primero.id);
+    const guardadas = [g[1], g[2]].filter((p) => [200, 403].includes(p.status));
+    return guardadas.length < 2 || (guardadas[0].status === guardadas[1].status && guardadas[0].id === guardadas[1].id);
   });
   const idsAprobados = new Set(pedidos.filter((p) => p.status === 200).map((p) => p.id));
   const idsRespuestas = new Set(pedidos.filter((p) => [200, 403].includes(p.status)).map((p) => p.id));
@@ -456,7 +458,7 @@ if (escenario === "duplicados") {
   else esperada("pares con exactamente un 409 (en la nube puede haber diferencia de llegada)", unSolo409.length, 95, pares);
   exacta("ningun par con dos 409", grupos.filter((g) => g[1].status === 409 && g[2].status === 409).length === 0, "0 esperado");
   exacta("todo 409 lleva Retry-After: 1", todos409.length > 0 && todos409.every((p) => p.retryAfter === "1"), `${todos409.length} respuestas 409`);
-  exacta("si el ganador fue 200 o 403, el otro pedido (si no fue 409) devolvio lo mismo", sinLio.length === grupos.length, `${sinLio.length} de ${grupos.length}`);
+  exacta("si los dos pedidos reciben una respuesta guardada (200 o 403), es la misma (mismo id)", sinLio.length === grupos.length, `${sinLio.length} de ${grupos.length}`);
   exacta("el tercer pedido repite la respuesta del ganador (200 o 403), mismo id", terceros.length > 0 && tercerosIguales.length === terceros.length, `${tercerosIguales.length} de ${terceros.length}`);
   exacta("entradas del log con ok:true = aprobaciones distintas", okLog.length === idsAprobados.size, `${okLog.length} contra ${idsAprobados.size}`);
   exacta("entradas nuevas del log = respuestas distintas + 503 (el que pierde con 409 no genera entrada)", nuevas.length === idsRespuestas.size + n(502, 503), `${nuevas.length} contra ${idsRespuestas.size + n(502, 503)}`);
