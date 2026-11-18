@@ -185,7 +185,6 @@ const inicio = new Date();
 let codigo = 0;
 let erroresDelLanzador = 0;
 
-// motor propio: dos pedidos iguales a la vez con la misma Idempotency-Key, y despues un tercero
 async function lanzarDuplicados() {
   const { pares, paresPorSegundo } = ESCENARIOS[escenario];
   const archivo = path.join(extras, "pedidos.jsonl");
@@ -211,8 +210,8 @@ async function lanzarDuplicados() {
       await dormir((i * 1000) / paresPorSegundo);
       const key = crypto.randomUUID();
       const dni = dniAlAzar();
-      await Promise.all([pedir(key, dni, 1), pedir(key, dni, 2)]); // a la vez
-      await pedir(key, dni, 3); // despues, uno solo
+      await Promise.all([pedir(key, dni, 1), pedir(key, dni, 2)]);
+      await pedir(key, dni, 3);
     })
   );
   fs.writeFileSync(rawArtillery, JSON.stringify({ motor: "propio", pares, paresPorSegundo, erroresDelLanzador }, null, 2) + "\n");
