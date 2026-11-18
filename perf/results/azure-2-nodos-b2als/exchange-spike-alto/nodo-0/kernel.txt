@@ -1,0 +1,22 @@
+# tp2vmss000000, sudo dmesg, lineas de conntrack, leido a las 03:51 UTC:
+(ninguna)
+
+# nstat -az, contadores de TCP desde el arranque del nodo
+TcpPassiveOpens                 39566              0.0
+TcpAttemptFails                 149                0.0
+TcpEstabResets                  22                 0.0
+TcpRetransSegs                  2359               0.0
+TcpExtSyncookiesSent            503                0.0
+TcpExtSyncookiesRecv            1716               0.0
+TcpExtSyncookiesFailed          0                  0.0
+TcpExtListenOverflows           17788              0.0
+TcpExtListenDrops               17788              0.0
+TcpExtTCPTimeouts               2347               0.0
+TcpExtTCPAbortOnData            28                 0.0
+TcpExtTCPAbortOnClose           11                 0.0
+TcpExtTCPAbortOnMemory          0                  0.0
+TcpExtTCPAbortOnTimeout         0                  0.0
+TcpExtTCPAbortOnLinger          0                  0.0
+TcpExtTCPBacklogDrop            0                  0.0
+TcpExtTCPReqQFullDrop           0                  0.0
+TcpExtTCPSynRetrans             2345               0.0

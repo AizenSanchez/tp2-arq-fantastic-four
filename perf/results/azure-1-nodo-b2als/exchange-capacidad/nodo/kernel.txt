@@ -1,0 +1,5 @@
+sudo dmesg | grep -c "table full", leido a las 01:14 UTC (574 lineas en el buffer desde el arranque): 0
+65536
+nstat -az (contadores desde el arranque del nodo):
+TcpExtListenOverflows           0                  0.0
+TcpExtListenDrops               0                  0.0

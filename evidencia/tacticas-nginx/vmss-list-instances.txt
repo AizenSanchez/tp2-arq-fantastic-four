@@ -1,0 +1,3 @@
+InstanceId    LatestModelApplied    Location        ModelDefinitionApplied    Name       ProvisioningState    ResilientVMDeletionStatus    ResourceGroup       TimeCreated                        VmId
+------------  --------------------  --------------  ------------------------  ---------  -------------------  ---------------------------  ------------------  ---------------------------------  ------------------------------------
+0             True                  northcentralus  VirtualMachineScaleSet    tp2vmss_0  Succeeded            Disabled                     tp2_resource_group  2026-11-18T00:21:57.5325696+00:00  260b7079-c4b9-414a-8be7-007b1c1e2fa2

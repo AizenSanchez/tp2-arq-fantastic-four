@@ -1,0 +1,4 @@
+sudo dmesg | grep -c "table full": 0
+nstat -az (contadores desde el arranque del nodo):
+TcpExtListenOverflows           0                  0.0
+TcpExtListenDrops               0                  0.0

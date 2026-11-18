@@ -1,0 +1,121 @@
+{
+  "cost": 28,
+  "interval": "PT1M",
+  "namespace": "Microsoft.ContainerInstance/containerGroups",
+  "resourceregion": "northcentralus",
+  "timespan": "2026-11-18T02:55:23Z/2026-11-18T03:03:04Z",
+  "value": [
+    {
+      "displayDescription": "CPU usage on all cores in millicores.",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "CPU Usage",
+        "value": "CpuUsage"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 1.0,
+              "maximum": 2.0,
+              "timeStamp": "2026-11-18T02:55:00Z"
+            },
+            {
+              "average": 0.0,
+              "maximum": 0.0,
+              "timeStamp": "2026-11-18T02:56:00Z"
+            },
+            {
+              "average": 0.0,
+              "maximum": 0.0,
+              "timeStamp": "2026-11-18T02:57:00Z"
+            },
+            {
+              "average": 0.0,
+              "maximum": 0.0,
+              "timeStamp": "2026-11-18T02:58:00Z"
+            },
+            {
+              "average": 12.0,
+              "maximum": 14.0,
+              "timeStamp": "2026-11-18T02:59:00Z"
+            },
+            {
+              "average": 80.0,
+              "maximum": 140.0,
+              "timeStamp": "2026-11-18T03:00:00Z"
+            },
+            {
+              "average": 12.5,
+              "maximum": 13.0,
+              "timeStamp": "2026-11-18T03:01:00Z"
+            },
+            {
+              "timeStamp": "2026-11-18T03:02:00Z"
+            }
+          ],
+          "metadatavalues": []
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Count"
+    },
+    {
+      "displayDescription": "Total memory usage in byte.",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "Memory Usage",
+        "value": "MemoryUsage"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 20496384.0,
+              "maximum": 20512768.0,
+              "timeStamp": "2026-11-18T02:55:00Z"
+            },
+            {
+              "average": 20486144.0,
+              "maximum": 20488192.0,
+              "timeStamp": "2026-11-18T02:56:00Z"
+            },
+            {
+              "average": 20490240.0,
+              "maximum": 20492288.0,
+              "timeStamp": "2026-11-18T02:57:00Z"
+            },
+            {
+              "average": 20496384.0,
+              "maximum": 20496384.0,
+              "timeStamp": "2026-11-18T02:58:00Z"
+            },
+            {
+              "average": 49891328.0,
+              "maximum": 61788160.0,
+              "timeStamp": "2026-11-18T02:59:00Z"
+            },
+            {
+              "average": 65957888.0,
+              "maximum": 66265088.0,
+              "timeStamp": "2026-11-18T03:00:00Z"
+            },
+            {
+              "average": 61300736.0,
+              "maximum": 61300736.0,
+              "timeStamp": "2026-11-18T03:01:00Z"
+            },
+            {
+              "timeStamp": "2026-11-18T03:02:00Z"
+            }
+          ],
+          "metadatavalues": []
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Bytes"
+    }
+  ]
+}

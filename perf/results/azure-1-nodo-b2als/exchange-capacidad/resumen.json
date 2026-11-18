@@ -1,0 +1,847 @@
+{
+  "caso": "azure-1-nodo-b2als",
+  "corrida": "exchange-capacidad",
+  "entorno": "azure",
+  "rtt": {
+    "reutilizada": {
+      "p50_ms": 160.3,
+      "p95_ms": 164.1
+    },
+    "nueva": {
+      "p50_ms": 324.9,
+      "p95_ms": 340.2,
+      "connect_p50_ms": 163.1
+    }
+  },
+  "recorte_s": {
+    "inicio": 5,
+    "fin": 2
+  },
+  "fases": [
+    {
+      "nombre": "escalon-10",
+      "tipo": "escalon",
+      "rate": 10,
+      "duracion": 60,
+      "desde_s": 0,
+      "hasta_s": 60,
+      "ventana_s": [
+        5,
+        58
+      ],
+      "segundos": 53,
+      "rate_nominal": 10,
+      "ofrecidos": 530,
+      "enviados": 530,
+      "enviados_por_s": 10,
+      "respuestas": 530,
+      "respuestas_por_s": 10,
+      "por_s": {
+        "200": 6.3,
+        "403": 3.1,
+        "503": 0.6,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "cuentas": {
+        "200": 334,
+        "403": 166,
+        "503": 30,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "otro_2xx_3xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "pct_403_de_respuestas": 31.3,
+      "pct_503_de_respuestas": 5.7,
+      "errores_propios": 0,
+      "pct_errores_propios": 0,
+      "pct_respuestas_de_ofrecido": 100,
+      "lat_200": {
+        "p50": 1309,
+        "p95": 1513,
+        "p99": 1613
+      },
+      "lat_403": {
+        "p50": 676,
+        "p95": 871
+      },
+      "motivos_503": {
+        "http_5xx": 30
+      },
+      "recursos": null,
+      "condiciones": {
+        "errores": true,
+        "respuestas": true,
+        "latencia": true
+      },
+      "cumple": true
+    },
+    {
+      "nombre": "escalon-20",
+      "tipo": "escalon",
+      "rate": 20,
+      "duracion": 60,
+      "desde_s": 60,
+      "hasta_s": 120,
+      "ventana_s": [
+        65,
+        118
+      ],
+      "segundos": 53,
+      "rate_nominal": 20,
+      "ofrecidos": 1060,
+      "enviados": 1060,
+      "enviados_por_s": 20,
+      "respuestas": 1060,
+      "respuestas_por_s": 20,
+      "por_s": {
+        "200": 12.2,
+        "403": 6.4,
+        "503": 1.4,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "cuentas": {
+        "200": 647,
+        "403": 341,
+        "503": 72,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "otro_2xx_3xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "pct_403_de_respuestas": 32.2,
+      "pct_503_de_respuestas": 6.8,
+      "errores_propios": 0,
+      "pct_errores_propios": 0,
+      "pct_respuestas_de_ofrecido": 100,
+      "lat_200": {
+        "p50": 1295,
+        "p95": 1523,
+        "p99": 1615
+      },
+      "lat_403": {
+        "p50": 694,
+        "p95": 848
+      },
+      "motivos_503": {
+        "http_5xx": 72
+      },
+      "recursos": null,
+      "condiciones": {
+        "errores": true,
+        "respuestas": true,
+        "latencia": true
+      },
+      "cumple": true
+    },
+    {
+      "nombre": "escalon-40",
+      "tipo": "escalon",
+      "rate": 40,
+      "duracion": 60,
+      "desde_s": 120,
+      "hasta_s": 180,
+      "ventana_s": [
+        125,
+        178
+      ],
+      "segundos": 53,
+      "rate_nominal": 40,
+      "ofrecidos": 2120,
+      "enviados": 2120,
+      "enviados_por_s": 40,
+      "respuestas": 2120,
+      "respuestas_por_s": 40,
+      "por_s": {
+        "200": 25.2,
+        "403": 12.2,
+        "503": 2.6,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "cuentas": {
+        "200": 1333,
+        "403": 647,
+        "503": 140,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "otro_2xx_3xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "pct_403_de_respuestas": 30.5,
+      "pct_503_de_respuestas": 6.6,
+      "errores_propios": 0,
+      "pct_errores_propios": 0,
+      "pct_respuestas_de_ofrecido": 100,
+      "lat_200": {
+        "p50": 1298,
+        "p95": 1555,
+        "p99": 2018
+      },
+      "lat_403": {
+        "p50": 707,
+        "p95": 910
+      },
+      "motivos_503": {
+        "http_5xx": 140
+      },
+      "recursos": null,
+      "condiciones": {
+        "errores": true,
+        "respuestas": true,
+        "latencia": true
+      },
+      "cumple": true
+    },
+    {
+      "nombre": "escalon-80",
+      "tipo": "escalon",
+      "rate": 80,
+      "duracion": 60,
+      "desde_s": 180,
+      "hasta_s": 240,
+      "ventana_s": [
+        185,
+        238
+      ],
+      "segundos": 53,
+      "rate_nominal": 80,
+      "ofrecidos": 4240,
+      "enviados": 4240,
+      "enviados_por_s": 80,
+      "respuestas": 4240,
+      "respuestas_por_s": 80,
+      "por_s": {
+        "200": 49.2,
+        "403": 25.5,
+        "503": 5.3,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "cuentas": {
+        "200": 2606,
+        "403": 1354,
+        "503": 280,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "otro_2xx_3xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "pct_403_de_respuestas": 31.9,
+      "pct_503_de_respuestas": 6.6,
+      "errores_propios": 0,
+      "pct_errores_propios": 0,
+      "pct_respuestas_de_ofrecido": 100,
+      "lat_200": {
+        "p50": 1293,
+        "p95": 1501,
+        "p99": 1571
+      },
+      "lat_403": {
+        "p50": 696,
+        "p95": 861
+      },
+      "motivos_503": {
+        "http_5xx": 280
+      },
+      "recursos": null,
+      "condiciones": {
+        "errores": true,
+        "respuestas": true,
+        "latencia": true
+      },
+      "cumple": true
+    },
+    {
+      "nombre": "escalon-120",
+      "tipo": "escalon",
+      "rate": 120,
+      "duracion": 60,
+      "desde_s": 240,
+      "hasta_s": 300,
+      "ventana_s": [
+        245,
+        298
+      ],
+      "segundos": 53,
+      "rate_nominal": 120,
+      "ofrecidos": 6360,
+      "enviados": 6360,
+      "enviados_por_s": 120,
+      "respuestas": 6360,
+      "respuestas_por_s": 120,
+      "por_s": {
+        "200": 73.9,
+        "403": 38.1,
+        "503": 7.9,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "cuentas": {
+        "200": 3919,
+        "403": 2020,
+        "503": 421,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "otro_2xx_3xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "pct_403_de_respuestas": 31.8,
+      "pct_503_de_respuestas": 6.6,
+      "errores_propios": 0,
+      "pct_errores_propios": 0,
+      "pct_respuestas_de_ofrecido": 100,
+      "lat_200": {
+        "p50": 1296,
+        "p95": 1510,
+        "p99": 1588
+      },
+      "lat_403": {
+        "p50": 702,
+        "p95": 864
+      },
+      "motivos_503": {
+        "http_5xx": 421
+      },
+      "recursos": null,
+      "condiciones": {
+        "errores": true,
+        "respuestas": true,
+        "latencia": true
+      },
+      "cumple": true
+    },
+    {
+      "nombre": "escalon-160",
+      "tipo": "escalon",
+      "rate": 160,
+      "duracion": 60,
+      "desde_s": 300,
+      "hasta_s": 360,
+      "ventana_s": [
+        305,
+        358
+      ],
+      "segundos": 53,
+      "rate_nominal": 160,
+      "ofrecidos": 8480,
+      "enviados": 8481,
+      "enviados_por_s": 160,
+      "respuestas": 8481,
+      "respuestas_por_s": 160,
+      "por_s": {
+        "200": 99.2,
+        "403": 51,
+        "503": 9.8,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "cuentas": {
+        "200": 5258,
+        "403": 2705,
+        "503": 518,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "otro_2xx_3xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "pct_403_de_respuestas": 31.9,
+      "pct_503_de_respuestas": 6.1,
+      "errores_propios": 0,
+      "pct_errores_propios": 0,
+      "pct_respuestas_de_ofrecido": 100,
+      "lat_200": {
+        "p50": 1295,
+        "p95": 1511,
+        "p99": 1590
+      },
+      "lat_403": {
+        "p50": 697,
+        "p95": 851
+      },
+      "motivos_503": {
+        "http_5xx": 518
+      },
+      "recursos": null,
+      "condiciones": {
+        "errores": true,
+        "respuestas": true,
+        "latencia": true
+      },
+      "cumple": true
+    },
+    {
+      "nombre": "escalon-200",
+      "tipo": "escalon",
+      "rate": 200,
+      "duracion": 60,
+      "desde_s": 360,
+      "hasta_s": 420,
+      "ventana_s": [
+        365,
+        418
+      ],
+      "segundos": 53,
+      "rate_nominal": 200,
+      "ofrecidos": 10600,
+      "enviados": 10600,
+      "enviados_por_s": 200,
+      "respuestas": 10600,
+      "respuestas_por_s": 200,
+      "por_s": {
+        "200": 123,
+        "403": 65,
+        "503": 12,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "cuentas": {
+        "200": 6518,
+        "403": 3444,
+        "503": 638,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "otro_2xx_3xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "pct_403_de_respuestas": 32.5,
+      "pct_503_de_respuestas": 6,
+      "errores_propios": 0,
+      "pct_errores_propios": 0,
+      "pct_respuestas_de_ofrecido": 100,
+      "lat_200": {
+        "p50": 1295,
+        "p95": 1505,
+        "p99": 1576
+      },
+      "lat_403": {
+        "p50": 692,
+        "p95": 853
+      },
+      "motivos_503": {
+        "http_5xx": 638
+      },
+      "recursos": null,
+      "condiciones": {
+        "errores": true,
+        "respuestas": true,
+        "latencia": true
+      },
+      "cumple": true
+    },
+    {
+      "nombre": "escalon-240",
+      "tipo": "escalon",
+      "rate": 240,
+      "duracion": 60,
+      "desde_s": 420,
+      "hasta_s": 480,
+      "ventana_s": [
+        425,
+        478
+      ],
+      "segundos": 53,
+      "rate_nominal": 240,
+      "ofrecidos": 12720,
+      "enviados": 12720,
+      "enviados_por_s": 240,
+      "respuestas": 12720,
+      "respuestas_por_s": 240,
+      "por_s": {
+        "200": 149.9,
+        "403": 75.6,
+        "503": 14.5,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "cuentas": {
+        "200": 7947,
+        "403": 4007,
+        "503": 766,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "otro_2xx_3xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "pct_403_de_respuestas": 31.5,
+      "pct_503_de_respuestas": 6,
+      "errores_propios": 0,
+      "pct_errores_propios": 0,
+      "pct_respuestas_de_ofrecido": 100,
+      "lat_200": {
+        "p50": 1300,
+        "p95": 1511,
+        "p99": 1593
+      },
+      "lat_403": {
+        "p50": 699,
+        "p95": 847
+      },
+      "motivos_503": {
+        "http_5xx": 766
+      },
+      "recursos": null,
+      "condiciones": {
+        "errores": true,
+        "respuestas": true,
+        "latencia": true
+      },
+      "cumple": true
+    },
+    {
+      "nombre": "escalon-320",
+      "tipo": "escalon",
+      "rate": 320,
+      "duracion": 60,
+      "desde_s": 480,
+      "hasta_s": 540,
+      "ventana_s": [
+        485,
+        538
+      ],
+      "segundos": 53,
+      "rate_nominal": 320,
+      "ofrecidos": 16960,
+      "enviados": 16960,
+      "enviados_por_s": 320,
+      "respuestas": 16960,
+      "respuestas_por_s": 320,
+      "por_s": {
+        "200": 196.3,
+        "403": 102.9,
+        "503": 20.8,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "cuentas": {
+        "200": 10402,
+        "403": 5454,
+        "503": 1104,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "otro_2xx_3xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "pct_403_de_respuestas": 32.2,
+      "pct_503_de_respuestas": 6.5,
+      "errores_propios": 0,
+      "pct_errores_propios": 0,
+      "pct_respuestas_de_ofrecido": 100,
+      "lat_200": {
+        "p50": 1305,
+        "p95": 1520,
+        "p99": 1594
+      },
+      "lat_403": {
+        "p50": 702,
+        "p95": 865
+      },
+      "motivos_503": {
+        "http_5xx": 1104
+      },
+      "recursos": null,
+      "condiciones": {
+        "errores": true,
+        "respuestas": true,
+        "latencia": true
+      },
+      "cumple": true
+    },
+    {
+      "nombre": "bajada-20",
+      "tipo": "bajada",
+      "rate": 20,
+      "duracion": 120,
+      "desde_s": 540,
+      "hasta_s": 660,
+      "ventana_s": [
+        545,
+        658
+      ],
+      "segundos": 113,
+      "rate_nominal": 20,
+      "ofrecidos": 2260,
+      "enviados": 2260,
+      "enviados_por_s": 20,
+      "respuestas": 2260,
+      "respuestas_por_s": 20,
+      "por_s": {
+        "200": 12.7,
+        "403": 6.2,
+        "503": 1.2,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "cuentas": {
+        "200": 1430,
+        "403": 696,
+        "503": 134,
+        "otro_4xx": 0,
+        "otro_5xx": 0,
+        "otro_2xx_3xx": 0,
+        "timeout": 0,
+        "conexion": 0
+      },
+      "pct_403_de_respuestas": 30.8,
+      "pct_503_de_respuestas": 5.9,
+      "errores_propios": 0,
+      "pct_errores_propios": 0,
+      "pct_respuestas_de_ofrecido": 100,
+      "lat_200": {
+        "p50": 1300,
+        "p95": 1506,
+        "p99": 1576
+      },
+      "lat_403": {
+        "p50": 707,
+        "p95": 867
+      },
+      "motivos_503": {
+        "http_5xx": 134
+      },
+      "recursos": null,
+      "condiciones": {
+        "errores": true,
+        "respuestas": true,
+        "latencia": true
+      },
+      "cumple": true
+    }
+  ],
+  "throughput_sostenido": {
+    "B_pedidos_por_s": 320,
+    "p95_ref_ms": 1513,
+    "primer_escalon_que_no_cumple": null,
+    "B_es_el_escalon_mas_alto": true,
+    "no_monotono": false
+  },
+  "recuperacion": {
+    "rate_bajada": 20,
+    "umbral_p95_ms": 1815.6,
+    "segundos": 0,
+    "ventanas": [
+      {
+        "desde_s": 540,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1503,
+        "desde_bajada_s": 0
+      },
+      {
+        "desde_s": 545,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1502,
+        "desde_bajada_s": 5
+      },
+      {
+        "desde_s": 550,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1499,
+        "desde_bajada_s": 10
+      },
+      {
+        "desde_s": 555,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1480,
+        "desde_bajada_s": 15
+      },
+      {
+        "desde_s": 560,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1527,
+        "desde_bajada_s": 20
+      },
+      {
+        "desde_s": 565,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1515,
+        "desde_bajada_s": 25
+      },
+      {
+        "desde_s": 570,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1502,
+        "desde_bajada_s": 30
+      },
+      {
+        "desde_s": 575,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1495,
+        "desde_bajada_s": 35
+      },
+      {
+        "desde_s": 580,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1517,
+        "desde_bajada_s": 40
+      },
+      {
+        "desde_s": 585,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1509,
+        "desde_bajada_s": 45
+      },
+      {
+        "desde_s": 590,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1479,
+        "desde_bajada_s": 50
+      },
+      {
+        "desde_s": 595,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1469,
+        "desde_bajada_s": 55
+      },
+      {
+        "desde_s": 600,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1498,
+        "desde_bajada_s": 60
+      },
+      {
+        "desde_s": 605,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1484,
+        "desde_bajada_s": 65
+      },
+      {
+        "desde_s": 610,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1508,
+        "desde_bajada_s": 70
+      },
+      {
+        "desde_s": 615,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1547,
+        "desde_bajada_s": 75
+      },
+      {
+        "desde_s": 620,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1531,
+        "desde_bajada_s": 80
+      },
+      {
+        "desde_s": 625,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1470,
+        "desde_bajada_s": 85
+      },
+      {
+        "desde_s": 630,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1505,
+        "desde_bajada_s": 90
+      },
+      {
+        "desde_s": 635,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1527,
+        "desde_bajada_s": 95
+      },
+      {
+        "desde_s": 640,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1561,
+        "desde_bajada_s": 100
+      },
+      {
+        "desde_s": 645,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1537,
+        "desde_bajada_s": 105
+      },
+      {
+        "desde_s": 650,
+        "enviados": 100,
+        "errores_propios": 0,
+        "p95_200": 1449,
+        "desde_bajada_s": 110
+      },
+      {
+        "desde_s": 655,
+        "enviados": 90,
+        "errores_propios": 0,
+        "p95_200": 1487,
+        "desde_bajada_s": 115
+      }
+    ]
+  },
+  "artillery": {
+    "response_time_2xx": {
+      "n": 45573,
+      "p50": 1130.2,
+      "p95": 1353.1,
+      "p99": 1436.8
+    },
+    "response_time_4xx": {
+      "n": 23582,
+      "p50": 539.2,
+      "p95": 699.4,
+      "p99": 757.6
+    },
+    "codigos": {
+      "http.codes.200": 45573,
+      "http.codes.403": 23582,
+      "http.codes.503": 4645
+    },
+    "errores": {},
+    "escenarios_creados": 73800,
+    "escenarios_fallidos": 0,
+    "lineas_en_pedidos_jsonl": 73800
+  }
+}

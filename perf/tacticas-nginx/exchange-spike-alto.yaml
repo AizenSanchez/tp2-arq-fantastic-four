@@ -1,0 +1,39 @@
+# E7 alto: el E7 del TP1 con un pico de 6B (720 req/s), por encima del techo de 1 nodo B2als_v2 (unos 570 req/s
+# de CPU), para ver qué pasa sin el limit_req de nginx cuando el pico excede. solo ARS a USD, como E7.
+config:
+  target: "{{ $processEnvironment.TARGET }}"
+  http:
+    timeout: 10
+  phases:
+    - name: "Carga normal 24 req/s"
+      duration: 60
+      arrivalRate: 24
+    - name: "Corrida cambiaria 6B 720 req/s"
+      duration: 20
+      arrivalRate: 720
+    - name: "Vuelta a la normalidad 24 req/s"
+      duration: 120
+      arrivalRate: 24
+  plugins:
+    publish-metrics:
+      - type: datadog
+        apiKey: "{{ $processEnvironment.DATADOG_API_KEY }}"
+        apiHost: "us5.datadoghq.com"
+        prefix: "artillery."
+        event:
+          send: false
+        tags:
+          - "test:exchange-spike-alto"
+
+scenarios:
+  - name: "ARS -> USD"
+    flow:
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "ARS"
+            counterCurrency: "USD"
+            baseAmount: 1000
+            baseAccountId: 101
+            counterAccountId: 102
+            dni: "{{ $randomNumber(1000000, 99999999) }}"
