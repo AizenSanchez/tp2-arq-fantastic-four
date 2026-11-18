@@ -1,3 +1,4 @@
+import os from "os";
 import express from "express";
 import connectDatadog from "connect-datadog";
 import StatsD from "hot-shots";
@@ -57,6 +58,12 @@ const arca = createArcaClient({
 metrics.start((await getAccounts()).map((account) => account.currency));
 
 const app = express();
+
+//which node answered: with several nodes behind the load balancer this is the only way to see it from outside
+app.use((req, res, next) => {
+  res.set("X-Node", os.hostname());
+  next();
+});
 
 app.use((req, res, next) => {
   const start = process.hrtime.bigint();

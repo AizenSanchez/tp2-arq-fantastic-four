@@ -1,0 +1,5 @@
+SIGINT received, shutting down
+Exchange API listening on port 3000
+Exchange API listening on port 3000
+SIGINT received, shutting down
+Exchange API listening on port 3000

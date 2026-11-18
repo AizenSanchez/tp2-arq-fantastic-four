@@ -1,0 +1,5 @@
+{"falla":"kill-9","planificado_s":60,"t_lanzado":1794969555396,"t_nodo":1794969571918,"t_vuelta":1794969572781,"error":null,"salida":"1794969571918"}
+{"falla":"pm2-stop","planificado_s":120,"t_lanzado":1794969615395,"t_nodo":1794969621990,"t_vuelta":1794969624611,"error":null,"salida":"1794969621990"}
+{"falla":"pm2-start","planificado_s":150,"t_lanzado":1794969645395,"t_nodo":1794969650867,"t_vuelta":1794969651735,"error":null,"salida":"1794969650867"}
+{"falla":"kill-STOP","planificado_s":210,"t_lanzado":1794969705396,"t_nodo":1794969710804,"t_vuelta":1794969711667,"error":null,"salida":"1794969710804"}
+{"falla":"kill-CONT","planificado_s":240,"t_lanzado":1794969735395,"t_nodo":1794969740967,"t_vuelta":1794969741838,"error":null,"salida":"1794969740967"}

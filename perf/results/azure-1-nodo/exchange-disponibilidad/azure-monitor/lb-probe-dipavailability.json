@@ -1,0 +1,104 @@
+{
+  "cost": 7,
+  "interval": "PT1M",
+  "namespace": "Microsoft.Network/loadBalancers",
+  "resourceregion": "eastus2",
+  "timespan": "2026-11-18T01:48:40Z/2026-11-18T01:56:31Z",
+  "value": [
+    {
+      "displayDescription": "Average Load Balancer health probe status per time duration",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "Health Probe Status",
+        "value": "DipAvailability"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T01:48:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T01:49:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T01:50:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T01:51:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T01:52:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T01:53:00Z"
+            },
+            {
+              "average": 50,
+              "timeStamp": "2026-11-18T01:54:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T01:55:00Z"
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "BackendIPAddress",
+                "value": "BackendIPAddress"
+              },
+              "value": "10.0.2.4"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "timeStamp": "2026-11-18T01:48:00Z"
+            },
+            {
+              "timeStamp": "2026-11-18T01:49:00Z"
+            },
+            {
+              "timeStamp": "2026-11-18T01:50:00Z"
+            },
+            {
+              "timeStamp": "2026-11-18T01:51:00Z"
+            },
+            {
+              "timeStamp": "2026-11-18T01:52:00Z"
+            },
+            {
+              "timeStamp": "2026-11-18T01:53:00Z"
+            },
+            {
+              "timeStamp": "2026-11-18T01:54:00Z"
+            },
+            {
+              "timeStamp": "2026-11-18T01:55:00Z"
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "BackendIPAddress",
+                "value": "BackendIPAddress"
+              },
+              "value": "10.0.2.5"
+            }
+          ]
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Count"
+    }
+  ]
+}

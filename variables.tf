@@ -46,6 +46,10 @@ variable "machine_sku" {
   default = "Standard_B1s"
 }
 
+variable "node_instances" {
+  default = 2
+}
+
 variable "redis_sku" {
   default = "Balanced_B0"
 }

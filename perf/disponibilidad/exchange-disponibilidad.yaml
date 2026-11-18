@@ -1,0 +1,74 @@
+# Lo lanza correr.mjs, que define RATE, DURACION, INICIO_MS y PEDIDOS_JSONL.
+config:
+  processor: "./procesadores.cjs"
+  http:
+    timeout: 10
+  phases:
+    - name: "Carga constante con fallas inyectadas"
+      arrivalRate: "{{ $processEnvironment.RATE }}"
+      duration: "{{ $processEnvironment.DURACION }}"
+  environments:
+    local:
+      target: "http://localhost:3000"
+    azure:
+      target: "{{ $processEnvironment.TARGET }}"
+      plugins:
+        publish-metrics:
+          - type: datadog
+            apiKey: "{{ $processEnvironment.DATADOG_API_KEY }}"
+            apiHost: "{{ $processEnvironment.DATADOG_API_HOST }}"
+            prefix: "artillery."
+            tags:
+              - "test:exchange-disponibilidad"
+              - "caso:{{ $processEnvironment.CASO }}"
+
+# Montos literales: $randomNumber devuelve texto y en el TP 1 corrompia los saldos.
+scenarios:
+  - name: "ARS -> USD"
+    weight: 35
+    flow:
+      - post:
+          url: "/exchange"
+          json: { baseCurrency: "ARS", counterCurrency: "USD", baseAmount: 1000, baseAccountId: 101, counterAccountId: 102 }
+          beforeRequest: "preparar"
+          afterResponse: "registrar"
+  - name: "USD -> ARS"
+    weight: 35
+    flow:
+      - post:
+          url: "/exchange"
+          json: { baseCurrency: "USD", counterCurrency: "ARS", baseAmount: 1, baseAccountId: 102, counterAccountId: 101 }
+          beforeRequest: "preparar"
+          afterResponse: "registrar"
+  - name: "ARS -> EUR"
+    weight: 10
+    flow:
+      - post:
+          url: "/exchange"
+          json: { baseCurrency: "ARS", counterCurrency: "EUR", baseAmount: 1000, baseAccountId: 101, counterAccountId: 103 }
+          beforeRequest: "preparar"
+          afterResponse: "registrar"
+  - name: "EUR -> ARS"
+    weight: 10
+    flow:
+      - post:
+          url: "/exchange"
+          json: { baseCurrency: "EUR", counterCurrency: "ARS", baseAmount: 1, baseAccountId: 103, counterAccountId: 101 }
+          beforeRequest: "preparar"
+          afterResponse: "registrar"
+  - name: "ARS -> BRL"
+    weight: 5
+    flow:
+      - post:
+          url: "/exchange"
+          json: { baseCurrency: "ARS", counterCurrency: "BRL", baseAmount: 1000, baseAccountId: 101, counterAccountId: 104 }
+          beforeRequest: "preparar"
+          afterResponse: "registrar"
+  - name: "BRL -> ARS"
+    weight: 5
+    flow:
+      - post:
+          url: "/exchange"
+          json: { baseCurrency: "BRL", counterCurrency: "ARS", baseAmount: 1, baseAccountId: 104, counterAccountId: 101 }
+          beforeRequest: "preparar"
+          afterResponse: "registrar"

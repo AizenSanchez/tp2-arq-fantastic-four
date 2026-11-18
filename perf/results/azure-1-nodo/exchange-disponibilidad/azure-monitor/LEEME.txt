@@ -1,0 +1,6 @@
+rango: 2026-11-18T01:48:40.350Z a 2026-11-18T01:56:31.044Z (la corrida, con 2 min antes y despues), grano 1 min
+lb: Microsoft.Network/loadBalancers tp2_lb, metrica DipAvailability (estado del probe por nodo, % de probes exitosos), dimension BackendIPAddress
+nodos (hostname e IP privada, consultado el 2026-11-18T02:50:00.291Z):
+  tp2vmss000000 10.0.2.4
+  tp2vmss000001 10.0.2.5
+para volver a exportar: az monitor metrics list --resource <id del lb> --metric DipAvailability --dimension BackendIPAddress --aggregation Average --interval PT1M --start-time 2026-11-18T01:48:40.350Z --end-time 2026-11-18T01:56:31.044Z
