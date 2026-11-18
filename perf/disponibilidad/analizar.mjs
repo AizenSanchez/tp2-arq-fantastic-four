@@ -87,8 +87,11 @@ const eventos = fallasOrd
     const restauracion = fallasOrd.find((g) => RESTAURA[g.falla] === f.falla && tFalla(g) > tFalla(f));
     const siguiente = fallasOrd.find((g) => !RESTAURA[g.falla] && tFalla(g) > tFalla(f));
     const tope = siguiente ? seg(tFalla(siguiente)) : ultimoSeg + 1;
+    // los pedidos en curso al momento de la falla salieron antes: se miran hasta 10 s atras (el timeout de Artillery)
+    const anterior = fallasOrd.filter((g) => tFalla(g) < tFalla(f)).at(-1);
+    const desde = Math.max(sFalla - 10, anterior ? seg(tFalla(anterior)) + 1 : 0);
     const tramo = porSeg.filter((c) => c.s >= sFalla && c.s < tope);
-    const malos = tramo.filter((c) => c.error5xx + c.perdidos > 0);
+    const malos = porSeg.filter((c) => c.s >= desde && c.s < tope && c.error5xx + c.perdidos > 0);
     let recupera = null;
     for (let k = 0; k + 2 < tramo.length; k++) {
       const tres = tramo.slice(k, k + 3);
@@ -98,7 +101,7 @@ const eventos = fallasOrd
         break;
       }
     }
-    const enTramo = pedidos.filter((p) => p.s >= sFalla && p.s < (recupera ?? tope));
+    const enTramo = pedidos.filter((p) => p.s >= desde && p.s < (recupera ?? tope));
     const saludTramo = salud.filter((h) => seg(h.t) >= sFalla && seg(h.t) < tope);
     const saludMal = saludTramo.filter((h) => h.status !== 200);
     const lentos = pedidos.filter((p) => p.s >= sFalla && p.s < tope && p.clase === "atendido" && p.ms > 2000);
