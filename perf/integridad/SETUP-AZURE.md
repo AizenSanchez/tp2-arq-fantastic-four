@@ -47,7 +47,7 @@ En esta máquina ya están instalados Terraform 1.13.5 y Ansible 2.22 con `datad
 
 - **Sitio de Datadog.** `ansible/vmss_setup.yml` tiene `datadog_site: "us5.datadoghq.com"`. Si tu cuenta es de otro sitio, cambialo **solo en tu copia** (no commitear) y exportá el mismo
   valor para Artillery: `export DATADOG_API_HOST=<tu sitio>`.
-- **Tamaño de las VMs (`machine_sku`).** El repo trae `Standard_B1s`, pero **en `eastus2` no está disponible para todas las suscripciones** (en la de Santiago no aparece, y Leticia y Aizen midieron con `Standard_F1als_v7`). Comprobarlo antes de desplegar: `az vm list-skus -l eastus2 --size Standard_B1s --resource-type virtualMachines -o table` (tarda un minuto; si no devuelve nada, no está). Se cambia en `terraform.tfvars` sin tocar código. Usar el mismo SKU que el resto del grupo hace comparables las mediciones. Cuesta ≈ US$ 0,06 por hora por VM (la B1s, 0,01): el despliegue completo con 2 nodos ronda US$ 0,26 por hora.
+- **Tamaño de las VMs (`machine_sku`).** El repo trae `Standard_B1s`, pero **en `eastus2` no está disponible para todas las suscripciones** (no aparece en algunas suscripciones; el resto del grupo midió con `Standard_F1als_v7`). Comprobarlo antes de desplegar: `az vm list-skus -l eastus2 --size Standard_B1s --resource-type virtualMachines -o table` (tarda un minuto; si no devuelve nada, no está). Se cambia en `terraform.tfvars` sin tocar código. Usar el mismo SKU que el resto del grupo hace comparables las mediciones. Cuesta ≈ US$ 0,06 por hora por VM (la B1s, 0,01): el despliegue completo con 2 nodos ronda US$ 0,26 por hora.
 - **Región.** El default es `eastus2`. Si `Standard_B1s` o Azure Managed Redis no están disponibles en tu suscripción, usar `westus2`: `-var region=westus2` en cada `terraform plan` / `apply`.
 
 ## 4. Rama de medición (🤖)
@@ -112,11 +112,3 @@ Para el caso escalado: `terraform apply -var node_instances=2` (con `plan -out` 
 ## 9. Cierre
 
 Cuando la evidencia esté commiteada y pusheada: `terraform destroy`, y eliminar el par de claves desde el portal de Azure. Revisar el crédito restante en *Cost Management* antes y durante.
-
-## 10. Revisión final antes de entregar
-
-Con las mediciones hechas y la evidencia guardada, se revisa todo lo nuestro y se borran los comentarios que no explican nada, dejando los que dicen **por qué** (decisiones, trampas conocidas, límites).
-
-- **Sí se limpia:** `perf/integridad/*` (`correr.mjs`, `azure.mjs`, `procesadores.cjs`, `control-negativo.mjs`, `medir-arca.mjs`, los YAML) y los README.
-- **No se toca:** `perf/predicciones/integridad.md` (commiteada antes de medir: solo admite notas al pie fechadas), nada de `perf/results/` ni de `evidencia/` (evidencia generada), ni los archivos de otros bloques.
-- Después de limpiar: `node --check` de cada script, `node --test` en `node/`, y repetir un ensayo local de cada escenario para comprobar que nada cambió. Commit aparte, sin mezclar con resultados.
