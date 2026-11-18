@@ -212,3 +212,99 @@ Se corre con `RATE_ENDURANCE` = 0,5 · B y `RATE_TRAMO` = B, con el B medido en 
   medir: si es menor al 20 %, B sería 200; si es más del doble, 120.
 - [ ] **Verificación del paso 7**: anotar el RTT medido (`rtt.json`, conexión reutilizada y conexión nueva) antes de
   leer las latencias.
+
+---
+
+## Caso escalado (2 nodos)
+
+> Agregado el 2026-11-18, **antes** de levantar los 2 nodos y de medir. Lo de arriba (caso 1 nodo) no se edita.
+
+### Qué cambia
+
+La misma infra que el caso 1 nodo, con `node_instances = 2`: dos `Standard_F1als_v7` detrás del mismo balanceador
+L4, con el mismo Redis `Balanced_B0` y el mismo ARCA en ACI. Se corre desde el mismo lugar y la misma conexión
+(wifi), con los mismos escalones (`10,20,40,80,120,160,200,240,320` y bajada a 20 pedidos/s) y la misma endurance
+(0,5·B durante 10 min y B durante 3 min). Lo corre `perf/capacidad/correr-bloque.mjs`. Los resultados van en
+`perf/results/azure-escalado/`.
+
+Instrumentos nuevos respecto del caso 1 nodo, para poder nombrar el cuello de botella:
+- el nodo que atendió cada pedido (`X-Node`);
+- CPU, memoria y bytes recibidos de cada nodo (Datadog);
+- el probe del balanceador por nodo (`DipAvailability`) y el tráfico que llega a su frontend (`SYNCount`,
+  `ByteCount`, `PacketCount`), en Azure Monitor.
+
+### ¿Escala B proporcionalmente a los nodos?
+
+**No: se predice B_escalado ≈ B_1 nodo = 120 pedidos/s, no 240.** El componente que lo impide **no son los nodos**.
+Es la red entre la generadora de carga y Azure: el wifi y el router de la casa, que tienen que abrir una conexión TCP
+nueva por pedido y sostener miles de conexiones a la vez por encima de B.
+
+**Razonamiento**, con lo medido en el caso 1 nodo (`perf/results/azure-1-nodo/`):
+
+1. **El nodo no estaba saturado.** La CPU fue de ≈ 15 % a 120 pedidos/s, ≈ 17 % a 160 y ≈ 24 % a 200 (Datadog, user +
+   system). Ninguna condición de B falló por CPU.
+2. **El escalón de 160 falló por una pausa de ~8 s con la CPU normal** (`observaciones.md`, punto 1). En la
+   sobrecarga, todos los pedidos terminaron en timeout con la CPU del nodo en 0–1 % y Redis y ARCA sin trabajo (punto
+   2): el nodo no estaba recibiendo pedidos.
+3. **Duplicar los nodos duplica lo que estaba sobrado** (CPU) y no toca lo que estaba en el camino de todos los
+   pedidos: la red de la generadora, el balanceador, Redis y ARCA.
+4. **Por qué la red y no Redis.** Redis tenía CPU ≈ 35–40 %, hacía ≈ 1.750 ops/s a 120 pedidos/s y no mostró ningún
+   error. Pero la otra hipótesis (que la app esperara a Redis) también explica el minuto muerto. La corrida escalada
+   las separa:
+
+| Si el límite es… | …se va a ver en el caso escalado |
+|---|---|
+| **la red de la generadora** (predicción) | B ≈ 120. Por encima de B, `SYNCount` y `ByteCount` del balanceador **dejan de crecer** con la tasa ofrecida, y los bytes recibidos **caen en los dos nodos a la vez**, con la CPU de los dos cerca de 0 |
+| Redis (o la espera a Redis) | B ≈ 120. Pero el balanceador **sigue recibiendo** SYN y bytes al ritmo ofrecido, los nodos siguen recibiendo bytes y `operationsPerSecond` de Redis queda en un techo |
+| los nodos | B ≈ 240: el doble, con la CPU de cada nodo alta en el escalón que falla |
+
+### Corrida A — capacidad, 2 nodos
+
+| Qué | Predicción | Tolerancia | Tipo |
+|---|---|---|---|
+| B | **120 pedidos/s** | 120 a 160 | esperado |
+| B_escalado / B_1 nodo | **≈ 1,0** (no 2,0) | 1,0 a 1,33 | esperado |
+| Primera condición que falla por encima de B | errores propios (timeouts), no la latencia | — | esperado |
+| Componente que lo impide | la red entre la generadora y Azure | — | esperado |
+| Reparto de las respuestas entre los dos nodos, en cada escalón hasta B | **50 / 50** | ± 5 puntos | esperado |
+| CPU de cada nodo a 40 / 80 / 120 / 160 pedidos/s en total | ≈ 6 / 8 / 11 / 11 % (≈ la CPU de 1 nodo a la mitad de la tasa) | ± 5 puntos | esperado |
+| Latencia de un 200 en los escalones de 10 a 80, `pedidos.jsonl` | p50 ≈ RTT_nueva + 980 ms (igual que con 1 nodo) | ± 60 ms | esperado |
+| Ídem, `http.response_time.2xx` de Artillery | p50 ≈ RTT_reutilizada + 990 ms | ± 60 ms | esperado |
+| 403 / 503 de ARCA entre las respuestas | 31 % / 6,5 % | ± 4 / ± 2,5 puntos | esperado |
+| Operaciones de Redis por pedido (`operationsPerSecond` / tasa) | ≈ 14,6, igual que con 1 nodo | ± 20 % | esperado |
+| CPU de ARCA (`CpuUsage`) | ≈ 0,32 milicores por pedido/s (≈ 38 a 120 pedidos/s) | ± 20 milicores | esperado |
+| Por encima de B | timeouts de 10 s, con los dos nodos con CPU baja y el balanceador sin recibir más tráfico (ver tabla) | — | esperado |
+| Recuperación en la bajada | ≈ 45 s, igual que con 1 nodo | 10 a 90 s | esperado |
+| 5xx que no son el 503 de ARCA | **0** | — | **exacto** |
+| Líneas en `pedidos.jsonl` = usuarios creados por Artillery | **iguales** | — | **exacto** |
+
+**Razonamiento de los números.** El balanceador reparte por conexión con un hash de 5 elementos, y Artillery abre una
+conexión nueva por pedido, así que el reparto es al azar y parejo. La CPU de cada nodo con una tasa total R es la de
+1 nodo con R/2: medida con 1 nodo, ≈ 8 % a 40 pedidos/s, ≈ 11 % a 60 y 80, y ≈ 15 % a 120. La línea de base sin carga
+fue de ≈ 1,5 % (Datadog, minuto previo a la corrida A). La latencia no cambia porque no dependía de la CPU sino de ARCA
+y de las transferencias simuladas. Redis y ARCA atienden la misma tasa total que con 1 nodo.
+
+### Corrida B — endurance, 2 nodos
+
+Con `RATE_ENDURANCE` = 0,5·B y `RATE_TRAMO` = B, con el B medido en la corrida A escalada (si B = 120: 60 y 120
+pedidos/s, la misma carga que con 1 nodo).
+
+| Qué | Predicción | Tolerancia | Tipo |
+|---|---|---|---|
+| Errores propios | **0** | < 0,1 % | esperado |
+| Pendiente del p95 de los 200 en el endurance | ≈ 0 ms/min | \|pendiente\| < 5 ms/min | esperado |
+| p95 de los 200 en el tramo a B | igual que con 1 nodo (≈ 1.490 ms) | ± 100 ms | esperado |
+| Memoria de cada nodo (`system.mem.used`) | plana | ± 10 % desde el minuto 1 | esperado |
+| Memoria de Redis (`usedmemory`) | lineal, ≈ 0,46 KiB por pedido (≈ 26 MiB si B = 120) | ± 30 % | esperado |
+| Reparto entre nodos, por minuto | 50 / 50 | ± 5 puntos | esperado |
+
+**Razonamiento.** Con la misma tasa total que con 1 nodo, cada nodo atiende la mitad. Nada acumula por pedido en los
+nodos (el log está en Redis), así que la memoria y el p95 siguen planos. Redis recibe lo mismo que con 1 nodo.
+
+### Incertidumbres y verificaciones (caso escalado)
+
+- **Incertidumbre principal**: la causa del límite. Si B llega a 240 o más, la predicción falla y el límite estaba en
+  los nodos, aunque la CPU no lo mostrara. Por ejemplo, algo por nodo como la cola de conexiones. Si `correr-bloque.mjs`
+  para porque B es el escalón más alto (320), se agregan escalones y se repite antes de la endurance.
+- [ ] Verificación antes de correr: los dos valores de `X-Node` responden por el balanceador, `infra/` muestra
+  `vmss_instances = 2`, y se anota el RTT medido en las dos variantes.
