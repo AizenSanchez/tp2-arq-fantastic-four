@@ -179,10 +179,18 @@ const monitor = (async () => {
   while (monitoreando) {
     const t = Date.now();
     try {
-      const r = await fetch(`${BASE}/health`, { signal: AbortSignal.timeout(800) });
-      anotar("salud.jsonl", { t, status: r.status, ms: Date.now() - t, nodo: r.headers.get("x-node") });
+      // conexion nueva en cada consulta: con una reutilizada el balanceador la manda siempre al mismo nodo
+      const r = await new Promise((resolve, reject) => {
+        const req = http.get(`${BASE}/health`, { agent: false, timeout: 800 }, (res) => {
+          res.resume();
+          res.on("end", () => resolve(res));
+        });
+        req.on("timeout", () => req.destroy(Object.assign(new Error("timeout"), { name: "TimeoutError" })));
+        req.on("error", reject);
+      });
+      anotar("salud.jsonl", { t, status: r.statusCode, ms: Date.now() - t, nodo: r.headers["x-node"] ?? null });
     } catch (err) {
-      anotar("salud.jsonl", { t, status: null, ms: Date.now() - t, error: err.cause?.code ?? err.name });
+      anotar("salud.jsonl", { t, status: null, ms: Date.now() - t, error: err.code ?? err.cause?.code ?? err.name });
     }
     await dormir(Math.max(0, 1000 - (Date.now() - t)));
   }
