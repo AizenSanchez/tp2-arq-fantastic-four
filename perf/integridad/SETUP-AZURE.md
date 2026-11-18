@@ -112,3 +112,11 @@ Para el caso escalado: `terraform apply -var node_instances=2` (con `plan -out` 
 ## 9. Cierre
 
 Cuando la evidencia esté commiteada y pusheada: `terraform destroy`, y eliminar el par de claves desde el portal de Azure. Revisar el crédito restante en *Cost Management* antes y durante.
+
+## 10. Revisión final antes de entregar
+
+Con las mediciones hechas y la evidencia guardada, se revisa todo lo nuestro y se borran los comentarios que no explican nada, dejando los que dicen **por qué** (decisiones, trampas conocidas, límites).
+
+- **Sí se limpia:** `perf/integridad/*` (`correr.mjs`, `azure.mjs`, `procesadores.cjs`, `control-negativo.mjs`, `medir-arca.mjs`, los YAML) y los README.
+- **No se toca:** `perf/predicciones/integridad.md` (commiteada antes de medir: solo admite notas al pie fechadas), nada de `perf/results/` ni de `evidencia/` (evidencia generada), ni los archivos de otros bloques.
+- Después de limpiar: `node --check` de cada script, `node --test` en `node/`, y repetir un ensayo local de cada escenario para comprobar que nada cambió. Commit aparte, sin mezclar con resultados.
