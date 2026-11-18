@@ -50,16 +50,11 @@ En esta máquina ya están instalados Terraform 1.13.5 y Ansible 2.22 con `datad
 - **Tamaño de las VMs (`machine_sku`).** El repo trae `Standard_B1s`, pero **en `eastus2` no está disponible para todas las suscripciones** (no aparece en algunas suscripciones; el resto del grupo midió con `Standard_F1als_v7`). Comprobarlo antes de desplegar: `az vm list-skus -l eastus2 --size Standard_B1s --resource-type virtualMachines -o table` (tarda un minuto; si no devuelve nada, no está). Se cambia en `terraform.tfvars` sin tocar código. Usar el mismo SKU que el resto del grupo hace comparables las mediciones. Cuesta ≈ US$ 0,06 por hora por VM (la B1s, 0,01): el despliegue completo con 2 nodos ronda US$ 0,26 por hora.
 - **Región.** El default es `eastus2`. Si `Standard_B1s` o Azure Managed Redis no están disponibles en tu suscripción, usar `westus2`: `-var region=westus2` en cada `terraform plan` / `apply`.
 
-## 4. Rama de medición (🤖)
+## 4. Variable `node_instances` (🤖)
 
-El caso de 2 nodos necesita la variable `node_instances`, que hoy no está en `main` (Aizen la tiene en su rama `perf/bloque3-disponibilidad`, con otro valor por defecto en un commit aparte). Para no chocar con su PR, **no** se agrega al nuestro: se arma una rama local de medición.
+El caso de 2 nodos necesita la variable `node_instances` (`terraform apply -var node_instances=2`). Esta rama la trae en el commit `9b2d360`, copiado del commit `aeab8f6` del trabajo del bloque 3 (valor por defecto 1), y no hay que repetirlo. Si `main` ya la define, al mergear alcanza con quedarse con la de `main`.
 
-```bash
-git checkout -b medicion/bloque4 perf/integridad
-git cherry-pick aeab8f6            # solo "make the number of vmss instances a variable" (default 1)
-```
-
-Los resultados de Azure se commitean en `perf/integridad` (el PR); `meta.txt` registra el commit desde el que se desplegó.
+Los `meta.txt` de los resultados citan los commits desde los que se desplegó y se midió: esos commits están en esta rama.
 
 ## 5. Despliegue (👤 aprueba, 🤖 ejecuta)
 
