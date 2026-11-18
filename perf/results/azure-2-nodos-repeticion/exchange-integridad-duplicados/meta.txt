@@ -1,0 +1,20 @@
+escenario: exchange-integridad-duplicados
+caso: azure-2-nodos-repeticion
+entorno: azure
+inicio UTC: 2026-11-18T15:52:38.746Z
+fin UTC: 2026-11-18T15:52:49.988Z
+nodos: http://qhybdyddqz.eastus2.cloudapp.azure.com
+commit: 5bbe96669d438a651501773d10db92c988973dae
+git status --porcelain (sin perf/results):
+?? evidencia/azure-2-nodos-repeticion/
+artillery: Artillery: 2.0.34
+node: v22.22.0
+maquina: 192.168.1.51
+conexion: wifi
+RTT de base (GET /): conexion reutilizada p50 143.8 ms, p95 145.2 ms; conexion nueva p50 290 ms, p95 439.3 ms
+RTT usado para comparar con las predicciones (ms): 290
+terraform output vmss_instances: 2
+terraform output vmss_sku: "Standard_F1als_v7"
+terraform output redis_sku: "Balanced_B0"
+region: eastus2
+zona horaria: America/Buenos_Aires

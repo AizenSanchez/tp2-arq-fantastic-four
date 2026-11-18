@@ -1,0 +1,15 @@
+escenario: exchange-integridad-reintentos
+caso: local-1-nodo
+entorno: local
+inicio UTC: 2026-11-17T03:19:07.986Z
+fin UTC: 2026-11-17T03:19:35.902Z
+nodos: http://localhost:3000
+commit: 84475e5667263e1462a730fdef4255ae19b99ccd
+git status --porcelain (sin perf/results):
+(vacio)
+artillery: Artillery: 2.0.34
+node: v22.22.0
+maquina: 192.168.1.51
+conexion: no informada
+RTT base (ms): 0
+zona horaria: America/Buenos_Aires

@@ -1,0 +1,156 @@
+{
+  "escenario": "exchange-integridad-reintentos",
+  "caso": "azure-1-nodo",
+  "entorno": "azure",
+  "resultado": "INVARIANTE ROTA",
+  "inicioUTC": "2026-11-18T14:55:01.514Z",
+  "finUTC": "2026-11-18T14:55:57.099Z",
+  "nodos": [
+    "http://qhybdyddqz.eastus2.cloudapp.azure.com"
+  ],
+  "pedidos": 399,
+  "respuestasPorEstado": {
+    "200": 249,
+    "403": 137,
+    "503": 13
+  },
+  "pedidosPorNodo": {
+    "tp2vmss000000": 399
+  },
+  "latenciaPorEstado": {
+    "200": {
+      "n": 249,
+      "mediana": 1021,
+      "p95": 1512
+    },
+    "403": {
+      "n": 137,
+      "mediana": 517,
+      "p95": 865
+    },
+    "503": {
+      "n": 13,
+      "mediana": 408,
+      "p95": 573
+    }
+  },
+  "usuarios": 199,
+  "repetidasIguales": 187,
+  "liberadasPor503": 12,
+  "reintentosQueCruzanDeNodo": 0,
+  "latenciaRepeticion": {
+    "n": 187,
+    "mediana": 292,
+    "p95": 445
+  },
+  "comprobaciones": [
+    {
+      "tipo": "exacta",
+      "nombre": "todos los pedidos tienen respuesta registrada",
+      "ok": false,
+      "detalle": "399 de 400"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "sin errores propios (otros estados, timeouts, conexiones caidas)",
+      "ok": false,
+      "detalle": "otros estados: 0, errores de Artillery: 1, estados: {\"200\":249,\"403\":137,\"503\":13}"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "el saldo de USD nunca fue negativo",
+      "ok": true,
+      "detalle": "minimo visto: 59916.06080634501 en 49 lecturas"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "hay 200 usuarios con sus dos respuestas",
+      "ok": false,
+      "detalle": "199"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "reintentos de un 200 o 403 devuelven la misma respuesta y el mismo id (100 %)",
+      "ok": true,
+      "detalle": "187 de 187"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "ningun usuario con dos aprobaciones distintas",
+      "ok": true,
+      "detalle": "0"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "sin respuestas 409",
+      "ok": true,
+      "detalle": "0"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "entradas del log con ok:true = aprobaciones distintas",
+      "ok": true,
+      "detalle": "127 contra 127"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "entradas nuevas del log = respuestas distintas + 503",
+      "ok": true,
+      "detalle": "212 contra 212"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "saldo de USD varia en -(suma de lo aprobado)",
+      "ok": true,
+      "detalle": "83.93919365498732 contra 83.93919365499008"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "saldo de ARS varia en +(suma de lo aprobado)",
+      "ok": true,
+      "detalle": "127000 contra 127000"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "primer pedido 200",
+      "ok": true,
+      "detalle": "122 (rango 103 a 131)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "primer pedido 403",
+      "ok": true,
+      "detalle": "66 (rango 60 a 84)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "primer pedido 503",
+      "ok": true,
+      "detalle": "12 (rango 5 a 17)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "usuarios con alguna aprobacion",
+      "ok": true,
+      "detalle": "127 (rango 110 a 138)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "entradas nuevas del log",
+      "ok": true,
+      "detalle": "212 (rango 204 a 218)"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "con un solo nodo ningun reintento cruza de nodo",
+      "ok": true,
+      "detalle": "0"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "mediana del reintento repetido (RTT + 5 ms)",
+      "ok": true,
+      "detalle": "292 (rango 285.9 a 345.9)"
+    }
+  ]
+}

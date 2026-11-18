@@ -1,0 +1,13 @@
+ARCA: http://127.0.0.1:8081   fecha: 2026-11-17T03:17:30.874Z
+
+1) 3000 llamadas con DNI al azar, 50 a la vez
+   HTTP 500: 733 (24.4 % +- 1.5); HTTP 200: 2267; otros: 0
+   latencia de los 200: mediana 364 ms, P95 498 ms, maximo 542 ms
+   latencia de los 500: mediana 13 ms
+   falla residual con 1 reintento (p^2): 6.0 %
+
+2) 600 DNI al azar, una respuesta valida cada uno
+   rechazados (ok:false): 178 de 600 (29.7 % +- 3.7)
+
+3) repetir 5 veces el mismo DNI
+   rechazados que cambian de respuesta: 0 de 30; aprobados que cambian: 0 de 30

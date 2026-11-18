@@ -1,0 +1,15 @@
+escenario: exchange-integridad-saldo-carga
+caso: local-1-nodo
+entorno: local
+inicio UTC: 2026-11-17T04:00:20.634Z
+fin UTC: 2026-11-17T04:00:58.657Z
+nodos: http://localhost:3000
+commit: 5616c2e6ae4c7abd8abaa429ed317a927bf1ecb1
+git status --porcelain (sin perf/results):
+(vacio)
+artillery: Artillery: 2.0.34
+node: v22.22.0
+maquina: 192.168.1.51
+conexion: no informada
+RTT base (ms): 0
+zona horaria: America/Buenos_Aires

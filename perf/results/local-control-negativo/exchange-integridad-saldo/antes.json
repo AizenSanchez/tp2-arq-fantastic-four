@@ -1,0 +1,41 @@
+{
+  "cuentas": [
+    {
+      "id": 1,
+      "currency": "ARS",
+      "balance": 120000000
+    },
+    {
+      "id": 2,
+      "currency": "USD",
+      "balance": 100
+    },
+    {
+      "id": 3,
+      "currency": "EUR",
+      "balance": 40000
+    },
+    {
+      "id": 4,
+      "currency": "BRL",
+      "balance": 60000
+    }
+  ],
+  "entradasDeLog": 0,
+  "rates": {
+    "ARS": {
+      "BRL": 0.0033663233016898945,
+      "EUR": 0.0005678591709256105,
+      "USD": 0.001
+    },
+    "BRL": {
+      "ARS": 297.06
+    },
+    "EUR": {
+      "ARS": 1761
+    },
+    "USD": {
+      "ARS": 1000
+    }
+  }
+}

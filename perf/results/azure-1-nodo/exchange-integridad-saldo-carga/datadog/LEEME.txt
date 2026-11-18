@@ -1,0 +1,7 @@
+Capturas del dashboard "TP2 arVault" (Datadog, sitio us5) de esta corrida: exchange-integridad-saldo-carga, caso azure-1-nodo.
+Rango de la corrida (meta.txt): 2026-11-18 14:59:40 a 15:00:41 UTC. Rango del dashboard: 1 minuto antes y 1 minuto despues (en hora local, UTC-03:00: 11:58 a 12:01, lo que muestra el selector de tiempo).
+Filtro: test = exchange-integridad-saldo-carga. Las metricas de la app, de ARCA y de los nodos no llevan ese tag, asi que muestran todo el rango.
+URL: https://us5.datadoghq.com/dashboard/hqx-a77-75c?from_ts=1795013920148&to_ts=1795014101792&live=false&tpl_var_test%5B0%5D=exchange-integridad-saldo-carga
+01: Artillery, pedidos por segundo ofrecidos y respuestas por codigo.  02: latencias de Artillery y tiempos de la app.
+Los paneles de Artillery muestran la rafaga y los 100 pedidos por segundo.
+04-cpu-nodos: CPU por nodo (system.cpu.user y system.cpu.system, % de un nucleo) y CPU robada. Valores marcados en el panel: usuario 17,67 % y sistema 5,55 % en el pico (1 nodo, 100 pedidos por segundo).

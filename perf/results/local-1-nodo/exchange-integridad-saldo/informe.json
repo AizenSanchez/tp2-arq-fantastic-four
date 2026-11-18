@@ -1,0 +1,157 @@
+{
+  "escenario": "exchange-integridad-saldo",
+  "caso": "local-1-nodo",
+  "entorno": "local",
+  "resultado": "INVARIANTES OK",
+  "inicioUTC": "2026-11-17T03:18:25.445Z",
+  "finUTC": "2026-11-17T03:19:03.557Z",
+  "nodos": [
+    "http://localhost:3000"
+  ],
+  "pedidos": 400,
+  "respuestasPorEstado": {
+    "200": 20,
+    "403": 122,
+    "422": 239,
+    "503": 19
+  },
+  "pedidosPorNodo": {
+    "15fb06692824": 400
+  },
+  "latenciaPorEstado": {
+    "200": {
+      "n": 20,
+      "mediana": 992,
+      "p95": 1200
+    },
+    "403": {
+      "n": 122,
+      "mediana": 386,
+      "p95": 541
+    },
+    "422": {
+      "n": 239,
+      "mediana": 390,
+      "p95": 562
+    },
+    "503": {
+      "n": 19,
+      "mediana": 108,
+      "p95": 116
+    }
+  },
+  "capacidad": 20,
+  "aprobadosPorNodo": {
+    "15fb06692824": 20
+  },
+  "comprobaciones": [
+    {
+      "tipo": "exacta",
+      "nombre": "todos los pedidos tienen respuesta registrada",
+      "ok": true,
+      "detalle": "400 de 400"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "sin errores propios (otros estados, timeouts, conexiones caidas)",
+      "ok": true,
+      "detalle": "otros estados: 0, errores de Artillery: 0, estados: {\"200\":20,\"403\":122,\"422\":239,\"503\":19}"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "el saldo de USD nunca fue negativo",
+      "ok": true,
+      "detalle": "minimo visto: 0 en 40 lecturas"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "aprobados (200) = 20",
+      "ok": true,
+      "detalle": "20"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "saldo final de USD = saldo inicial - 5 x aprobados",
+      "ok": true,
+      "detalle": "0"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "saldo final de ARS = saldo inicial + 5.000 x aprobados",
+      "ok": true,
+      "detalle": "120100000"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "entradas nuevas del log = pedidos respondidos",
+      "ok": true,
+      "detalle": "400 contra 400"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "entradas del log con ok:true = aprobados",
+      "ok": true,
+      "detalle": "20 contra 20 respuestas 200"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "pedidos que llegan a la reserva (200 + 422)",
+      "ok": false,
+      "detalle": "259 (rango 215 a 255)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "422 (sin fondos)",
+      "ok": false,
+      "detalle": "239 (rango 195 a 235)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "403 (ARCA rechaza)",
+      "ok": false,
+      "detalle": "122 (rango 126 a 162)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "503 (ARCA no disponible)",
+      "ok": true,
+      "detalle": "19 (rango 12 a 30)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "en la rafaga: aprobados",
+      "ok": true,
+      "detalle": "20 (rango 20 a 20)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "en la rafaga: 422",
+      "ok": true,
+      "detalle": "44 (rango 29 a 49)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "en la rafaga: 403",
+      "ok": true,
+      "detalle": "33 (rango 26 a 46)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "en la rafaga: 503",
+      "ok": true,
+      "detalle": "3 (rango 0 a 10)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "mediana de un 200 (RTT + 985 ms)",
+      "ok": true,
+      "detalle": "992 (rango 865 a 1105)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "mediana de un 422 (RTT + 385 ms)",
+      "ok": true,
+      "detalle": "390 (rango 305 a 465)"
+    }
+  ]
+}

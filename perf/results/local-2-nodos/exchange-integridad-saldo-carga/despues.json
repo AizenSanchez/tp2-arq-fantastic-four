@@ -1,0 +1,508 @@
+{
+  "cuentas": [
+    {
+      "id": 1,
+      "currency": "ARS",
+      "balance": 120100000
+    },
+    {
+      "id": 2,
+      "currency": "USD",
+      "balance": 0
+    },
+    {
+      "id": 3,
+      "currency": "EUR",
+      "balance": 40000
+    },
+    {
+      "id": 4,
+      "currency": "BRL",
+      "balance": 60000
+    }
+  ],
+  "cantidadDeEntradasNuevas": 3100,
+  "recortado": true,
+  "entradasNuevasDeLog": [
+    {
+      "id": "8IrIQHgzjnBbFFW8PqlSf",
+      "ts": "2026-11-17T04:01:08.681Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "333f7c4f-d5bb-488d-85e7-f0ecb81b94f2",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "88680557"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "4f2efaf70aff484a51d328fe6abed91a13f6a72a",
+      "hash": "e9493c366b513caf64796835fb1b630ee90a4b45"
+    },
+    {
+      "id": "uH8VwmIuExGpgjV445OkT",
+      "ts": "2026-11-17T04:01:08.812Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "18e122dd-6c2c-4599-93c7-08f8587fccd7",
+        "intentos": 2
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "41742022"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "650cb690d9df499fdf1e63fa42bcd98a7af32031",
+      "hash": "6f97c703de6bf23c58b5280aacfe7098d79f3a4e"
+    },
+    {
+      "id": "uJk-S3AQL_eDxb_8z-2EP",
+      "ts": "2026-11-17T04:01:08.787Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "aa83cd11-6df1-4832-a284-1ae0be9963db",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "1895129"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "822855ea76ec34f23464f4455f987de3e732a24d",
+      "hash": "bc4a45522a4ccf0e21b0c1f8314d3b3382781780"
+    },
+    {
+      "id": "wLT7wdazj0GgeGmQGbBPS",
+      "ts": "2026-11-17T04:01:08.867Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "7cba19f4-6964-4604-8f3f-67bbd3522bbb",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "90360877"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "e5d400446851941745c5c1a72429b87ad688cf44",
+      "hash": "1d4ab0d10f06e0bfefe4c2fa24779da57dd0a850"
+    },
+    {
+      "id": "J3F_5Kf1yxr95nTbiTggR",
+      "ts": "2026-11-17T04:01:08.779Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "710ce4d1-0500-4f1a-8bce-c887beac86a9",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "47743441"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "0b393deb050342553a97c07556e5d481972f8003",
+      "hash": "03e8a92c105a73e044da3e7a9b240263da332b11"
+    },
+    {
+      "id": "nf2ChXob8VHC_zx8PlGsQ",
+      "ts": "2026-11-17T04:01:08.812Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "ebd76fc2-b08c-49b4-9bfc-3b38eec9aeb6",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "62050716"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "cabcb63223729ad5abc43dee22a3161740515525",
+      "hash": "f58e73b66e5305404b9a256bfc7911aa2842b298"
+    },
+    {
+      "id": "rc7URj02u3qFnBbbXai0L",
+      "ts": "2026-11-17T04:01:08.804Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "7aa2c392-7047-4b88-a651-e6a4ac5a4e0a",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "41899107"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "f58e73b66e5305404b9a256bfc7911aa2842b298",
+      "hash": "766bfd4e27e0f1c3f78695549e7b1197530de74b"
+    },
+    {
+      "id": "6eSZynLeT9nMYotymxCK1",
+      "ts": "2026-11-17T04:01:08.897Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "2ae75e15-7494-47d6-bf70-7e88085b149b",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "88029767"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "766bfd4e27e0f1c3f78695549e7b1197530de74b",
+      "hash": "dc5284462d5f98a0a135e3a04158ed31ca0812cb"
+    },
+    {
+      "id": "3ALGFurXnIfU0BwyAtx_x",
+      "ts": "2026-11-17T04:01:08.939Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "7343bf64-dc8d-4568-8456-19e5a8c63111",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "63619355"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "a8b30196def9a0ba2d04b63ee8656f8e2f969709",
+      "hash": "13fe3e11e3dd594844f6d34c70a9347256e24e04"
+    },
+    {
+      "id": "J94oV3wklDXnlYuRSsvsz",
+      "ts": "2026-11-17T04:01:08.858Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "6158cfa4-db68-4307-9d59-9eaaa27fad1a",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "27492785"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "c601930df1fb623cd0e87e96a7ba770242ddff80",
+      "hash": "51c592f1f68b3be95d3fe5d0d683875780f6111c"
+    },
+    {
+      "id": "rHPo1AE6apgt3Nfr_c5i0",
+      "ts": "2026-11-17T04:01:08.808Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "4a398f65-f6e3-4d58-b5b4-301fac238118",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "12930151"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "51c592f1f68b3be95d3fe5d0d683875780f6111c",
+      "hash": "066e2d6f6b07c33e7d819fed9cb009a3710368be"
+    },
+    {
+      "id": "VIpfcj1GgIbeSj8xC3rGy",
+      "ts": "2026-11-17T04:01:08.930Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "6fb8ca99-81c2-4dbd-acf4-82513b1fb4fb",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "11064382"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "066e2d6f6b07c33e7d819fed9cb009a3710368be",
+      "hash": "2db4464396adf183ed6a798dc06728b5e786db3c"
+    },
+    {
+      "id": "gIxiu6zRTEWBeNrQxa457",
+      "ts": "2026-11-17T04:01:08.875Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "001bec72-fdd6-4120-840c-50bf5e29ab86",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "31768344"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "fa2e9be9dd1c848ed64d3b2cbed2ddfc792ed48c",
+      "hash": "6567d9e0b62991e772b7dcc32c0d9ff13288444d"
+    },
+    {
+      "id": "B_NndDAosfxWqBmucQWL3",
+      "ts": "2026-11-17T04:01:08.914Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "0755721c-1cc8-4475-abca-590d9af98cd6",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "25038298"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "6567d9e0b62991e772b7dcc32c0d9ff13288444d",
+      "hash": "80c6fd154434a5d35ca8f23476d0c6898f756d59"
+    },
+    {
+      "id": "rfbirS_cvJSGM_wa0xAHx",
+      "ts": "2026-11-17T04:01:08.930Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "b0daf138-197a-4908-9e41-f44334b6f3b1",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "22529538"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "80c6fd154434a5d35ca8f23476d0c6898f756d59",
+      "hash": "98f5757c6a714e35c83524a13d24600106ea279d"
+    },
+    {
+      "id": "5PTn35BF6oCThi_3UcjZk",
+      "ts": "2026-11-17T04:01:08.852Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "14336be4-ec94-43ef-88b3-61c10166ee7e",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "70122651"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "98f5757c6a714e35c83524a13d24600106ea279d",
+      "hash": "2f0c96d5ba925e272ac127f94a104b2885e05c08"
+    },
+    {
+      "id": "bh8oI7Xqf4sr9IGH1FQmF",
+      "ts": "2026-11-17T04:01:08.942Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "1ef395f1-6765-47c2-8205-1a89b2326977",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "84826818"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "c904518a580da2c3a37c0c3fa42a824e2356a91f",
+      "hash": "9ac228e423058cb4ef6c4603f3dc04a73e33aa29"
+    },
+    {
+      "id": "-RDMgJ45WNxpVV82khypM",
+      "ts": "2026-11-17T04:01:08.985Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "27606dda-2531-40de-b609-4aa950e195e5",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "45332818"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "9ac228e423058cb4ef6c4603f3dc04a73e33aa29",
+      "hash": "c603f071444fe411d4b01cdcf9ef97fb19673b5f"
+    },
+    {
+      "id": "AttuSlXgvnHf15a3X_BsX",
+      "ts": "2026-11-17T04:01:08.962Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "1478a1d0-15e4-4eab-828e-fba023a56448",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "41931111"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "fa79849d603a820c564d325343d9d3c30d1412d0",
+      "hash": "2d81cca4d0de9045061215ace82787b27723a66e"
+    },
+    {
+      "id": "gXcMNLtCYF-6xa6JR4wYa",
+      "ts": "2026-11-17T04:01:08.965Z",
+      "ok": true,
+      "actor": null,
+      "arca": {
+        "ok": true,
+        "codigoAutorizacion": "c05a7114-4ac3-4047-aed7-b80b5ca74a95",
+        "intentos": 1
+      },
+      "request": {
+        "baseCurrency": "ARS",
+        "counterCurrency": "USD",
+        "baseAmount": 5000,
+        "baseAccountId": 501,
+        "counterAccountId": 502,
+        "dni": "73004211"
+      },
+      "exchangeRate": 0.001,
+      "counterAmount": 5,
+      "obs": null,
+      "prev": "97922c770538a601b2bb63ce619331544997219d",
+      "hash": "4d3a8f4a85feaff48f74ed87011c62b56eeafdb2"
+    }
+  ]
+}

@@ -1,0 +1,206 @@
+[1/4] reinicio del estado: docker compose -f docker-compose.local.yml exec -T app node tools/reset-state.js
+reset: 8 keys deleted, state seeded again
+[2/4] estado inicial: USD 60000, ARS 120000000, 0 entradas en el log
+[3/4] Artillery (exchange-integridad-reintentos.yaml, entorno azure) contra http://localhost:3000
+Test run id: thkft_7ytktph8ykn3ec78c3yk55cgdkxbr_e8jh
+2026-11-17T03:57:01.447Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T03:57:01.449Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794887821447',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: true
+  },
+  tags: [ 'test:exchange-integridad-reintentos', 'caso:local-datadog-seco' ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T03:57:01.449Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+2026-11-17T03:57:04.900Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T03:57:04.902Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794887824900',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: true
+  },
+  tags: [ 'test:exchange-integridad-reintentos', 'caso:local-datadog-seco' ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T03:57:04.903Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+2026-11-17T03:57:07.017Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T03:57:07.020Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794887827017',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: true
+  },
+  tags: [ 'test:exchange-integridad-reintentos', 'caso:local-datadog-seco' ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T03:57:07.020Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+2026-11-17T03:57:09.050Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T03:57:09.053Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794887829050',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: true
+  },
+  tags: [ 'test:exchange-integridad-reintentos', 'caso:local-datadog-seco' ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T03:57:09.053Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+2026-11-17T03:57:11.090Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T03:57:11.093Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794887831090',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: true
+  },
+  tags: [ 'test:exchange-integridad-reintentos', 'caso:local-datadog-seco' ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T03:57:11.093Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+2026-11-17T03:57:13.287Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T03:57:13.290Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794887833287',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: true
+  },
+  tags: [ 'test:exchange-integridad-reintentos', 'caso:local-datadog-seco' ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T03:57:13.290Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+2026-11-17T03:57:15.501Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T03:57:15.504Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794887835500',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: true
+  },
+  tags: [ 'test:exchange-integridad-reintentos', 'caso:local-datadog-seco' ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T03:57:15.504Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+2026-11-17T03:57:17.671Z plugin:publish-metrics:datadog-statsd creating DatadogReporter with config
+2026-11-17T03:57:17.677Z plugin:publish-metrics:datadog-statsd {
+  apiKey: 'clave-falsa-de-prueba',
+  appKey: undefined,
+  host: '127.0.0.1',
+  port: 8125,
+  prefix: 'artillery.',
+  event: {
+    title: 'Artillery.io Test 1794887837671',
+    text: 'Target: http://localhost:3000',
+    priority: 'low',
+    alertType: 'info',
+    tags: [],
+    send: true
+  },
+  tags: [ 'test:exchange-integridad-reintentos', 'caso:local-datadog-seco' ],
+  type: 'datadog',
+  apiHost: 'datadog.invalid'
+}
+2026-11-17T03:57:17.677Z plugin:publish-metrics:datadog-statsd Initializing datadog via HTTPS
+metrics: The `apiHost` option (and `DATADOG_API_HOST` environment variable) for `init()` and `BufferedMetricsLogger` has been deprecated and will be removed in a future release. Please use the `site` option (or `DATADOG_SITE` environment variable) instead.
+Phase started: 200 usuarios, 10 por segundo (index: 0, duration: 20s) 00:57:17(-0300)
+
+2026-11-17T03:57:17.848Z plugin:publish-metrics:datadog-statsd sending start event
+2026-11-17T03:57:17.848Z plugin:publish-metrics:datadog-statsd sending event Target: http://localhost:3000
+2026-11-17T03:57:18.606Z plugin:publish-metrics:datadog-statsd [ 'Forbidden', 'API key is missing or invalid' ]
+/home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/node_modules/artillery/dist/builtin-packages/artillery-plugin-publish-metrics/lib/datadog.js:188
+        if (res.status !== 'ok') {
+                ^
+
+TypeError: Cannot read properties of null (reading 'status')
+    at /home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/node_modules/artillery/dist/builtin-packages/artillery-plugin-publish-metrics/lib/datadog.js:188:17
+    at IncomingMessage.<anonymous> (/home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/node_modules/dogapi/lib/client.js:109:17)
+    at IncomingMessage.emit (node:events:531:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+Node.js v22.22.0
+AVISO: Artillery termino con codigo 1
+node:fs:440
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/results/local-datadog-seco/exchange-integridad-reintentos.json'
+    at Object.readFileSync (node:fs:440:20)
+    at file:///home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/integridad/correr.mjs:199:33
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/santi/Documents/arquitectura_de_software/tp2-arq-fantastic-four/perf/results/local-datadog-seco/exchange-integridad-reintentos.json'
+}
+
+Node.js v22.22.0

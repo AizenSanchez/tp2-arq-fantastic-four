@@ -1,0 +1,54 @@
+# Integridad de saldo (junta la carrera corta y la carrera larga del TP 1).
+# Con saldo para 20 cambios, 400 pedidos de 5.000 ARS: una rafaga de 100 en 1 s y despues 10 por segundo
+# durante 30 s. Tiene que aprobarse exactamente 20 y el saldo de USD no puede bajar de 0.
+# Lo prepara y lo verifica correr.mjs (tasa, saldo, reinicio): no se corre este YAML solo.
+# Predicciones: perf/predicciones/integridad.md
+config:
+  processor: "./procesadores.cjs"
+  http:
+    timeout: 10
+  environments:
+    # contra docker-compose.local.yml. TARGET lo define correr.mjs (por defecto http://localhost:3000)
+    local:
+      target: "{{ $processEnvironment.TARGET }}"
+    # contra el balanceador de Azure: TARGET sale de node/lb_dns (lo hace correr.mjs)
+    azure:
+      target: "{{ $processEnvironment.TARGET }}"
+      plugins:
+        publish-metrics:
+          - type: datadog
+            apiKey: "{{ $processEnvironment.DATADOG_API_KEY }}"
+            apiHost: "{{ $processEnvironment.DATADOG_API_HOST }}"
+            prefix: "artillery."
+            # El evento de inicio y fin lo manda dogapi, que NO recibe el sitio de Datadog y siempre llama al de EE.UU.
+            # (app.datadoghq.com). Con una cuenta de otro sitio (us5, eu...) falla y Artillery se cae antes de medir.
+            # Las metricas no dependen de esto: van por datadog-metrics, que si usa apiHost
+            event:
+              send: false
+            tags:
+              - "test:exchange-integridad-saldo"
+              - "caso:{{ $processEnvironment.CASO }}"
+
+  phases:
+    - name: "Rafaga: 100 pedidos en 1 s"
+      arrivalCount: 100
+      duration: 1
+    - name: "Sostenido: 10 pedidos por segundo"
+      arrivalRate: 10
+      duration: 30
+
+scenarios:
+  - name: "Cambio ARS -> USD de 5.000 ARS"
+    flow:
+      - post:
+          url: "/exchange"
+          # los numeros tienen que ser literales: $randomNumber de Artillery devuelve texto, y el texto
+          # corrompe los saldos (en el TP 1 se descubrio asi). Solo el dni se pone por codigo
+          json:
+            baseCurrency: "ARS"
+            counterCurrency: "USD"
+            baseAmount: 5000
+            baseAccountId: 501
+            counterAccountId: 502
+          beforeRequest: "prepararSaldo"
+          afterResponse: "registrar"
