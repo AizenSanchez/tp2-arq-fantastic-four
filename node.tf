@@ -80,6 +80,10 @@ resource "azurerm_lb_probe" "lb_probe" {
   name            = "lb_probe"
   loadbalancer_id = azurerm_lb.tp2_lb.id
   port            = 3000
+  # HTTP y no TCP: con el proceso colgado el sistema operativo sigue aceptando la conexion, pero la app no responde
+  protocol            = "Http"
+  request_path        = "/"
+  interval_in_seconds = 5
 }
 
 resource "azurerm_lb_rule" "lb_rule" {

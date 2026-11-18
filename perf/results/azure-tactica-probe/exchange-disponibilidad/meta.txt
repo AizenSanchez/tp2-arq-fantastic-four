@@ -1,0 +1,13 @@
+caso: azure-tactica-probe   entorno: azure   target: http://gunegfcioh.eastus2.cloudapp.azure.com
+inicio UTC: 2026-11-18T22:54:07.029Z
+fin UTC: 2026-11-18T22:59:55.136Z
+zona horaria: America/Buenos_Aires
+carga: 20 pedidos/s durante 300 s   fallas: kill-9@60s pm2-stop@120s pm2-start@150s kill-STOP@210s kill-CONT@240s   nodo: vmss[0]
+commit: e0c2c7373805c6fd02cf4cc3a1414c1d176d471c
+git status --porcelain (sin perf/results):
+?? "Plan TP 2 \342\200\224 arVault en Azure (por integrante).pdf"
+?? "Plan TP 2 \342\200\224 versi\303\263n ag\303\251ntica (delegar en Claude).pdf"
+?? catalogo_tp1_a_tp2.md
+artillery: Artillery: 2.0.34
+node: v24.22.3   maquina: aizen-OMEN-by-HP-Laptop-16-b0xxx   conexion: cable
+codigo de salida de artillery: 0

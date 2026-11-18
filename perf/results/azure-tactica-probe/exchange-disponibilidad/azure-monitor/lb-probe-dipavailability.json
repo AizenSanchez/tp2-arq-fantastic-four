@@ -1,0 +1,120 @@
+{
+  "cost": 8,
+  "interval": "PT1M",
+  "namespace": "Microsoft.Network/loadBalancers",
+  "resourceregion": "eastus2",
+  "timespan": "2026-11-18T22:52:07Z/2026-11-18T23:01:55Z",
+  "value": [
+    {
+      "displayDescription": "Average Load Balancer health probe status per time duration",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "Health Probe Status",
+        "value": "DipAvailability"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T22:52:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T22:53:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T22:54:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T22:55:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T22:56:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T22:57:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T22:58:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T22:59:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T23:00:00Z"
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "BackendIPAddress",
+                "value": "BackendIPAddress"
+              },
+              "value": "10.0.2.5"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T22:52:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T22:53:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T22:54:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T22:55:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T22:56:00Z"
+            },
+            {
+              "average": 50,
+              "timeStamp": "2026-11-18T22:57:00Z"
+            },
+            {
+              "average": 41.666666666666664,
+              "timeStamp": "2026-11-18T22:58:00Z"
+            },
+            {
+              "average": 83.33333333333333,
+              "timeStamp": "2026-11-18T22:59:00Z"
+            },
+            {
+              "average": 100,
+              "timeStamp": "2026-11-18T23:00:00Z"
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "BackendIPAddress",
+                "value": "BackendIPAddress"
+              },
+              "value": "10.0.2.4"
+            }
+          ]
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Count"
+    }
+  ]
+}

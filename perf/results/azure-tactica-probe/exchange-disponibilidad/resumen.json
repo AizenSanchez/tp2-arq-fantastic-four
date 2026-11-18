@@ -1,0 +1,716 @@
+{
+  "meta": "caso: azure-tactica-probe   entorno: azure   target: http://gunegfcioh.eastus2.cloudapp.azure.com\ninicio UTC: 2026-11-18T22:54:07.029Z\nfin UTC: 2026-11-18T22:59:55.136Z\nzona horaria: America/Buenos_Aires\ncarga: 20 pedidos/s durante 300 s   fallas: kill-9@60s pm2-stop@120s pm2-start@150s kill-STOP@210s kill-CONT@240s   nodo: vmss[0]\ncommit: e0c2c7373805c6fd02cf4cc3a1414c1d176d471c\ngit status --porcelain (sin perf/results):\n?? \"Plan TP 2 \\342\\200\\224 arVault en Azure (por integrante).pdf\"\n?? \"Plan TP 2 \\342\\200\\224 versi\\303\\263n ag\\303\\251ntica (delegar en Claude).pdf\"\n?? catalogo_tp1_a_tp2.md\nartillery: Artillery: 2.0.34\nnode: v24.22.3   maquina: aizen-OMEN-by-HP-Laptop-16-b0xxx   conexion: cable\ncodigo de salida de artillery: 0",
+  "base": {
+    "min_ms": 298,
+    "p50_ms": 309,
+    "p95_ms": 328
+  },
+  "totales": {
+    "enviados": 6000,
+    "atendidos": 5411,
+    "arca503": 373,
+    "error5xx": 0,
+    "perdidos": 216,
+    "por_status": {
+      "200": 3533,
+      "403": 1878,
+      "503": 373,
+      "sin respuesta": 216
+    },
+    "por_nodo": {
+      "tp2vmss000001": 3390,
+      "tp2vmss000000": 2394,
+      "?": 216
+    },
+    "artillery_errores": {
+      "errors.ECONNRESET": 9,
+      "errors.ECONNREFUSED": 130,
+      "errors.ERR_SOCKET_TIMEOUT": 77
+    },
+    "artillery_codigos": {
+      "http.codes.403": 1878,
+      "http.codes.200": 3533,
+      "http.codes.503": 373
+    }
+  },
+  "referencia_sin_fallas": {
+    "200": {
+      "n": 0,
+      "mediana_ms": null,
+      "p95_ms": null
+    },
+    "403": {
+      "n": 0,
+      "mediana_ms": null,
+      "p95_ms": null
+    },
+    "422": {
+      "n": 0,
+      "mediana_ms": null,
+      "p95_ms": null
+    }
+  },
+  "e9": {
+    "enviados": 0,
+    "por_tipo": {
+      "dni": 0,
+      "moneda": 0
+    },
+    "respuestas": {},
+    "mediana_400_ms": null,
+    "mediana_400_menos_base_ms": null,
+    "validos_en_la_ventana": {}
+  },
+  "eventos": [
+    {
+      "falla": "kill-9",
+      "planificado_s": 60,
+      "s_real": 74,
+      "demora_inyeccion_ms": 14460,
+      "restaurada_s": null,
+      "primer_seg_con_falla": 73,
+      "ultimo_seg_con_falla": 74,
+      "t_rec_s": 1,
+      "t_rec_desde_restauracion_s": null,
+      "primera_respuesta_s": 75,
+      "sin_respuestas_desde_la_falla_s": 0.6,
+      "sin_respuestas_desde_la_restauracion_s": null,
+      "pedidos_afectados": 10,
+      "de_ellos_perdidos": 10,
+      "de_ellos_5xx": 0,
+      "atendidos_lentos_mas_de_2s": 0,
+      "latencia_max_ms": 1656,
+      "health_segundos_no_200": 0,
+      "health_primer_no_200_s": null,
+      "health_ultimo_no_200_s": null,
+      "error": null
+    },
+    {
+      "falla": "pm2-stop",
+      "planificado_s": 120,
+      "s_real": 126,
+      "demora_inyeccion_ms": 6640,
+      "restaurada_s": 155,
+      "primer_seg_con_falla": 126,
+      "ultimo_seg_con_falla": 137,
+      "t_rec_s": 29,
+      "t_rec_desde_restauracion_s": 0,
+      "primera_respuesta_s": 155.6,
+      "sin_respuestas_desde_la_falla_s": 28.9,
+      "sin_respuestas_desde_la_restauracion_s": 0,
+      "pedidos_afectados": 129,
+      "de_ellos_perdidos": 129,
+      "de_ellos_5xx": 0,
+      "atendidos_lentos_mas_de_2s": 0,
+      "latencia_max_ms": 1649,
+      "health_segundos_no_200": 7,
+      "health_primer_no_200_s": 129,
+      "health_ultimo_no_200_s": 136,
+      "error": null
+    },
+    {
+      "falla": "kill-STOP",
+      "planificado_s": 210,
+      "s_real": 215,
+      "demora_inyeccion_ms": 5537,
+      "restaurada_s": 245,
+      "primer_seg_con_falla": 214,
+      "ultimo_seg_con_falla": 228,
+      "t_rec_s": 30,
+      "t_rec_desde_restauracion_s": 0,
+      "primera_respuesta_s": 245.6,
+      "sin_respuestas_desde_la_falla_s": 30.1,
+      "sin_respuestas_desde_la_restauracion_s": 0.1,
+      "pedidos_afectados": 77,
+      "de_ellos_perdidos": 77,
+      "de_ellos_5xx": 0,
+      "atendidos_lentos_mas_de_2s": 30,
+      "latencia_max_ms": 6456,
+      "health_segundos_no_200": 1,
+      "health_primer_no_200_s": 218,
+      "health_ultimo_no_200_s": 218,
+      "error": null
+    }
+  ],
+  "reinicios_pm2": 1,
+  "pm2": {
+    "antes": [
+      {
+        "nombre": "app",
+        "pid": 82194,
+        "estado": "online",
+        "reinicios": 2,
+        "autorestart": true,
+        "uptime_desde": 1794969650957
+      }
+    ],
+    "despues": [
+      {
+        "nombre": "app",
+        "pid": 98847,
+        "estado": "online",
+        "reinicios": 3,
+        "autorestart": true,
+        "uptime_desde": 1795042602678
+      }
+    ]
+  },
+  "errores_por_periodo": [
+    {
+      "desde": 72,
+      "hasta": 82,
+      "errores": {
+        "errors.ECONNRESET": 8,
+        "errors.ECONNREFUSED": 2
+      }
+    },
+    {
+      "desde": 122,
+      "hasta": 132,
+      "errores": {
+        "errors.ECONNREFUSED": 80,
+        "errors.ECONNRESET": 1
+      }
+    },
+    {
+      "desde": 132,
+      "hasta": 142,
+      "errores": {
+        "errors.ECONNREFUSED": 48
+      }
+    },
+    {
+      "desde": 222,
+      "hasta": 232,
+      "errores": {
+        "errors.ERR_SOCKET_TIMEOUT": 58
+      }
+    },
+    {
+      "desde": 232,
+      "hasta": 242,
+      "errores": {
+        "errors.ERR_SOCKET_TIMEOUT": 19
+      }
+    }
+  ],
+  "cambios_salud": [
+    {
+      "s": 0,
+      "estado": 200
+    },
+    {
+      "s": 129.1,
+      "estado": "ECONNREFUSED"
+    },
+    {
+      "s": 131.1,
+      "estado": 200
+    },
+    {
+      "s": 132.1,
+      "estado": "ECONNREFUSED"
+    },
+    {
+      "s": 137.1,
+      "estado": 200
+    },
+    {
+      "s": 218.1,
+      "estado": "TimeoutError"
+    },
+    {
+      "s": 219.1,
+      "estado": 200
+    }
+  ],
+  "probe_lb": [
+    {
+      "ip": "10.0.2.5",
+      "minutos": [
+        {
+          "s": -127,
+          "utc": "22:52",
+          "pct": 100
+        },
+        {
+          "s": -67,
+          "utc": "22:53",
+          "pct": 100
+        },
+        {
+          "s": -7,
+          "utc": "22:54",
+          "pct": 100
+        },
+        {
+          "s": 53,
+          "utc": "22:55",
+          "pct": 100
+        },
+        {
+          "s": 113,
+          "utc": "22:56",
+          "pct": 100
+        },
+        {
+          "s": 173,
+          "utc": "22:57",
+          "pct": 100
+        },
+        {
+          "s": 233,
+          "utc": "22:58",
+          "pct": 100
+        },
+        {
+          "s": 293,
+          "utc": "22:59",
+          "pct": 100
+        },
+        {
+          "s": 353,
+          "utc": "23:00",
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "ip": "10.0.2.4",
+      "minutos": [
+        {
+          "s": -127,
+          "utc": "22:52",
+          "pct": 100
+        },
+        {
+          "s": -67,
+          "utc": "22:53",
+          "pct": 100
+        },
+        {
+          "s": -7,
+          "utc": "22:54",
+          "pct": 100
+        },
+        {
+          "s": 53,
+          "utc": "22:55",
+          "pct": 100
+        },
+        {
+          "s": 113,
+          "utc": "22:56",
+          "pct": 100
+        },
+        {
+          "s": 173,
+          "utc": "22:57",
+          "pct": 50
+        },
+        {
+          "s": 233,
+          "utc": "22:58",
+          "pct": 42
+        },
+        {
+          "s": 293,
+          "utc": "22:59",
+          "pct": 83
+        },
+        {
+          "s": 353,
+          "utc": "23:00",
+          "pct": 100
+        }
+      ]
+    }
+  ],
+  "ventanas": [
+    {
+      "desde": 0,
+      "enviados": 0,
+      "atendidos": 0,
+      "pct_atendido": null,
+      "arca503": 0,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": null,
+      "p95_ms": null
+    },
+    {
+      "desde": 10,
+      "enviados": 0,
+      "atendidos": 0,
+      "pct_atendido": null,
+      "arca503": 0,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": null,
+      "p95_ms": null
+    },
+    {
+      "desde": 20,
+      "enviados": 0,
+      "atendidos": 0,
+      "pct_atendido": null,
+      "arca503": 0,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": null,
+      "p95_ms": null
+    },
+    {
+      "desde": 30,
+      "enviados": 0,
+      "atendidos": 0,
+      "pct_atendido": null,
+      "arca503": 0,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": null,
+      "p95_ms": null
+    },
+    {
+      "desde": 40,
+      "enviados": 125,
+      "atendidos": 118,
+      "pct_atendido": 94.4,
+      "arca503": 7,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1184,
+      "p95_ms": 1512
+    },
+    {
+      "desde": 50,
+      "enviados": 200,
+      "atendidos": 186,
+      "pct_atendido": 93,
+      "arca503": 14,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1222,
+      "p95_ms": 1507
+    },
+    {
+      "desde": 60,
+      "enviados": 200,
+      "atendidos": 181,
+      "pct_atendido": 90.5,
+      "arca503": 19,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1205,
+      "p95_ms": 1481
+    },
+    {
+      "desde": 70,
+      "enviados": 200,
+      "atendidos": 177,
+      "pct_atendido": 88.5,
+      "arca503": 13,
+      "error5xx": 0,
+      "perdidos": 10,
+      "p50_ms": 1199,
+      "p95_ms": 1512
+    },
+    {
+      "desde": 80,
+      "enviados": 200,
+      "atendidos": 189,
+      "pct_atendido": 94.5,
+      "arca503": 11,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1218,
+      "p95_ms": 1472
+    },
+    {
+      "desde": 90,
+      "enviados": 200,
+      "atendidos": 190,
+      "pct_atendido": 95,
+      "arca503": 10,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1219,
+      "p95_ms": 1494
+    },
+    {
+      "desde": 100,
+      "enviados": 200,
+      "atendidos": 187,
+      "pct_atendido": 93.5,
+      "arca503": 13,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1186,
+      "p95_ms": 1468
+    },
+    {
+      "desde": 110,
+      "enviados": 200,
+      "atendidos": 185,
+      "pct_atendido": 92.5,
+      "arca503": 15,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1158,
+      "p95_ms": 1483
+    },
+    {
+      "desde": 120,
+      "enviados": 200,
+      "atendidos": 147,
+      "pct_atendido": 73.5,
+      "arca503": 8,
+      "error5xx": 0,
+      "perdidos": 45,
+      "p50_ms": 1151,
+      "p95_ms": 1480
+    },
+    {
+      "desde": 130,
+      "enviados": 200,
+      "atendidos": 109,
+      "pct_atendido": 54.5,
+      "arca503": 7,
+      "error5xx": 0,
+      "perdidos": 84,
+      "p50_ms": 1193,
+      "p95_ms": 1513
+    },
+    {
+      "desde": 140,
+      "enviados": 200,
+      "atendidos": 191,
+      "pct_atendido": 95.5,
+      "arca503": 9,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1202,
+      "p95_ms": 1482
+    },
+    {
+      "desde": 150,
+      "enviados": 200,
+      "atendidos": 184,
+      "pct_atendido": 92,
+      "arca503": 16,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1143,
+      "p95_ms": 1483
+    },
+    {
+      "desde": 160,
+      "enviados": 200,
+      "atendidos": 184,
+      "pct_atendido": 92,
+      "arca503": 16,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1211,
+      "p95_ms": 1469
+    },
+    {
+      "desde": 170,
+      "enviados": 200,
+      "atendidos": 193,
+      "pct_atendido": 96.5,
+      "arca503": 7,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1208,
+      "p95_ms": 1508
+    },
+    {
+      "desde": 180,
+      "enviados": 200,
+      "atendidos": 185,
+      "pct_atendido": 92.5,
+      "arca503": 15,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1205,
+      "p95_ms": 1463
+    },
+    {
+      "desde": 190,
+      "enviados": 200,
+      "atendidos": 176,
+      "pct_atendido": 88,
+      "arca503": 24,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1192,
+      "p95_ms": 1476
+    },
+    {
+      "desde": 200,
+      "enviados": 200,
+      "atendidos": 185,
+      "pct_atendido": 92.5,
+      "arca503": 15,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1159,
+      "p95_ms": 1469
+    },
+    {
+      "desde": 210,
+      "enviados": 200,
+      "atendidos": 149,
+      "pct_atendido": 74.5,
+      "arca503": 6,
+      "error5xx": 0,
+      "perdidos": 45,
+      "p50_ms": 1218,
+      "p95_ms": 1455
+    },
+    {
+      "desde": 220,
+      "enviados": 200,
+      "atendidos": 156,
+      "pct_atendido": 78,
+      "arca503": 12,
+      "error5xx": 0,
+      "perdidos": 32,
+      "p50_ms": 1249,
+      "p95_ms": 1452
+    },
+    {
+      "desde": 230,
+      "enviados": 200,
+      "atendidos": 186,
+      "pct_atendido": 93,
+      "arca503": 14,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1174,
+      "p95_ms": 1488
+    },
+    {
+      "desde": 240,
+      "enviados": 200,
+      "atendidos": 187,
+      "pct_atendido": 93.5,
+      "arca503": 13,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1228,
+      "p95_ms": 1474
+    },
+    {
+      "desde": 250,
+      "enviados": 200,
+      "atendidos": 190,
+      "pct_atendido": 95,
+      "arca503": 10,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1222,
+      "p95_ms": 1600
+    },
+    {
+      "desde": 260,
+      "enviados": 200,
+      "atendidos": 195,
+      "pct_atendido": 97.5,
+      "arca503": 5,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1256,
+      "p95_ms": 1634
+    },
+    {
+      "desde": 270,
+      "enviados": 200,
+      "atendidos": 189,
+      "pct_atendido": 94.5,
+      "arca503": 11,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1237,
+      "p95_ms": 1618
+    },
+    {
+      "desde": 280,
+      "enviados": 200,
+      "atendidos": 189,
+      "pct_atendido": 94.5,
+      "arca503": 11,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1222,
+      "p95_ms": 1602
+    },
+    {
+      "desde": 290,
+      "enviados": 200,
+      "atendidos": 184,
+      "pct_atendido": 92,
+      "arca503": 16,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1234,
+      "p95_ms": 1568
+    },
+    {
+      "desde": 300,
+      "enviados": 200,
+      "atendidos": 181,
+      "pct_atendido": 90.5,
+      "arca503": 19,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1257,
+      "p95_ms": 1621
+    },
+    {
+      "desde": 310,
+      "enviados": 200,
+      "atendidos": 184,
+      "pct_atendido": 92,
+      "arca503": 16,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1238,
+      "p95_ms": 1512
+    },
+    {
+      "desde": 320,
+      "enviados": 200,
+      "atendidos": 194,
+      "pct_atendido": 97,
+      "arca503": 6,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1202,
+      "p95_ms": 1483
+    },
+    {
+      "desde": 330,
+      "enviados": 200,
+      "atendidos": 190,
+      "pct_atendido": 95,
+      "arca503": 10,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1223,
+      "p95_ms": 1526
+    },
+    {
+      "desde": 340,
+      "enviados": 75,
+      "atendidos": 70,
+      "pct_atendido": 93.3,
+      "arca503": 5,
+      "error5xx": 0,
+      "perdidos": 0,
+      "p50_ms": 1165,
+      "p95_ms": 1517
+    }
+  ]
+}
