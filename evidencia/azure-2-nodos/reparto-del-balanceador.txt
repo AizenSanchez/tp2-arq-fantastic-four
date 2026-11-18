@@ -1,0 +1,10 @@
+reparto del balanceador, 100 pedidos GET / con conexion nueva (Connection: close) desde cada origen
+fecha UTC: 2026-11-18T15:32:07Z   commit: fc405ec
+terraform output vmss_instances: 2
+
+desde esta maquina (conexion: wifi):
+  100 X-Node: tp2vmss000001
+
+desde el jumpbox, dentro de Azure:
+  55 X-Node: tp2vmss000000
+  45 X-Node: tp2vmss000001
