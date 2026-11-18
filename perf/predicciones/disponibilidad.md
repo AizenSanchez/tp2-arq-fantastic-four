@@ -61,4 +61,12 @@ RTT es la ida y vuelta por internet hasta Azure, medida aparte con `GET /`.
 
 ## Caso escalado (2 nodos)
 
-Pendiente: se predice antes de correr el caso escalado, con E18 incluido.
+Se corre la línea de tiempo completa (300 s) y las fallas se inyectan solo en `vmss[0]`; el otro nodo sigue sano. E9 se repite como control, sin predicción nueva.
+
+| Falla | Pedidos perdidos |
+|---|---|
+| E3 — `kill -9` a los 60 s | 0 |
+| E4 — `pm2 stop` a los 120 s y `pm2 start` a los 150 s | 0 |
+| E18 — `kill -STOP` a los 210 s y `kill -CONT` a los 240 s | 0 (el probe saca el nodo del pool) |
+
+**Razonamiento.** Con un segundo nodo sano detrás del balanceador, los pedidos que no puede atender el nodo con la falla se redirigen al otro.
