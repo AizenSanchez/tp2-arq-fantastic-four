@@ -1,0 +1,6 @@
+Capturas del dashboard "TP2 arVault" (Datadog, sitio us5) de esta corrida: exchange-integridad-saldo-carga, caso azure-2-nodos.
+Rango de la corrida (meta.txt): 2026-11-18 15:42:06 a 15:43:00 UTC. Rango del dashboard: 1 minuto antes y 1 minuto despues (hora local UTC-03:00: 12:41 a 12:44, lo que muestra el selector de tiempo).
+Filtro: test = exchange-integridad-saldo-carga. Las metricas de la app, de ARCA y de los nodos no llevan ese tag, asi que muestran todo el rango (con 2 nodos, un host por serie).
+URL: https://us5.datadoghq.com/dashboard/hqx-a77-75c?from_ts=1795016466646&to_ts=1795016640911&live=false&tpl_var_test%5B0%5D=exchange-integridad-saldo-carga
+01-artillery: pedidos por segundo ofrecidos y respuestas por codigo.  02-latencia-y-app: latencias de Artillery y tiempos de la app.  03-nodos: memoria y red por nodo.
+En 03-nodos se ven los dos hosts (tp2vmss000000 y tp2vmss000001) con trafico de red simultaneo.
