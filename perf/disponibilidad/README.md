@@ -44,6 +44,7 @@ Si la corrida se corta con Ctrl+C, el script manda `kill -CONT` y `pm2 start` pa
 - `.../fallas.jsonl`: cada falla con la hora del nodo y la salida del comando.
 - `.../terraform-state-list.txt`, `terraform-output.txt` y `vmss-list-instances.txt` (solo Azure): la infraestructura desplegada al empezar.
 - `.../pm2-antes.json`, `pm2-despues.json` y `pm2-log-arranques.txt` (solo Azure): reinicios y las líneas de arranque y apagado.
+- `.../azure-monitor/` (solo Azure): estado del probe del balanceador por nodo y minuto, y qué IP es cada nodo. Lo baja `exportar-probe.mjs` 3 min después de terminar (`ESPERA_MONITOR_S`), sin ids ni suscripción.
 - `.../meta.txt`: inicio y fin UTC, commit, `git status`, versiones, máquina y conexión.
 - `.../resumen.md` y `resumen.json`: los genera `analizar.mjs` solo a partir de los archivos anteriores.
 

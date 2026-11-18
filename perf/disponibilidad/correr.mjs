@@ -255,5 +255,16 @@ fs.writeFileSync(
   ].join("\n") + "\n"
 );
 
+if (ENTORNO === "azure") {
+  const espera = Number(process.env.ESPERA_MONITOR_S ?? 180);
+  console.log(`      esperando ${espera} s a que Azure Monitor tenga el final de la corrida`);
+  await dormir(espera * 1000);
+  try {
+    execFileSync(process.execPath, [path.join(AQUI, "exportar-probe.mjs"), path.join(RAIZ, "perf/results", caso)], { stdio: "inherit" });
+  } catch {
+    console.error("no se pudo exportar el estado del probe: correr exportar-probe.mjs a mano");
+  }
+}
+
 console.log("[5/5] analisis");
 execFileSync(process.execPath, [path.join(AQUI, "analizar.mjs"), path.join(RAIZ, "perf/results", caso)], { stdio: "inherit" });

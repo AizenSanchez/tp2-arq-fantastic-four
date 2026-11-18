@@ -177,11 +177,16 @@ for (const h of salud) {
   const estado = h.status ?? h.error;
   if (estado !== cambiosSalud.at(-1)?.estado) cambiosSalud.push({ s: Math.round((h.t - ORIGEN) / 100) / 10, estado });
 }
+const probeJson = leerJson(path.join(dir, "azure-monitor", "lb-probe-dipavailability.json"));
+const probe = (probeJson?.value?.[0]?.timeseries ?? []).map((ts) => ({
+  ip: ts.metadatavalues.map((m) => m.value).join(","),
+  minutos: ts.data.map((d) => ({ s: Math.round((Date.parse(d.timeStamp) - ORIGEN) / 1000), utc: d.timeStamp.slice(11, 16), pct: d.average === undefined ? null : Math.round(d.average) })),
+}));
 const pm2Antes = leerJson(path.join(dir, "pm2-antes.json"));
 const pm2Despues = leerJson(path.join(dir, "pm2-despues.json"));
 const reinicios = pm2Antes && pm2Despues ? pm2Despues[0]?.reinicios - pm2Antes[0]?.reinicios : null;
 
-const resumen = { meta: meta.trim(), base: base && { min_ms: base.min_ms, p50_ms: base.p50_ms, p95_ms: base.p95_ms }, totales, referencia_sin_fallas: latPorStatus, e9, eventos, reinicios_pm2: reinicios, pm2: { antes: pm2Antes, despues: pm2Despues }, errores_por_periodo: erroresPorPeriodo, cambios_salud: cambiosSalud, ventanas };
+const resumen = { meta: meta.trim(), base: base && { min_ms: base.min_ms, p50_ms: base.p50_ms, p95_ms: base.p95_ms }, totales, referencia_sin_fallas: latPorStatus, e9, eventos, reinicios_pm2: reinicios, pm2: { antes: pm2Antes, despues: pm2Despues }, errores_por_periodo: erroresPorPeriodo, cambios_salud: cambiosSalud, probe_lb: probe, ventanas };
 fs.writeFileSync(path.join(dir, "resumen.json"), JSON.stringify(resumen, null, 2) + "\n");
 
 const fila = (celdas) => `| ${celdas.map((c) => (c === null || c === undefined ? "—" : c)).join(" | ")} |`;
@@ -253,6 +258,18 @@ const md = [
   "## Cambios de estado del monitor de /health",
   "",
   cambiosSalud.map((c) => `${c.s} s → ${c.estado}`).join(" · "),
+  "",
+  "## Estado del probe del balanceador por nodo (Azure Monitor, % de probes exitosos por minuto)",
+  "",
+  ...(probe.length
+    ? [
+        fila(["IP del nodo", ...probe[0].minutos.map((m) => `${m.utc} (${m.s} s)`)]),
+        fila(Array(probe[0].minutos.length + 1).fill("---")),
+        ...probe.map((p) => fila([p.ip, ...p.minutos.map((m) => m.pct)])),
+        "",
+        "Qué IP es cada nodo: `azure-monitor/LEEME.txt`. El segundo entre paréntesis es el comienzo de cada minuto desde el inicio de la corrida.",
+      ]
+    : ["no exportado"]),
   "",
   "## Ventanas de 10 s",
   "",
