@@ -1,0 +1,8 @@
+az monitor metrics list del VMSS tp2vmss, "CPU Credits Remaining" y "Percentage CPU", grano 5 min (promedio)
+2026-11-18T00:20Z  creditos 60,9  CPU 4,3 %
+2026-11-18T00:25Z  creditos 62,8  CPU 4,3 %
+2026-11-18T00:30Z  creditos 65,3  CPU 7,1 %
+2026-11-18T00:35Z  creditos 67,3  CPU 7,6 %
+2026-11-18T00:40Z  creditos 69,9  CPU 1,6 %
+2026-11-18T00:45Z  creditos 72,4  CPU 2,1 %
+suben unos 0,5 por minuto con la VM casi quieta

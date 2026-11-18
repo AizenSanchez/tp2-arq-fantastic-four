@@ -1,0 +1,24 @@
+# hora del nodo: 2026-11-18T00:37:55Z
+# cpu
+2
+Model name:                              AMD EPYC 7763 64-Core Processor
+Thread(s) per core:                      2
+# memoria
+               total        used        free      shared  buff/cache   available
+Mem:            3906         750        1164           3        2281        3156
+# sysctl
+net.netfilter.nf_conntrack_max = 65536
+net.netfilter.nf_conntrack_count = 157
+net.netfilter.nf_conntrack_tcp_timeout_time_wait = 120
+net.ipv4.tcp_fin_timeout = 60
+net.core.somaxconn = 4096
+net.ipv4.tcp_max_syn_backlog = 256
+# regla de nftables que activa conntrack
+3-		type filter hook output priority 150; policy accept;
+4-		ip daddr 168.63.129.16 tcp dport 53 counter packets 0 bytes 0 accept
+5-		ip daddr 168.63.129.16 ip protocol tcp skuid 0 counter packets 3538 bytes 1090549 accept
+6:		ip daddr 168.63.129.16 ip protocol tcp ct state invalid,new counter packets 0 bytes 0 drop
+7-	}
+8-}
+# app
+app online instancias=1 modo=fork_mode

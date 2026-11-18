@@ -1,0 +1,12 @@
+CPU del proceso de la app por pedido, Standard_B2als_v2 (2 vCPU EPYC 7763), northcentralus, 2026-11-18 UTC
+fuente: ticks-app.txt (utime + stime de /proc/<pid>/stat, 1 tick = 10 ms), ventanas de *.horario.txt, 1.200 pedidos por corrida a 20 req/s desde la generadora por cable
+
+en reposo: 15 ticks de utime y 0 de stime en 152 s (1794962849 a 1794963001), unos 1 ms/s
+
+| corrida | utime | stime | reposo | neto | pedidos | ms de CPU por pedido |
+|---|---|---|---|---|---|---|
+| GET /rates | 89 | 30 (21 en 56 s medidos, escalado a 80 s) | 8 | 111 | 1.200 | 0,93 |
+| GET /accounts | 92 | 25 | 8 | 109 | 1.200 | 0,91 |
+| POST /exchange (ARS a USD) | 341 | sin medir (ese tramo de `ticks-app.txt` no tiene stime) | 8 | 333 de utime | 1.200 | 2,8 de utime; unos 3,5 con stime estimado en 0,27 x utime como en los GET |
+
+techo del proceso (1 hilo de JS): 1.000 / 3,5 = unos 285 POST/s con el 100 % de un nucleo
