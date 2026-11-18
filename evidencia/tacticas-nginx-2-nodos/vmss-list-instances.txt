@@ -1,0 +1,8 @@
+InstanceId    LatestModelApplied    Location        ModelDefinitionApplied    Name       ProvisioningState    ResilientVMDeletionStatus    ResourceGroup       TimeCreated                        VmId
+------------  --------------------  --------------  ------------------------  ---------  -------------------  ---------------------------  ------------------  ---------------------------------  ------------------------------------
+0             True                  northcentralus  VirtualMachineScaleSet    tp2vmss_0  Succeeded            Disabled                     tp2_resource_group  2026-11-18T02:35:21.588403+00:00   f5cf5838-11b1-4222-be58-2b6cf5c29164
+1             True                  northcentralus  VirtualMachineScaleSet    tp2vmss_1  Succeeded            Disabled                     tp2_resource_group  2026-11-18T03:06:20.2265219+00:00  d00b9adb-9406-4bcd-9505-6a2ef9a8dfd7
+
+Sku                Capacidad    Region
+-----------------  -----------  --------------
+Standard_B2als_v2  2            northcentralus
