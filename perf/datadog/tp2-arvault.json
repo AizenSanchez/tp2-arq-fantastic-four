@@ -1,0 +1,361 @@
+{
+  "title": "TP2 arVault",
+  "description": "Carga de Artillery, respuestas de la app, ARCA y los nodos del VMSS.",
+  "layout_type": "ordered",
+  "template_variables": [
+    {
+      "name": "test",
+      "prefix": "test",
+      "available_values": [],
+      "default": "*"
+    },
+    {
+      "name": "host",
+      "prefix": "host",
+      "available_values": [],
+      "default": "*"
+    }
+  ],
+  "widgets": [
+    {
+      "definition": {
+        "type": "group",
+        "title": "Artillery (cliente)",
+        "layout_type": "ordered",
+        "widgets": [
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Pedidos por segundo ofrecidos",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "requests": [
+                {
+                  "q": "sum:artillery.http.request_rate{$test}",
+                  "display_type": "line"
+                }
+              ]
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Respuestas por codigo (Artillery)",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "requests": [
+                {
+                  "q": "sum:artillery.http.codes.200{$test}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:artillery.http.codes.403{$test}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:artillery.http.codes.503{$test}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:artillery.http.codes.502{$test}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:artillery.errors.ETIMEDOUT{$test}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:artillery.errors.ERR_SOCKET_TIMEOUT{$test}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:artillery.errors.ECONNRESET{$test}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:artillery.errors.EADDRNOTAVAIL{$test}.as_count()",
+                  "display_type": "bars"
+                }
+              ]
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Latencia de los 200: mediana y p95 (ms)",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "requests": [
+                {
+                  "q": "avg:artillery.http.response_time.2xx.median{$test}",
+                  "display_type": "line"
+                },
+                {
+                  "q": "avg:artillery.http.response_time.2xx.p95{$test}",
+                  "display_type": "line"
+                }
+              ]
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Latencia de los 403 y 503: mediana y p95 (ms)",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "requests": [
+                {
+                  "q": "avg:artillery.http.response_time.4xx.median{$test}",
+                  "display_type": "line"
+                },
+                {
+                  "q": "avg:artillery.http.response_time.4xx.p95{$test}",
+                  "display_type": "line"
+                },
+                {
+                  "q": "avg:artillery.http.response_time.5xx.median{$test}",
+                  "display_type": "line"
+                },
+                {
+                  "q": "avg:artillery.http.response_time.5xx.p95{$test}",
+                  "display_type": "line"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "definition": {
+        "type": "group",
+        "title": "App (arVault en cada nodo)",
+        "layout_type": "ordered",
+        "widgets": [
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Respuestas por codigo (app)",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "requests": [
+                {
+                  "q": "sum:arvault.exchange.express.response_code.200{$host}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:arvault.exchange.express.response_code.403{$host}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:arvault.exchange.express.response_code.503{$host}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:arvault.exchange.express.response_code.502{$host}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:arvault.exchange.express.response_code.500{$host}.as_count()",
+                  "display_type": "bars"
+                }
+              ]
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Tiempo de respuesta de POST /exchange en la app: mediana y p95 (ms)",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "requests": [
+                {
+                  "q": "avg:arvault.exchange.http.POST.exchange.median{$host}",
+                  "display_type": "line"
+                },
+                {
+                  "q": "avg:arvault.exchange.http.POST.exchange.95percentile{$host}",
+                  "display_type": "line"
+                }
+              ]
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Cambios hechos y rechazados por saldo",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "requests": [
+                {
+                  "q": "sum:arvault.exchange.operaciones.ok{$host}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:arvault.exchange.operaciones.rechazadas{$host}.as_count()",
+                  "display_type": "bars"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "definition": {
+        "type": "group",
+        "title": "ARCA",
+        "layout_type": "ordered",
+        "widgets": [
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Validaciones: aprobadas, rechazadas y reintentos",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "requests": [
+                {
+                  "q": "sum:arvault.exchange.arca.aprobadas{$host}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:arvault.exchange.arca.rechazadas{$host}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:arvault.exchange.arca.reintentos{$host}.as_count()",
+                  "display_type": "bars"
+                }
+              ]
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Errores de ARCA por motivo",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "requests": [
+                {
+                  "q": "sum:arvault.exchange.arca.errores.http_5xx{$host}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:arvault.exchange.arca.errores.timeout{$host}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:arvault.exchange.arca.errores.conexion{$host}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:arvault.exchange.arca.errores.http_4xx{$host}.as_count()",
+                  "display_type": "bars"
+                },
+                {
+                  "q": "sum:arvault.exchange.arca.errores.respuesta_invalida{$host}.as_count()",
+                  "display_type": "bars"
+                }
+              ]
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Tiempo de ARCA, con reintento: mediana y p95 (ms)",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "requests": [
+                {
+                  "q": "avg:arvault.exchange.arca.ms.median{$host}",
+                  "display_type": "line"
+                },
+                {
+                  "q": "avg:arvault.exchange.arca.ms.95percentile{$host}",
+                  "display_type": "line"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "definition": {
+        "type": "group",
+        "title": "Nodos del VMSS",
+        "layout_type": "ordered",
+        "widgets": [
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "CPU por nodo (%)",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "requests": [
+                {
+                  "q": "avg:system.cpu.user{$host} by {host}",
+                  "display_type": "line"
+                },
+                {
+                  "q": "avg:system.cpu.system{$host} by {host}",
+                  "display_type": "line"
+                }
+              ]
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "CPU robada (steal) e iowait por nodo (%)",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "requests": [
+                {
+                  "q": "avg:system.cpu.stolen{$host} by {host}",
+                  "display_type": "line"
+                },
+                {
+                  "q": "avg:system.cpu.iowait{$host} by {host}",
+                  "display_type": "line"
+                }
+              ]
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Memoria usable por nodo",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "requests": [
+                {
+                  "q": "avg:system.mem.usable{$host} by {host}",
+                  "display_type": "line"
+                }
+              ]
+            }
+          },
+          {
+            "definition": {
+              "type": "timeseries",
+              "title": "Red por nodo (bytes/s)",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "requests": [
+                {
+                  "q": "sum:system.net.bytes_rcvd{$host} by {host}",
+                  "display_type": "line"
+                },
+                {
+                  "q": "sum:system.net.bytes_sent{$host} by {host}",
+                  "display_type": "line"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
