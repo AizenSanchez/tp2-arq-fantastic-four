@@ -32,24 +32,30 @@ TARGETS=http://localhost:3000,http://localhost:3001 node perf/integridad/correr.
 TARGETS=http://localhost:3000,http://localhost:3001 node perf/integridad/correr.mjs reintentos local-2-nodos
 ```
 
-## Azure (lo corre quien mide, en el lugar fijo)
+## Azure (cada uno en su propia cuenta)
 
-Antes: `GET /` para el RTT base, y **un escenario a la vez**: cambian la tasa y el saldo de USD, que son compartidos con los demás bloques.
+Prerrequisitos y orden completo: ver `perf/integridad/SETUP-AZURE.md`.
+
+Con la infra desplegada (`terraform apply` y `ansible/setup.sh` + `ansible/deploy.sh`), y **un escenario a la vez** (cambian la tasa y el saldo de USD, que son estado compartido):
 
 ```bash
-export DATADOG_API_KEY=...            # sin escribirla en ningun archivo
-export RTT_MS=<RTT base medido>       # para comparar latencias con la prediccion
-export CONEXION=cable                 # o wifi (queda en meta.txt)
-# el reinicio es ansible/reset.sh (lo hace correr.mjs); el target sale de node/lb_dns
-node perf/integridad/correr.mjs saldo 1-nodo --env azure
-node perf/integridad/correr.mjs reintentos 1-nodo --env azure
-# subir node_instances a 2, ansible/setup.sh, ansible/deploy.sh, y repetir con el caso "escalado"
-node perf/integridad/correr.mjs saldo escalado --env azure
-node perf/integridad/correr.mjs reintentos escalado --env azure
-# opcionales: saldo-carga y duplicados, con ambos casos
+read -s DATADOG_API_KEY; export DATADOG_API_KEY     # nunca en un archivo
+export DATADOG_API_HOST=us5.datadoghq.com           # el sitio de TU cuenta de Datadog (por defecto us5, como ansible/vmss_setup.yml)
+export CONEXION=cable                               # o wifi (queda en meta.txt)
+# el reinicio es ansible/reset.sh y el target sale de node/lb_dns; ambos los resuelve correr.mjs
+node perf/integridad/correr.mjs saldo azure-1-nodo --env azure
+node perf/integridad/correr.mjs reintentos azure-1-nodo --env azure
+node perf/integridad/correr.mjs saldo-carga azure-1-nodo --env azure      # opcional
+node perf/integridad/correr.mjs duplicados azure-1-nodo --env azure      # opcional
+# escalar a 2 nodos (terraform apply -var node_instances=2, ansible/setup.sh, ansible/deploy.sh) y repetir con azure-2-nodos
 ```
 
-**Antes de la corrida oficial, con la clave real, una prueba corta** (por ejemplo `reintentos` con un caso de prueba como `prueba-seca`) y mirar que las métricas lleguen al dashboard: una clave inválida o una falla de Datadog al arrancar hace caer Artillery **antes de medir** (ver `perf/results/resultados-integridad-local.md`, sección B). Y **no dejar `DEBUG=plugin:publish-metrics:datadog-statsd` prendido** (lo exporta `perf/run.sh`): imprime la clave en claro.
+Con `--env azure`, antes de cargar `correr.mjs` mide el RTT de base (`rtt.json`, y lo usa como `RTT_MS` si no se pasa uno) y guarda
+`terraform state list`, `terraform output` y `az vmss list-instances` en `evidencia/<caso>/`. Al terminar exporta las métricas de
+Redis y de ARCA de Azure Monitor a `azure-monitor/` (espera 3 minutos a que Azure las publique; `AZURE_MONITOR_ESPERA_S=saltear` evita todo el paso).
+
+**Antes de la corrida oficial, con la clave real, una prueba corta** (por ejemplo `reintentos` con un caso `prueba-seca`, que no se commitea) y mirar que las
+métricas lleguen al dashboard. Y **no dejar `DEBUG=plugin:publish-metrics:datadog-statsd` prendido** (lo exporta `perf/run.sh`): imprime la clave en claro.
 
 ## Qué queda en `perf/results/<caso>/`
 
@@ -58,10 +64,12 @@ node perf/integridad/correr.mjs reintentos escalado --env azure
 - `.../saldos.jsonl`: saldo de USD y ARS cada segundo.
 - `.../antes.json` y `despues.json`: cuentas y entradas nuevas del log.
 - `.../informe.json`: cada comprobación, exacta o esperada, con su resultado.
-- `.../meta.txt`: inicio y fin UTC, commit, `git status`, versiones, máquina, tipo de conexión.
+- `.../rtt.json`: las 20 + 20 muestras de `GET /` (conexión reutilizada y nueva) con su mediana y P95.
+- `.../azure-monitor/` (solo Azure): Redis y ARCA de Azure Monitor, para ver que no se saturan.
+- `.../meta.txt`: inicio y fin UTC, commit, `git status`, versiones, máquina, tipo de conexión, RTT y, en Azure, las salidas de `terraform output`.
 
 ## Diferencias de local con Azure (importan al comparar)
 
 - En local el reparto entre nodos lo hace el script (al azar por conexión); en Azure lo hace el balanceador L4 (hash de la conexión).
-- En local no hay latencia de red: `RTT_MS` queda en 0.
+- En local no hay latencia de red: `RTT_MS` queda en 0 (el RTT se mide igual y queda en `rtt.json`).
 - Redis local no tiene TLS ni red de por medio; el de Azure sí.

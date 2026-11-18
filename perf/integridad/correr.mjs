@@ -16,6 +16,7 @@
 // RTT_MS (latencia de red base, para comparar latencias), CONEXION (cable o wifi), DATADOG_API_KEY (solo azure).
 import { spawn, execSync } from "node:child_process";
 import crypto from "node:crypto";
+import { capturarInfra, exportarAzureMonitor, lineasDeAzureParaMeta, medirRtt } from "./azure.mjs";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -73,7 +74,9 @@ function nodos() {
 }
 const NODOS = nodos();
 const BASE = NODOS[0];
-const RTT_MS = Number(process.env.RTT_MS ?? 0);
+// RTT_MS: la red que se le suma a cada pedido para comparar con las predicciones. En local es 0. En Azure, si no se
+// pasa, se usa la mediana de GET / con conexion nueva (lo que le suma la red a cada pedido de estos escenarios)
+let RTT_MS = Number(process.env.RTT_MS ?? 0);
 
 // ---------------------------------------------------------------- utilidades
 
@@ -132,6 +135,16 @@ const resetCmd =
 console.log(`[1/4] reinicio del estado: ${resetCmd}`);
 execSync(resetCmd, { cwd: RAIZ, stdio: "inherit" });
 await esperarSalud();
+
+// RTT de base: GET / no toca ARCA ni Redis. Se mide siempre (en local da ~ 0) y se guarda en rtt.json
+const rtt = await medirRtt(BASE);
+guardar("rtt.json", rtt);
+console.log(`      RTT de base (GET /): conexion reutilizada p50 ${rtt.reutilizada.p50_ms} ms, nueva p50 ${rtt.nueva.p50_ms} ms (connect p50 ${rtt.nueva.connect_p50_ms} ms)`);
+if (ENTORNO === "azure") {
+  if (process.env.RTT_MS === undefined) RTT_MS = rtt.nueva.p50_ms;
+  // terraform state list, terraform output y az vmss list-instances: evidencia de como estaba desplegado
+  capturarInfra(RAIZ, caso);
+}
 
 // saldo: tasa 0,001 (5.000 ARS = 5 USD exactos) y 100 USD de saldo = saldo para 20 cambios
 const MONTO_ARS = 5000;
@@ -222,7 +235,7 @@ if (ESCENARIOS[escenario].motor === "propio") {
           TARGET: NODOS[0],
           TARGETS: NODOS.join(","),
           CASO: caso,
-          DATADOG_API_HOST: process.env.DATADOG_API_HOST ?? "app.datadoghq.com",
+          DATADOG_API_HOST: process.env.DATADOG_API_HOST ?? "us5.datadoghq.com", // el sitio del grupo (ansible/vmss_setup.yml); cambiarlo si tu cuenta es de otro
           PEDIDOS_JSONL: path.join(extras, "pedidos.jsonl"),
         },
       }
@@ -475,10 +488,17 @@ fs.writeFileSync(
     `node: ${process.version}`,
     `maquina: ${os.hostname()}`,
     `conexion: ${process.env.CONEXION ?? "no informada"}`,
-    `RTT base (ms): ${RTT_MS}`,
+    `RTT de base (GET /): conexion reutilizada p50 ${rtt.reutilizada.p50_ms} ms, p95 ${rtt.reutilizada.p95_ms} ms; conexion nueva p50 ${rtt.nueva.p50_ms} ms, p95 ${rtt.nueva.p95_ms} ms`,
+    `RTT usado para comparar con las predicciones (ms): ${RTT_MS}`,
+    ...(ENTORNO === "azure" ? lineasDeAzureParaMeta(RAIZ) : []),
     `zona horaria: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
   ].join("\n") + "\n"
 );
+
+// Redis y ARCA no tienen agente de Datadog: sus metricas salen de Azure Monitor (espera 3 min a que se publiquen)
+if (ENTORNO === "azure" && process.env.AZURE_MONITOR_ESPERA_S !== "saltear") {
+  await exportarAzureMonitor({ raiz: RAIZ, dir: path.join(extras, "azure-monitor"), inicio, fin });
+}
 
 console.log(`\n[4/4] ${nombreCompleto} (${caso})`);
 console.log(`respuestas: ${JSON.stringify(porEstado)}   por nodo: ${JSON.stringify(porNodo)}`);
