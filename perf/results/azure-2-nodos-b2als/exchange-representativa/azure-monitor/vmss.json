@@ -1,0 +1,269 @@
+{
+  "cost": 78,
+  "interval": "PT1M",
+  "namespace": "Microsoft.Compute/virtualMachineScaleSets",
+  "resourceregion": "northcentralus",
+  "timespan": "2026-11-18T03:31:27Z/2026-11-18T03:45:50Z",
+  "value": [
+    {
+      "displayDescription": "Total number of credits available to burst. Only available on B-series burstable VMs",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "CPU Credits Remaining",
+        "value": "CPU Credits Remaining"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 79.74,
+              "maximum": 88.21,
+              "timeStamp": "2026-11-18T03:31:00Z"
+            },
+            {
+              "average": 80.235,
+              "maximum": 88.67,
+              "timeStamp": "2026-11-18T03:32:00Z"
+            },
+            {
+              "average": 80.695,
+              "maximum": 89.14,
+              "timeStamp": "2026-11-18T03:33:00Z"
+            },
+            {
+              "average": 81.215,
+              "maximum": 89.69,
+              "timeStamp": "2026-11-18T03:34:00Z"
+            },
+            {
+              "average": 81.78,
+              "maximum": 90.24,
+              "timeStamp": "2026-11-18T03:35:00Z"
+            },
+            {
+              "average": 82.32,
+              "maximum": 90.78,
+              "timeStamp": "2026-11-18T03:36:00Z"
+            },
+            {
+              "average": 82.855,
+              "maximum": 91.31,
+              "timeStamp": "2026-11-18T03:37:00Z"
+            },
+            {
+              "average": 83.39,
+              "maximum": 91.85,
+              "timeStamp": "2026-11-18T03:38:00Z"
+            },
+            {
+              "average": 83.925,
+              "maximum": 92.39,
+              "timeStamp": "2026-11-18T03:39:00Z"
+            },
+            {
+              "average": 84.465,
+              "maximum": 92.93,
+              "timeStamp": "2026-11-18T03:40:00Z"
+            },
+            {
+              "average": 85.005,
+              "maximum": 93.47,
+              "timeStamp": "2026-11-18T03:41:00Z"
+            },
+            {
+              "average": 85.545,
+              "maximum": 94.01,
+              "timeStamp": "2026-11-18T03:42:00Z"
+            },
+            {
+              "average": 94.54,
+              "maximum": 94.54,
+              "timeStamp": "2026-11-18T03:43:00Z"
+            },
+            {
+              "maximum": 0.0,
+              "timeStamp": "2026-11-18T03:44:00Z"
+            }
+          ],
+          "metadatavalues": []
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Count"
+    },
+    {
+      "displayDescription": "Total number of credits consumed by the Virtual Machine. Only available on B-series burstable VMs",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "CPU Credits Consumed",
+        "value": "CPU Credits Consumed"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 0.145,
+              "maximum": 0.15,
+              "timeStamp": "2026-11-18T03:31:00Z"
+            },
+            {
+              "average": 0.12,
+              "maximum": 0.13,
+              "timeStamp": "2026-11-18T03:32:00Z"
+            },
+            {
+              "average": 0.035,
+              "maximum": 0.05,
+              "timeStamp": "2026-11-18T03:33:00Z"
+            },
+            {
+              "average": 0.055,
+              "maximum": 0.06,
+              "timeStamp": "2026-11-18T03:34:00Z"
+            },
+            {
+              "average": 0.06,
+              "maximum": 0.06,
+              "timeStamp": "2026-11-18T03:35:00Z"
+            },
+            {
+              "average": 0.07,
+              "maximum": 0.07,
+              "timeStamp": "2026-11-18T03:36:00Z"
+            },
+            {
+              "average": 0.065,
+              "maximum": 0.07,
+              "timeStamp": "2026-11-18T03:37:00Z"
+            },
+            {
+              "average": 0.06,
+              "maximum": 0.06,
+              "timeStamp": "2026-11-18T03:38:00Z"
+            },
+            {
+              "average": 0.06,
+              "maximum": 0.06,
+              "timeStamp": "2026-11-18T03:39:00Z"
+            },
+            {
+              "average": 0.06,
+              "maximum": 0.06,
+              "timeStamp": "2026-11-18T03:40:00Z"
+            },
+            {
+              "average": 0.06,
+              "maximum": 0.06,
+              "timeStamp": "2026-11-18T03:41:00Z"
+            },
+            {
+              "average": 0.065,
+              "maximum": 0.07,
+              "timeStamp": "2026-11-18T03:42:00Z"
+            },
+            {
+              "average": 0.07,
+              "maximum": 0.07,
+              "timeStamp": "2026-11-18T03:43:00Z"
+            },
+            {
+              "maximum": 0.0,
+              "timeStamp": "2026-11-18T03:44:00Z"
+            }
+          ],
+          "metadatavalues": []
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Count"
+    },
+    {
+      "displayDescription": "The percentage of allocated compute units that are currently in use by the Virtual Machine(s)",
+      "errorCode": "Success",
+      "name": {
+        "localizedValue": "Percentage CPU",
+        "value": "Percentage CPU"
+      },
+      "resourceGroup": "tp2_resource_group",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "average": 0.9575,
+              "maximum": 1.35,
+              "timeStamp": "2026-11-18T03:31:00Z"
+            },
+            {
+              "average": 4.73,
+              "maximum": 6.3,
+              "timeStamp": "2026-11-18T03:32:00Z"
+            },
+            {
+              "average": 5.955,
+              "maximum": 6.68,
+              "timeStamp": "2026-11-18T03:33:00Z"
+            },
+            {
+              "average": 3.3675,
+              "maximum": 5.81,
+              "timeStamp": "2026-11-18T03:34:00Z"
+            },
+            {
+              "average": 1.37,
+              "maximum": 2.24,
+              "timeStamp": "2026-11-18T03:35:00Z"
+            },
+            {
+              "average": 2.95,
+              "maximum": 3.2,
+              "timeStamp": "2026-11-18T03:36:00Z"
+            },
+            {
+              "average": 2.795,
+              "maximum": 2.94,
+              "timeStamp": "2026-11-18T03:37:00Z"
+            },
+            {
+              "average": 2.795,
+              "maximum": 3.03,
+              "timeStamp": "2026-11-18T03:38:00Z"
+            },
+            {
+              "average": 2.96,
+              "maximum": 3.29,
+              "timeStamp": "2026-11-18T03:39:00Z"
+            },
+            {
+              "average": 2.6875,
+              "maximum": 2.77,
+              "timeStamp": "2026-11-18T03:40:00Z"
+            },
+            {
+              "average": 2.6475,
+              "maximum": 2.78,
+              "timeStamp": "2026-11-18T03:41:00Z"
+            },
+            {
+              "average": 2.645,
+              "maximum": 2.76,
+              "timeStamp": "2026-11-18T03:42:00Z"
+            },
+            {
+              "average": 3.375,
+              "maximum": 3.49,
+              "timeStamp": "2026-11-18T03:43:00Z"
+            },
+            {
+              "timeStamp": "2026-11-18T03:44:00Z"
+            }
+          ],
+          "metadatavalues": []
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Percent"
+    }
+  ]
+}
