@@ -1,0 +1,167 @@
+{
+  "escenario": "exchange-integridad-duplicados",
+  "caso": "azure-2-nodos-repeticion",
+  "entorno": "azure",
+  "resultado": "INVARIANTE ROTA",
+  "inicioUTC": "2026-11-18T15:52:38.746Z",
+  "finUTC": "2026-11-18T15:52:49.988Z",
+  "nodos": [
+    "http://qhybdyddqz.eastus2.cloudapp.azure.com"
+  ],
+  "pedidos": 300,
+  "respuestasPorEstado": {
+    "200": 126,
+    "403": 70,
+    "409": 98,
+    "503": 6
+  },
+  "pedidosPorNodo": {
+    "tp2vmss000001": 202,
+    "tp2vmss000000": 98
+  },
+  "latenciaPorEstado": {
+    "200": {
+      "n": 126,
+      "mediana": 988,
+      "p95": 1478
+    },
+    "403": {
+      "n": 70,
+      "mediana": 501,
+      "p95": 807
+    },
+    "409": {
+      "n": 98,
+      "mediana": 298,
+      "p95": 446
+    },
+    "503": {
+      "n": 6,
+      "mediana": 397,
+      "p95": 547
+    }
+  },
+  "pares": 100,
+  "paresConUn409": 98,
+  "ganadores": {
+    "200": 62,
+    "403": 34,
+    "503": 4
+  },
+  "paresEnNodosDistintos": 42,
+  "latencia409": {
+    "n": 98,
+    "mediana": 298,
+    "p95": 446
+  },
+  "comprobaciones": [
+    {
+      "tipo": "exacta",
+      "nombre": "todos los pedidos tienen respuesta registrada",
+      "ok": true,
+      "detalle": "300 de 300"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "sin errores propios (otros estados, timeouts, conexiones caidas)",
+      "ok": true,
+      "detalle": "otros estados: 0, errores de Artillery: 0, estados: {\"200\":126,\"403\":70,\"409\":98,\"503\":6}"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "el saldo de USD nunca fue negativo",
+      "ok": true,
+      "detalle": "minimo visto: 59957.699933906144 en 12 lecturas"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "hay 100 pares con sus tres respuestas",
+      "ok": true,
+      "detalle": "100"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "pares con exactamente un 409 (en la nube puede haber diferencia de llegada)",
+      "ok": true,
+      "detalle": "98 (rango 95 a 100)"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "ningun par con dos 409",
+      "ok": true,
+      "detalle": "0 esperado"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "todo 409 lleva Retry-After: 1",
+      "ok": true,
+      "detalle": "98 respuestas 409"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "si el ganador fue 200 o 403, el otro pedido (si no fue 409) devolvio lo mismo",
+      "ok": false,
+      "detalle": "98 de 100"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "el tercer pedido repite la respuesta del ganador (200 o 403), mismo id",
+      "ok": true,
+      "detalle": "96 de 96"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "entradas del log con ok:true = aprobaciones distintas",
+      "ok": true,
+      "detalle": "64 contra 64"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "entradas nuevas del log = respuestas distintas + 503 (el que pierde con 409 no genera entrada)",
+      "ok": true,
+      "detalle": "106 contra 106"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "saldo de USD varia en -(suma de lo aprobado)",
+      "ok": true,
+      "detalle": "42.300066093856 contra 42.30006609385327"
+    },
+    {
+      "tipo": "exacta",
+      "nombre": "saldo de ARS varia en +(suma de lo aprobado)",
+      "ok": true,
+      "detalle": "64000 contra 64000"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "ganador 200",
+      "ok": true,
+      "detalle": "62 (rango 52 a 76)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "ganador 403",
+      "ok": true,
+      "detalle": "34 (rango 18 a 42)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "ganador 503",
+      "ok": true,
+      "detalle": "4 (rango 1 a 12)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "mediana de un 409 (RTT + 5 ms)",
+      "ok": true,
+      "detalle": "298 (rango 290 a 350)"
+    },
+    {
+      "tipo": "esperada",
+      "nombre": "pares cuyos dos pedidos caen en nodos distintos",
+      "ok": true,
+      "detalle": "42 (rango 40 a 60)"
+    }
+  ]
+}
