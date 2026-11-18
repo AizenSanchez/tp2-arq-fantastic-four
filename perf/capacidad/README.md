@@ -77,6 +77,17 @@ read -s DD_APP_KEY; export DD_APP_KEY                             # además de D
 node perf/capacidad/capturar-datadog.mjs azure-1-nodo capacidad   # o endurance
 ```
 
+Los gráficos de `capturar-datadog.mjs` son snapshots de la API de Datadog: cuando un gráfico tiene varias series, no
+llevan título ni leyenda (los números exactos están en `series.json`). Por eso cada corrida tiene además
+`datadog/dashboard-tp2-arvault.png`, la captura de pantalla del dashboard del grupo (`perf/datadog/tp2-arvault.json`)
+con la variable `test` en la corrida y el rango de `meta.txt` (1 min antes y después; las horas están en UTC−3). El
+tablero se importa en la cuenta con `POST /api/v1/dashboard` y el JSON del repo, y las capturas salen de un Chromium
+con ventana en el que se inicia sesión a mano una vez:
+
+```bash
+DD_DASHBOARD_ID=<id del tablero en tu cuenta> node perf/capacidad/capturar-dashboard.cjs   # o <caso>/<corrida>
+```
+
 Variables: `TARGET` (por defecto `localhost:3000` o `node/lb_dns`), `RESET_CMD` (por defecto `reset-state.js` en el
 contenedor, o `ansible/reset.sh` en Azure), `CONEXION`, `DATADOG_API_KEY` (solo Azure, solo por entorno),
 `DATADOG_API_HOST` (`us5.datadoghq.com`), `AZURE_GRUPO` (`tp2_resource_group`), `AZURE_MONITOR_ESPERA_S` (180) y
