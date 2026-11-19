@@ -1,0 +1,78 @@
+{
+  "consultado_utc": "2026-11-19T03:18:23Z",
+  "consulta": "GET https://prices.azure.com/api/retail/prices?$filter=serviceName eq 'Application Gateway' and armRegionName eq 'eastus2' and priceType eq 'Consumption'",
+  "items": [
+    {
+      "productName": "Application Gateway WAF v2",
+      "skuName": "Standard",
+      "meterName": "Standard Capacity Units",
+      "retailPrice": 0.0144,
+      "currencyCode": "USD",
+      "unitOfMeasure": "1/Hour",
+      "effectiveStartDate": "2019-05-09T00:00:00Z"
+    },
+    {
+      "productName": "Application Gateway WAF v2",
+      "skuName": "Standard",
+      "meterName": "Standard Captcha Sessions",
+      "retailPrice": 0.4,
+      "currencyCode": "USD",
+      "unitOfMeasure": "1K",
+      "effectiveStartDate": "2025-11-01T00:00:00Z"
+    },
+    {
+      "productName": "Application Gateway WAF v2 - Discounted",
+      "skuName": "Standard",
+      "meterName": "Standard Fixed Cost",
+      "retailPrice": 0.2,
+      "currencyCode": "USD",
+      "unitOfMeasure": "1/Hour",
+      "effectiveStartDate": "2025-10-01T00:00:00Z"
+    },
+    {
+      "productName": "Application Gateway WAF v2",
+      "skuName": "Standard",
+      "meterName": "Standard Fixed Cost",
+      "retailPrice": 0.36,
+      "currencyCode": "USD",
+      "unitOfMeasure": "1/Hour",
+      "effectiveStartDate": "2019-05-09T00:00:00Z"
+    },
+    {
+      "productName": "Application Gateway Standard v2",
+      "skuName": "Standard",
+      "meterName": "Standard Capacity Units",
+      "retailPrice": 0.008,
+      "currencyCode": "USD",
+      "unitOfMeasure": "1/Hour",
+      "effectiveStartDate": "2019-05-09T00:00:00Z"
+    },
+    {
+      "productName": "Application Gateway WAF v2 - Discounted",
+      "skuName": "Standard",
+      "meterName": "Standard Capacity Units",
+      "retailPrice": 0.008,
+      "currencyCode": "USD",
+      "unitOfMeasure": "1/Hour",
+      "effectiveStartDate": "2025-10-01T00:00:00Z"
+    },
+    {
+      "productName": "Application Gateway Standard v2",
+      "skuName": "Confidential Compute",
+      "meterName": "Confidential Compute Fixed Cost",
+      "retailPrice": 0.02,
+      "currencyCode": "USD",
+      "unitOfMeasure": "1/Hour",
+      "effectiveStartDate": "2026-11-01T00:00:00Z"
+    },
+    {
+      "productName": "Application Gateway Standard v2",
+      "skuName": "Standard",
+      "meterName": "Standard Fixed Cost",
+      "retailPrice": 0.2,
+      "currencyCode": "USD",
+      "unitOfMeasure": "1/Hour",
+      "effectiveStartDate": "2019-05-09T00:00:00Z"
+    }
+  ]
+}
